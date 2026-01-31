@@ -38,7 +38,6 @@ header div{
 #search-bar::placeholder{
     text-align: center;
     font-family: 'Reddit Sans', sans-serif;
-    
 }
 
 #search-bar:focus{
@@ -66,7 +65,7 @@ header div{
     margin-right: 10px;
 }
 
-#reg-log{
+#reg, #log{
     padding: 5px 15px; 
     width: auto;
     height: 45px;
@@ -79,12 +78,18 @@ header div{
     transition: background-color 0.3s ease;
 }
 
-#reg-log:hover{
+#reg:hover, #log:hover{
     background-color: #9d2727;
     cursor: pointer;
 }
 
-#side-nav{
+@media (max-width: 1100px) {
+    #reg{
+        display: none;
+    }
+}
+
+.side-nav{
     height: 100%; 
     width: 270px; 
     position: fixed; 
@@ -93,22 +98,80 @@ header div{
     background-color: #ffffff; 
     padding-top: 10px; 
     border-right: 1px solid #b8b8b8;
+    transition: all 0.3s ease;
     display: flex;
     justify-content: center;
 }
 
+.side-nav.minimize{
+    width: 50px;
+}
+
+.nav-item.minimize{
+    transition: all 0.3s ease;
+    display: none;
+}
+
 #side-nav-home{
+    font-family: 'Reddit Sans', sans-serif;
     text-decoration: none; 
     color: #000000; 
-    align-items: center;
     font-size: 16px;
     background-color: transparent;
-    padding: 16px 95px;
+    width: 230px;
+    height: 50px;
     border-color: transparent;
     border-radius: 10px;
+    transition: all 0.3s ease;
+    text-align: left;
+    padding-left: 30px;
 }
 
 #side-nav-home:hover{
     background-color: #f0f0f0;
     cursor: pointer;
+}
+
+#btn{
+    position: fixed;
+    top: 90px;
+    left: 256px;
+    font-size: 20px;
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid #868686;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#btn:hover{
+    transform: scale(1.1);
+    border-color: #3b3b3b;
+}
+
+#btn.clicked{
+    left: 36px;
+}
+
+#side-nav-icons{
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+#main-content{
+    margin-top: 66px;
+    margin-left: 270px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+#main-content.expand{
+    margin-left: 50px;
 }
