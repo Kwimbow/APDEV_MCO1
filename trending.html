@@ -34,7 +34,7 @@
         </div>
         <i class="bx bx-menu" id="btn"></i>
         <div id="main-content">
-            <h2>Welcome to freddyt!</h2>
+            <h2>Trends!</h2>
             <p></p>
 
         </div>
@@ -44,7 +44,7 @@
         let sideNav = document.querySelector("#side-bar")
         let navItem = document.querySelector("#nav-item")
         let mainContent = document.querySelector("#main-content")
-        let navButton = document.querySelector("#home-btn")
+        let navButton = document.querySelector("#trending-btn")
 
         btn.onclick = function() {
             sideNav.classList.toggle("minimize");
@@ -53,7 +53,7 @@
             mainContent.classList.toggle("expand");
         }
 
-    if (window.location.href.indexOf("index.html") > -1) {
+    if (window.location.href.indexOf("trending.html") > -1) {
         navButton.classList.add("active");
     }
     

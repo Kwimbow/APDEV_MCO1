@@ -112,7 +112,7 @@ header div{
     display: none;
 }
 
-#side-nav-home{
+.side-nav-buttons{
     font-family: 'Reddit Sans', sans-serif;
     text-decoration: none; 
     color: #000000; 
@@ -125,11 +125,17 @@ header div{
     transition: all 0.3s ease;
     text-align: left;
     padding-left: 30px;
+    display: block;
+    margin-bottom: 10px;
 }
 
-#side-nav-home:hover{
+.side-nav-buttons:hover{
     background-color: #f0f0f0;
     cursor: pointer;
+}
+
+.side-nav-buttons.active{
+    background-color: #dddfdf;
 }
 
 #btn{
