@@ -13,7 +13,6 @@
 
     <body>
         <header>
-
             <!--Show logo, doubles as link to the home page-->
             <div>
                 <h1 id="logo"><a href="index.html" id="logo">freddyt</a></h1>
@@ -25,9 +24,16 @@
             </div>
 
             <!--The register and log in buttons-->
-            <div>
-                <button id="reg" onclick="document.getElementById('register-popup').style.display='block'">Register</button>
-                <button id="log" onclick="document.getElementById('login-popup').style.display='block'">Log In</button>
+            <div id="reg-login-group">
+                <button id="reg">Register</button>
+                <button id="log">Log In</button>
+                <button id="settings-visitor"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+            </div>
+
+            <!--Mini profile displayed when logged in-->
+            <div id="mini-profile">
+                <button id="profile-clickable"><i class='bx bxs-user-circle' id="profile-icon"></i></button>
+                <button id="settings-logged-in"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
             </div>
         </header>
 
@@ -61,9 +67,15 @@
                         <!--Displays big Log In-->
                         <h1 style="text-align:center; font-family: 'Reddit Sans', sans-serif;">Log In</h1>
                         <!--Input box for email or username-->
-                        <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
+                        <div class="form-group">
+                            <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
+                            <label for="log-reg-info" id="pholder">Email or username</label>
+                        </div>
                         <!--Input box for password-->
-                        <input type="password" placeholder="Password" name="psw" id="log-reg-info">        
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" name="psw" id="log-reg-info">
+                            <label for="log-reg-info" id="pholder">Password</label>
+                        </div>      
                         <!--Log in submit button-->
                         <button type="submit" id="reg-login-btn">Log In</button>
                         <!--Extra stuff below the log in-->
@@ -90,11 +102,20 @@
                         <!--Displays big Register-->
                         <h1 style="text-align:center; font-family: 'Reddit Sans', sans-serif;">Register</h1>
                         <!--Input box for email or username-->
-                        <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
+                        <div class="form-group">
+                            <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
+                            <label for="log-reg-info" id="pholder">Email or username</label>
+                        </div>
                         <!--Input box for password-->
-                        <input type="password" placeholder="Password" name="psw" id="log-reg-info">        
+                        <div class="form-group">
+                            <input type="password" placeholder="Password" name="psw" id="log-reg-info">
+                            <label for="log-reg-info" id="pholder">Password</label>
+                        </div>    
                         <!--Input box for re-enter password-->
-                        <input type="password" placeholder="Re-enter Password" name="psw" id="log-reg-info">   
+                        <div class="form-group">
+                            <input type="password" placeholder="Re-enter Password" name="psw" id="log-reg-info">
+                            <label for="log-reg-info" id="pholder">Re-enter Password</label>
+                        </div>
                         <!--Register submit button-->
                         <button type="submit" id="reg-login-btn">Register</button>
                         <!--Link to Log in pop up if already have an account-->
@@ -105,10 +126,18 @@
         </span>
 
         <!--Create post button-->
-        <button id="create-post-btn"><i class="bx bx-plus"></i></button>
+        <div id="create-post-login">
+            <button id="create-post-btn"><i class="bx bx-plus"></i></button>
+        </div>
+        
         
         <!--Connect to JS script for animations-->
-        <script src="main.js"></script>
         <script src="auth.js"></script>
+        <script src="main.js"></script>
+
+        <script>
+            setupPopups();
+            updateUserUI();
+        </script>
     </body>
 </html>

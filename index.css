@@ -292,6 +292,7 @@ header div{
     display: inline-block;
     box-sizing: border-box;
 	font-size:16px;
+    padding-bottom: 0px;
 }
 
 #log-reg-info:hover{
@@ -299,21 +300,88 @@ header div{
 }
 
 #log-reg-info::placeholder{
-    text-align: left;
-    font-size: 16px;
-    font-family: 'Reddit Sans', sans-serif;
-    transition: all 0.3s ease;
-}
-
-#log-reg-info:focus::placeholder{
-    position: absolute;
-    text-align: left;
-    top: 7px;
-    font-size: 12px;
-    margin-bottom: 5px;
+    opacity: 0;
 }
 
 #pop-to-pop{
     color: #397fc4;
     cursor: pointer;
+}
+
+.form-group {
+    position: relative;
+}
+
+#pholder {
+    position: absolute;
+    left: 2.8rem;
+    top: 1.8rem;
+    pointer-events: none;
+    text-align: left;
+    font-size: 16px;
+    font-family: 'Reddit Sans', sans-serif;
+    transition: all 0.3s ease;
+    color: #888888;
+}
+
+#log-reg-info:focus + #pholder,
+#log-reg-info:not(:placeholder-shown) + #pholder {
+    transform: translateY(-.75rem);
+    font-size: 12px;
+}
+
+#profile-icon{
+    font-size: 45px;
+    border-radius: 50%;
+    align-items: center;
+    color: #df4b4b;
+}
+
+#profile-clickable{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 25px;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+#profile-clickable:hover{
+    background-color: #e8e8e8;
+}
+
+#settings-logged-in, #settings-visitor{
+    width: 45px;
+    height: 45px;
+    border-radius: 25px;
+    border: transparent;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    vertical-align: middle;
+}
+#settings-logged-in:hover, #settings-visitor:hover{
+    background-color: #e8e8e8;
+}
+
+#settings-icon{
+    padding: 0px;
+    font-size: 25px;
+    border-radius: 50%;
+    align-items: center;
+    color: #000000;
+}
+
+#mini-profile{
+    display: none;
+}
+
+#create-post-login{
+    display: none;
 }
