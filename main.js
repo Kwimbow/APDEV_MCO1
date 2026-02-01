@@ -60,7 +60,7 @@ function setupPopups(){
 }
 
 function setupLogout(){
-    const logoutBtn = document.getElementById("settings-logged-in");
+    const logoutBtn = document.getElementById("settings-logged-in");//<-- change this to log out when actual button is made
 
     if (!logoutBtn) return;
 
