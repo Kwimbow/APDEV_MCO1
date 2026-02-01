@@ -1,0 +1,3 @@
+/* JS file that contains the bookmarked post of a user.
+   This should be only seen by the user who is logged into their account
+   and they should only be able to see THEIR OWN bookmarks */

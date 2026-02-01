@@ -1,4 +1,5 @@
-/* JS file that contains the shared ui of each navigation button */  
+/* JS file that contains the shared ui of each navigation button 
+   such as the header bar, the side navigation bar, the user's profile, and etc. */  
 
 let btn = document.querySelector("#btn")
 let sideNav = document.querySelector("#side-bar")
@@ -65,8 +66,7 @@ function setupLogout(){
     if (!logoutBtn) return;
 
     logoutBtn.addEventListener("click", () => {
-        logout();
-        updateUserUI();
+        logoutAndRedirect();
     });
 }
 
@@ -90,6 +90,28 @@ function setupLoginForm(){
     });
 }
 
+function logoutAndRedirect(){
+    logout();
+    updateUserUI();
+    window.location.href = "index.html";
+}
+
+function showBookmarksBar(){
+    if(getCurrentUser() !== null){
+        document.getElementById("bookmarks-bar").style.display = "block";
+    }else{
+        document.getElementById("bookmarks-bar").style.display = "none";
+    }
+}
+
+function protectBookmarksPage(){
+    if (window.location.href.includes("bookmarks.html")) {
+        if (getCurrentUser() === null) {
+            window.location.href = "index.html";
+        }
+    }
+}
+
 function updateUserUI() {
     const user = getCurrentUser();
     const postBtn = document.getElementById("create-post-login");
@@ -97,6 +119,8 @@ function updateUserUI() {
     const regLoginGroup = document.getElementById("reg-login-group");
 
     if (!postBtn || !miniProfile || !regLoginGroup) return;
+
+    showBookmarksBar();
 
     if (user !== null) {
         postBtn.style.display = "block";
@@ -114,4 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setupLoginForm();
     setupLogout();
     updateUserUI();
+    showBookmarksBar();
+    protectBookmarksPage();
 });
