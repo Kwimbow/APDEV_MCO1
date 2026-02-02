@@ -91,7 +91,9 @@
                             <input type="checkbox" style="margin:26px 10px;" id="remember-3weeks"> Remember me      
                             <a href="#" style="text-decoration:none; float:right; margin-right:34px; margin-top:26px;" id="pop-to-pop">Forgot Password?</a>
                             <!--Link to Register pop up if no account made yet-->
-                            <p align="center" style="font-family: 'Reddit Sans', sans-serif;">New to Freddyt? <span onclick="document.getElementById('login-popup').style.display='none'; document.getElementById('register-popup').style.display='block';" id="pop-to-pop">Register</span></p>
+                            <p align="center" style="font-family: 'Reddit Sans', sans-serif;">New to Freddyt? 
+                                <span onclick="document.getElementById('login-popup').style.display='none'; document.getElementById('register-popup').style.display='block'; clearLoginRegister('login-popup');" id="pop-to-pop">Register</span>
+                            </p>
                         </p>
                     </div>
                 </form>
@@ -131,7 +133,9 @@
                         <!--Register submit button-->
                         <button type="submit" id="reg-login-btn">Register</button>
                         <!--Link to Log in pop up if already have an account-->
-                        <p align="center" style="font-family: 'Reddit Sans', sans-serif;">Already a freddytor? <span onclick="document.getElementById('login-popup').style.display='block'; document.getElementById('register-popup').style.display='none';" id="pop-to-pop">Log In</span></p>
+                        <p align="center" style="font-family: 'Reddit Sans', sans-serif;">Already a freddytor? 
+                            <span onclick="document.getElementById('login-popup').style.display='block'; document.getElementById('register-popup').style.display='none'; clearLoginRegister('register-popup');" id="pop-to-pop">Log In</span>
+                        </p>
                     </div>
                 </form>
             </div>
