@@ -32,7 +32,12 @@ header div{
     border: 1.5px solid #df4b4b;
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     box-sizing: border-box;
-    padding-left: 15px;
+
+    background-image: url("images/freddyt_logo.png");
+    background-repeat: no-repeat;
+    background-position-x: 3px;
+    background-position-y: 3px;
+    background-size: 36px 36px;
 }
 
 #search-bar::placeholder{
@@ -45,7 +50,7 @@ header div{
     border-color: #ffaa17;
     outline: none;
     box-sizing: border-box;
-    padding-left: 15px;
+    padding-left: 45px;
     box-shadow: 0 0 20px #ff703c; 
 }
 
