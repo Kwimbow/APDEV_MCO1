@@ -4,6 +4,7 @@
         <title>
             Freddyt - The horhor of the internet
         </title>
+        <link rel="icon" type="images/png" href="images/freddyt_tab_icon.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
@@ -64,7 +65,7 @@
                 <form class="modal-content">
                     <!--Contains the close (x) for the log in-->
                     <div class="xcontainer">
-                        <span onclick="document.getElementById('login-popup').style.display='none'" class="close">&times;</span>
+                        <span onclick="hidePopup('login-popup')" class="close">&times;</span>
                     </div>
                     <!--Separate box for the log in details-->
                     <div class="container">
@@ -72,19 +73,22 @@
                         <h1 style="text-align:center; font-family: 'Reddit Sans', sans-serif;">Log In</h1>
                         <!--Input box for email or username-->
                         <div class="form-group">
-                            <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
-                            <label for="log-reg-info" id="pholder">Email or username</label>
+                            <input type="text" placeholder="Email or username" name="uname" id="log-user-info">
+                            <label for="log-user-info" class="pholder">Email or username</label>
+                            <span id="log-empty-user">Username field cannot be empty!</span>
                         </div>
                         <!--Input box for password-->
                         <div class="form-group">
-                            <input type="password" placeholder="Password" name="psw" id="log-reg-info">
-                            <label for="log-reg-info" id="pholder">Password</label>
+                            <input type="password" placeholder="Password" name="psw" id="log-pw-info">
+                            <label for="log-pw-info" class="pholder">Password</label>
+                            <span id="log-empty-pw">Password cannot be empty!</span>
+                            <span id="log-unmatch-user-pw">Invalid username or password!</span>
                         </div>      
                         <!--Log in submit button-->
                         <button type="submit" id="reg-login-btn">Log In</button>
                         <!--Extra stuff below the log in-->
                         <p align="center" style="font-family: 'Reddit Sans', sans-serif;">
-                            <input type="checkbox" style="margin:26px 10px;"> Remember me      
+                            <input type="checkbox" style="margin:26px 10px;" id="remember-3weeks"> Remember me      
                             <a href="#" style="text-decoration:none; float:right; margin-right:34px; margin-top:26px;" id="pop-to-pop">Forgot Password?</a>
                             <!--Link to Register pop up if no account made yet-->
                             <p align="center" style="font-family: 'Reddit Sans', sans-serif;">New to Freddyt? <span onclick="document.getElementById('login-popup').style.display='none'; document.getElementById('register-popup').style.display='block';" id="pop-to-pop">Register</span></p>
@@ -99,7 +103,7 @@
                 <form class="modal-content">
                     <!--Contains the close (x) for the register-->
                     <div class="xcontainer">
-                        <span onclick="document.getElementById('register-popup').style.display='none'" class="close">&times;</span>
+                        <span onclick="hidePopup('register-popup')" class="close">&times;</span>
                     </div>
                     <!--Separate box for the register details-->
                     <div class="container">
@@ -107,18 +111,22 @@
                         <h1 style="text-align:center; font-family: 'Reddit Sans', sans-serif;">Register</h1>
                         <!--Input box for email or username-->
                         <div class="form-group">
-                            <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
-                            <label for="log-reg-info" id="pholder">Email or username</label>
+                            <input type="text" placeholder="Email or username" name="uname" id="reg-user-info">
+                            <label for="reg-user-info" class="pholder">Email or username</label>
+                            <span id="reg-empty-user">Username cannot be empty!</span>
+                            <span id="reg-taken-user">Username has been taken!</span>
                         </div>
                         <!--Input box for password-->
                         <div class="form-group">
-                            <input type="password" placeholder="Password" name="psw" id="log-reg-info">
-                            <label for="log-reg-info" id="pholder">Password</label>
+                            <input type="password" placeholder="Password" name="psw" id="reg-pw-info">
+                            <label for="reg-pw-info" class="pholder">Password</label>
                         </div>    
                         <!--Input box for re-enter password-->
                         <div class="form-group">
-                            <input type="password" placeholder="Re-enter Password" name="psw" id="log-reg-info">
-                            <label for="log-reg-info" id="pholder">Re-enter Password</label>
+                            <input type="password" placeholder="Re-enter Password" name="repsw" id="reg-repw-info">
+                            <label for="reg-repw-info" class="pholder">Re-enter Password</label>
+                            <span id="reg-empty-pw">Password cannot be empty!</span>
+                            <span id="reg-unmatch-pw">Passwords do not match!</span>
                         </div>
                         <!--Register submit button-->
                         <button type="submit" id="reg-login-btn">Register</button>
@@ -132,6 +140,10 @@
         <!--Create post button-->
         <div id="create-post-login">
             <button id="create-post-btn"><i class="bx bx-plus"></i></button>
+        </div>
+
+        <div id="reg-success">
+            <span id="reg-success-msg">Account successfully registered! Please log in to your account!</span>
         </div>
         
         

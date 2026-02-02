@@ -4,6 +4,7 @@
         <title>
             Freddyt - The horhor of the internet
         </title>
+        <link rel="icon" type="images/png" href="images/freddyt_tab_icon.png">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
@@ -56,78 +57,79 @@
             <h2>Bookmarks!</h2>
         </div>
 
-        <!--Log in and Register popups-->
+        <!--Log in and Register popups !!MAYBE NOT NEEDED SINCE USER NEEDS TO BE SIGNED IN TO ACCESS THIS PAGE!!
         <span>
-            <!--Log in pop up, class modal is the transparent black bg-->
+            <!--Log in pop up, class modal is the transparent black bg- ->
             <div id="login-popup" class="modal">
-                <!--Displays the box to hold log in inputs-->
+                <!--Displays the box to hold log in inputs- ->
                 <form class="modal-content">
-                    <!--Contains the close (x) for the log in-->
+                    <!--Contains the close (x) for the log in- ->
                     <div class="xcontainer">
                         <span onclick="document.getElementById('login-popup').style.display='none'" class="close">&times;</span>
                     </div>
-                    <!--Separate box for the log in details-->
+                    <!--Separate box for the log in details- ->
                     <div class="container">
-                        <!--Displays big Log In-->
+                        <!--Displays big Log In- ->
                         <h1 style="text-align:center; font-family: 'Reddit Sans', sans-serif;">Log In</h1>
-                        <!--Input box for email or username-->
+                        <!--Input box for email or username- ->
                         <div class="form-group">
                             <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
                             <label for="log-reg-info" id="pholder">Email or username</label>
                         </div>
-                        <!--Input box for password-->
+                        <!--Input box for password- ->
                         <div class="form-group">
                             <input type="password" placeholder="Password" name="psw" id="log-reg-info">
                             <label for="log-reg-info" id="pholder">Password</label>
                         </div>      
-                        <!--Log in submit button-->
+                        <!--Log in submit button- ->
                         <button type="submit" id="reg-login-btn">Log In</button>
-                        <!--Extra stuff below the log in-->
+                        <!--Extra stuff below the log in- ->
                         <p align="center" style="font-family: 'Reddit Sans', sans-serif;">
                             <input type="checkbox" style="margin:26px 10px;"> Remember me      
                             <a href="#" style="text-decoration:none; float:right; margin-right:34px; margin-top:26px;" id="pop-to-pop">Forgot Password?</a>
-                            <!--Link to Register pop up if no account made yet-->
+                            <!--Link to Register pop up if no account made yet- ->
                             <p align="center" style="font-family: 'Reddit Sans', sans-serif;">New to Freddyt? <span onclick="document.getElementById('login-popup').style.display='none'; document.getElementById('register-popup').style.display='block';" id="pop-to-pop">Register</span></p>
                         </p>
                     </div>
                 </form>
             </div>
 
-            <!--Register pop up, class modal is the transparent black bg-->
+            <!--Register pop up, class modal is the transparent black bg- ->
             <div id="register-popup" class="modal">
-                <!--Displays the box to hold register inputs-->
+                <!--Displays the box to hold register inputs- ->
                 <form class="modal-content">
-                    <!--Contains the close (x) for the register-->
+                    <!--Contains the close (x) for the register- ->
                     <div class="xcontainer">
                         <span onclick="document.getElementById('register-popup').style.display='none'" class="close">&times;</span>
                     </div>
-                    <!--Separate box for the register details-->
+                    <!--Separate box for the register details- ->
                     <div class="container">
-                        <!--Displays big Register-->
+                        <!--Displays big Register- ->
                         <h1 style="text-align:center; font-family: 'Reddit Sans', sans-serif;">Register</h1>
-                        <!--Input box for email or username-->
+                        <!--Input box for email or username- ->
                         <div class="form-group">
                             <input type="text" placeholder="Email or username" name="uname" id="log-reg-info">
                             <label for="log-reg-info" id="pholder">Email or username</label>
                         </div>
-                        <!--Input box for password-->
+                        <!--Input box for password- ->
                         <div class="form-group">
                             <input type="password" placeholder="Password" name="psw" id="log-reg-info">
                             <label for="log-reg-info" id="pholder">Password</label>
                         </div>    
-                        <!--Input box for re-enter password-->
+                        <!--Input box for re-enter password- ->
                         <div class="form-group">
                             <input type="password" placeholder="Re-enter Password" name="psw" id="log-reg-info">
                             <label for="log-reg-info" id="pholder">Re-enter Password</label>
                         </div>
-                        <!--Register submit button-->
+                        <!--Register submit button- ->
                         <button type="submit" id="reg-login-btn">Register</button>
-                        <!--Link to Log in pop up if already have an account-->
+                        <!--Link to Log in pop up if already have an account- ->
                         <p align="center" style="font-family: 'Reddit Sans', sans-serif;">Already a freddytor? <span onclick="document.getElementById('login-popup').style.display='block'; document.getElementById('register-popup').style.display='none';" id="pop-to-pop">Log In</span></p>
                     </div>
                 </form>
             </div>
         </span>
+        -->
 
         <!--Create post button-->
         <div id="create-post-login">
