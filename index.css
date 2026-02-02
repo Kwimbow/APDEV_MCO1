@@ -250,6 +250,7 @@ header div{
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    overflow: hidden;
 }
 /* Modal Content Box */
 .modal-content {
@@ -279,6 +280,11 @@ header div{
 .close:hover,.close:focus {
     background-color: rgb(231, 231, 231);
     cursor: pointer;
+}
+
+/*lock the background so that it doesnt scroll when the pop up is open*/
+body.modal-open{
+    overflow: hidden;
 }
 
 .container{
