@@ -10,9 +10,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" type="text/css" href="createpost.css">
+         <script src="savepost.js"></script>
     </head>
 
     <body>
+        
         <header>
             <!--Show logo, doubles as link to the home page-->
             <div>
@@ -55,6 +58,7 @@
         <!--Main content area-->
         <div id="main-content">
             <h2>Welcome to freddyt!</h2>
+            
         </div>
 
         <!--Log in and Register popups-->
@@ -146,14 +150,65 @@
             <button id="create-post-btn"><i class="bx bx-plus"></i></button>
         </div>
 
+        <div id="create-post-popup" class="modal">
+                <!--Displays the box to hold register inputs-->
+                <form class="create-post-modal">
+                    <!--Contains the close (x) for the register-->
+                    <div class="xcontainer">
+                        <span onclick="hidePopup('create-post-popup')" class="close">&times;</span>
+                    </div>
+                    <!--Separate box for the register details-->
+                    <div>
+                        <h2>Create Post</h2>
+                        <hr>
+                        <br>
+                        <form id="createpost_form">
+                            <div class="tag_holder">
+                                <label class="tag_header" for="tag">Tag:</label>
+
+                                <input class="tag_input" type="radio" id="guides" name="tag" value="guides">
+                                <label class="tag_label" for="guides">Guides</label>
+
+                                <input class="tag_input" type="radio" id="discussion" name="tag" value="discussion">
+                                <label class="tag_label" for="discussion">Discussion</label>
+
+                                <input class="tag_input" type="radio" id="showcase" name="tag" value="showcase">
+                                <label class="tag_label" for="showcase">Showcase</label>
+
+                                <input class="tag_input" type="radio" id="joke" name="tag" value="joke">
+                                <label class="tag_label" for="joke">Joke</label>
+
+                                <input class="tag_input" type="radio" id="misc" name="tag" value="misc">
+                                <label class="tag_label" for="misc">Miscellaneous</label>
+                            </div>
+
+                            <div>
+                                <input class="title_inpt" type="text" id="title" name="title" placeholder="Enter post title..." required>
+                            </div>
+
+                            <div>
+                                <textarea class="post_content" id="content" name="post-content" placeholder="Enter post content..." required></textarea>
+                            </div>
+
+                            <div>
+                                <input class="submit_btn" type="submit" value="Create Post">
+                                <script src="savepost.js"></script>
+                            </div>
+                        </form>
+                    </div>
+                </form>
+            </div>
+
         <div id="reg-success">
             <span id="reg-success-msg">Account successfully registered! Please log in to your account!</span>
         </div>
         
         
+        
         <!--Connect to JS script for animations-->
         <script src="auth.js"></script>
         <script src="main.js"></script>
+        
 
         <script>
             setupPopups();

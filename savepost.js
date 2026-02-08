@@ -18,5 +18,5 @@ new_post.addEventListener("submit", function(e) {
 	posts.push(post);
 	localStorage.setItem("posts", JSON.stringify(posts));
 
-	alert("work");
+	window.location.replace('index.html');
 });

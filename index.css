@@ -262,6 +262,17 @@ header div{
     height: 600px;
 	padding-bottom: 30px;
 }
+
+.create-post-modal {
+    background-color: #fefefe;
+    margin: 4% auto 15% auto;
+    border: 1px solid #888;
+    border-radius: 20px;
+    width: 70%; 
+    height: 700px;
+	padding-bottom: 30px;
+
+}
 /* The Close Button (x) */
 .close {
     position: absolute;

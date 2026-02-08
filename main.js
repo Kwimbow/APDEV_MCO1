@@ -52,6 +52,9 @@ function hidePopup(id) {
     } if (id === "login-popup"){
         clearLoginRegister("login-popup");
     }
+    if (id === "create-post-popup"){
+        clearLoginRegister("login-popup");
+    }
 }
 
 /* This function handles the register and login button on the upper right corner,
@@ -65,6 +68,9 @@ function setupPopups(){
     });
     document.getElementById("log")?.addEventListener("click", () => {
         showPopup("login-popup");
+    });
+    document.getElementById("create-post-btn")?.addEventListener("click", () => {
+        showPopup("create-post-popup");
     });
 
     document.querySelectorAll(".modal").forEach(modal => {
