@@ -43,5 +43,19 @@ hr {
 /*txt inputs*/
 .title_inpt {
 	width: 100%;
-
+	margin: 2rem 0;
+	padding: 1rem;
+	font-size: 1.5rem;
 }
+
+.post_content {
+	width: 100%;
+	height: 40vh;
+	padding: 1rem;
+	font-size: 1rem;
+	resize: none;
+}
+
+
+
+/*submit btn*/
