@@ -1,7 +1,9 @@
 /*general*/
 h2 {
+	font-family: 'Reddit Sans', sans-serif; 
 	font-size: 2.5rem;
 	margin-bottom: 0rem;
+	font-weight: 800;
 }
 hr {
 	color: light-gray;
@@ -21,6 +23,9 @@ hr {
 }
 
 .tag_label {
+	font-family: 'Reddit Sans', sans-serif; 
+	font-weight: 600;
+	border-radius: 20px;
 	margin: .5rem;
 	padding: .7rem;
 	font-size: 1.3rem;
@@ -35,13 +40,18 @@ hr {
 }
 
 .tag_header {
+	font-family: 'Reddit Sans', sans-serif; 
 	font-size: 1.5rem;
+	font-weight: 700;
+
 }
 
 
 
 /*txt inputs*/
 .title_inpt {
+	font-family: 'Reddit Sans', sans-serif; 
+	font-weight: 600;
 	width: 100%;
 	margin-top: 2rem;
 	margin-bottom: 1rem;
@@ -50,10 +60,11 @@ hr {
 }
 
 .post_content {
+	font-family: 'Reddit Sans', sans-serif; 
 	width: 100%;
 	height: 40vh;
 	padding: 1rem;
-	font-size: 1rem;
+	font-size: 1.2rem;
 	resize: none;
 }
 
@@ -61,6 +72,7 @@ hr {
 
 /*submit btn*/
 .submit_btn {
+	font-family: 'Reddit Sans', sans-serif; 
 	margin-top: 1rem;
 	font-size: 1.4rem;
 	padding: .6rem;
