@@ -10,6 +10,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" type="text/css" href="createpost.css">
     </head>
 
     <body>
@@ -64,25 +65,34 @@
 
         <!--Main content area-->
         <div id="main-content">
-            <h1>Create Post</h1 >
+            <h2>Create Post</h1 >
+
+            <hr>
+            <br>
 
             <form>
-                <div>
-                    <label for="tag">Tag:</label>
-                    <select id="tag" name="tag">
-                        <option value="guide">Guides</option>
-                        <option value="discussion">Discussion</option>
-                        <option value="showcase">Showcase</option>
-                        <option value="meme">MEME MONDAY!</option>
-                    </select>  
+                <div class="tag_holder">
+                    <label class="tag_header" for="tag">Tag:</label>
+
+                    <input class="tag_input" type="radio" id="guides" name="tag" value="guides">
+                    <label class="tag_label" for="guides">Guides</label>
+
+                    <input class="tag_input" type="radio" id="discussion" name="tag" value="discussion">
+                    <label class="tag_label" for="discussion">Discusssion</label>
+
+                    <input class="tag_input" type="radio" id="showcase" name="tag" value="showcase">
+                    <label class="tag_label" for="showcase">Showcase</label>
+
+                    <input class="tag_input" type="radio" id="joke" name="tag" value="joke">
+                    <label class="tag_label" for="joke">Joke</label>
                 </div>
 
                 <div>
-                    <input type="text" name="title" placeholder="Enter post title...*" required>
+                    <input class="title_inpt" type="text" name="title" placeholder="Enter post title...*" required>
                 </div>
 
                 <div>
-                    <input type="text" name="post-content" placeholder="Enter post content...*" required>
+                    <textarea name="post-content" placeholder="Enter post content...*" required></textarea>
                 </div>
 
                 <div>

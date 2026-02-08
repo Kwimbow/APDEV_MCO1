@@ -1,0 +1,47 @@
+/*general*/
+h2 {
+	font-size: 2.5rem;
+	margin-bottom: 0rem;
+}
+hr {
+	color: light-gray;
+}
+#main-content {
+	width: 55vw;
+	padding: 1vw 10vw;
+}
+
+
+/* TAG STUFF */
+.tag_holder {
+}
+
+.tag_input {
+	display: none;
+}
+
+.tag_label {
+	margin: .5rem;
+	padding: .7rem;
+	font-size: 1.3rem;
+	color: white;
+	background: red;
+	cursor: pointer;
+	transition: background 0.1s;
+}
+
+.tag_input:checked + .tag_label {
+	background: gray;
+}
+
+.tag_header {
+	font-size: 1.5rem;
+}
+
+
+
+/*txt inputs*/
+.title_inpt {
+	width: 100%;
+
+}
