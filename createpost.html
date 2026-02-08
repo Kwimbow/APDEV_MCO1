@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Freddyt - The horhor of the internet
+        </title>
+        <link rel="icon" type="images/png" href="images/freddyt_tab_icon.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" type="text/css" href="index.css">
+    </head>
+
+    <body>
+        <header>
+            <!--Show logo, doubles as link to the home page-->
+            <div>
+                <h1 id="logo"><a href="index.html" id="logo">freddyt</a></h1>
+            </div>
+
+            <!--The search bar-->
+            <div>
+                <form>
+                    <input type="search" placeholder="Find anything" name="search" id="search-bar">
+                </form>
+            </div>
+
+            <!--The register and log in buttons-->
+            <div id="reg-login-group">
+                <button id="reg">Register</button>
+                <button id="log">Log In</button>
+                <button id="settings-visitor"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+            </div>
+
+            <!--Mini profile displayed when logged in-->
+            <div id="mini-profile">
+                <button id="profile-clickable"><i class='bx bxs-user-circle' id="profile-icon"></i></button>
+                <button id="settings-logged-in"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+            </div>
+        </header>
+
+        <!--Side navigation bar-->
+        <div class="side-nav" id="side-bar">
+            <span class="nav-item" id="nav-item">
+                <a href="index.html" style="text-decoration: none;"><button class="side-nav-buttons" id="home-btn"><i class='bx bxs-home' id="side-nav-icons"></i> Home</button></a>
+                <div id="bookmarks-bar">
+                    <a href="bookmarks.html" style="text-decoration: none;"><button class="side-nav-buttons" id="bookmarks-btn"><i class='bx bxs-bookmarks' id="side-nav-icons"></i> Bookmarks</button></a>
+                </div>            
+            </span>
+        </div>
+        <!--Menu button to close side navigation-->
+        <i class="bx bx-menu" id="btn"></i>
+
+
+
+
+
+
+
+
+
+
+
+        <!--Main content area-->
+        <div id="main-content">
+            <h1>Create Post</h1 >
+
+            <form>
+                <div>
+                    <label for="tag">Tag:</label>
+                    <select id="tag" name="tag">
+                        <option value="guide">Guides</option>
+                        <option value="discussion">Discussion</option>
+                        <option value="showcase">Showcase</option>
+                        <option value="meme">MEME MONDAY!</option>
+                    </select>  
+                </div>
+
+                <div>
+                    <input type="text" name="title" placeholder="Enter post title...*" required>
+                </div>
+
+                <div>
+                    <input type="text" name="post-content" placeholder="Enter post content...*" required>
+                </div>
+
+                <div>
+                    <input type="submit">
+                </div>
+            </form>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--Create post button-->
+        <div id="create-post-login">
+            <button id="create-post-btn"><i class="bx bx-plus"></i></button>
+        </div>
+        
+        
+        <!--Connect to JS script for animations-->
+        <script src="auth.js"></script>
+        <script src="main.js"></script>
+
+        <script>
+            setupPopups();
+            updateUserUI();
+        </script>
+    </body>
+</html>
