@@ -53,11 +53,9 @@
         </div>
         <!--Menu button to close side navigation-->
         <i class="bx bx-menu" id="btn"></i>
-
         <!--Main content area-->
         <div id="main-content">
-            <h2>Welcome to freddyt!</h2>
-            
+
         </div>
 
         <!--Log in and Register popups-->
@@ -197,6 +195,30 @@
                 </form>
             </div>
 
+        <div id="view-post-popup" class="modal">
+            <!--Displays the box to hold register inputs-->
+                <!--Contains the close (x) for the register-->
+                <div class = "view-post-modal">
+                    <div class="xcontainer">
+                        <span onclick="hidePopup('view-post-popup')" class="close">&times;</span>
+                    </div>
+                    <!--Separate box for the register details-->
+                    <div id = "view-post-flex-h">
+                        <div id = "view-post-left">
+                              <img id = "OP-pfp">
+                              <p id = "OP-username"></p>
+                              <p id = "OP-date"></p>
+                        </div>
+                        <div id = "view-post-right">
+                            <h2 id = "view-post-title"></h2> 
+                            <hr>
+                            <br>
+                            <p id = "view-post-content"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         <div id="reg-success">
             <span id="reg-success-msg">Account successfully registered! Please log in to your account!</span>
         </div>
@@ -207,6 +229,9 @@
         <script src="auth.js"></script>
         <script src="main.js"></script>
         <script src="savepost.js"></script>
+        <script src="displayposts.js"></script>
+        <script src = "viewposts.js"></script>
+
         
 
         <script>

@@ -1,0 +1,3 @@
+function viewPost(){
+    alert("test");
+}
