@@ -1,3 +1,5 @@
+/* FOR CREATING NEW POST 		*/
+
 const new_post = document.getElementById("createpost_form");
 
 new_post.addEventListener("submit", function(e) {
@@ -11,7 +13,8 @@ new_post.addEventListener("submit", function(e) {
 		tag: tag,
 		title: title,
 		content: content,
-		date: new Date()
+		date: new Date(),
+		user: getCurrentUser()
 	}
 
 	const posts = JSON.parse(localStorage.getItem("posts")) || [];
