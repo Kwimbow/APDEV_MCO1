@@ -46,8 +46,33 @@
         <div class="side-nav" id="side-bar">
             <span class="nav-item" id="nav-item">
                 <a href="index.html" style="text-decoration: none;"><button class="side-nav-buttons" id="home-btn"><i class='bx bxs-home' id="side-nav-icons"></i> Home</button></a>
+                
                 <div id="bookmarks-bar">
                     <a href="bookmarks.html" style="text-decoration: none;"><button class="side-nav-buttons" id="bookmarks-btn"><i class='bx bxs-bookmarks' id="side-nav-icons"></i> Bookmarks</button></a>
+                </div>
+
+                <hr id="sidenav-hr">
+                
+                <div id="tag-filters">
+                    <form id="tag-filter">
+                        <input type="radio" name="tag-filter" id="filter-all" value="filter-all" class="filter-input">
+                        <label class="filter-label" for="filter-all">All</label>
+
+                        <input type="radio" name="tag-filter" id="filter-guides" value="filter-guides" class="filter-input">
+                        <label class="filter-label" for="filter-guides">Guides</label>
+
+                        <input type="radio" name="tag-filter" id="filter-discussion" value="filter-discussion" class="filter-input">
+                        <label class="filter-label" for="filter-discussion">Discussion</label>
+
+                        <input type="radio" name="tag-filter" id="filter-showcase" value="filter-showcase" class="filter-input">
+                        <label class="filter-label" for="filter-showcase">Showcase</label>
+
+                        <input type="radio" name="tag-filter" id="filter-jokes" value="filter-jokes" class="filter-input">
+                        <label class="filter-label" for="filter-jokes">Jokes</label>
+
+                        <input type="radio" name="tag-filter" id="filter-misc" value="filter-misc" class="filter-input">
+                        <label class="filter-label" for="filter-misc">Miscellaneous</label>
+                    </form>
                 </div>
             </span>
         </div>

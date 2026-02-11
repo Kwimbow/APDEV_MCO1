@@ -460,7 +460,11 @@ body.modal-open{
 
 #bookmarks-bar{
     display: none;
+    width: 50%;
 }
+
+
+
 
 #log-empty-user, #log-empty-pw, #log-unmatch-user-pw,
 #reg-empty-user, #reg-taken-user, #reg-empty-pw, #reg-unmatch-pw{
@@ -677,4 +681,46 @@ body.modal-open{
     font-family: 'Reddit Sans', sans-serif;
     font-size: 18px;
     margin-bottom: -12px;
+}
+
+
+
+/* horizontal line in sidenav bar */
+#sidenav-hr {
+    color:  #dddfdf;
+}
+
+/* for tag filters part */
+#tag-filters {
+    padding-top: .5rem;
+}
+
+.filter-input{
+    display: none;
+}
+
+.filter-label{
+    display: block;
+
+    font-family: 'Reddit Sans', sans-serif; 
+    border-radius: 6px;
+    margin: 0.7rem;
+    padding: 1rem;
+    font-size: 1rem;
+    background-color: #f0f0f0;
+    border-color: darkgray;
+    border-width: 10px;
+    cursor: pointer;
+    transition: background 0.1s;
+
+    /*font-size: 1rem;
+    font-family: 'Reddit Sans', sans-serif;
+    height: 3rem;
+    margin: 1rem;*/
+}
+
+.filter-input:checked + .filter-label {
+    background-color: rgba(223, 75, 75);
+    color: white;
+    font-weight: bold;
 }
