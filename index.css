@@ -114,6 +114,9 @@ header div{
     box-sizing: border-box;
     padding-left: 45px;
 
+    background-color: var(--background-color);
+    color: var(--default-txt);
+    
     background-image: url("images/freddyt_logo.png");
     background-repeat: no-repeat;
     background-position-x: 3px;
