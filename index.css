@@ -757,8 +757,33 @@ body.modal-open{
 .comment-content{
     border: 2px solid black;
     font-family: 'Reddit Sans', sans-serif; 
-    margin-top:10px;
+    margin-top:60px;
     margin-left: 30px;
     padding:10px;  
 }
 
+.upvote{
+    margin-top:10px;
+    margin-right:5px;
+
+}
+
+.downvote{
+    margin-top:10px;
+    margin-left:5px;
+}
+
+.upvote:active{
+    background-color: rgba(250, 78, 52, 0.855);
+}
+
+.downvote:active{
+    background-color: rgba(108, 52, 250, 0.855);
+}
+
+.score{
+    font-size:14px;
+    align-self: center;
+    font-family: 'Reddit Sans', sans-serif;
+    margin-bottom:5px;
+}
