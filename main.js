@@ -386,6 +386,50 @@ function updateUserUI() {
     }
 }
 
+/* This function displays the drop down menu for posts or comms*/
+function setupPostOptions(){
+
+    //dropdown for posts type shi
+    document.querySelectorAll('.post-options').forEach(btn => {
+        const menu = btn.parentElement.querySelector('.post-options-menu');
+        if(!menu) return;
+
+        btn.addEventListener('click', (e) => {
+            const isOpen = menu.classList.contains('open');
+            document.querySelectorAll('.post-options-menu.open').forEach(m => m.classList.remove('open'));
+            if(!isOpen){
+                menu.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                menu.setAttribute('aria-hidden', 'false');
+            } else {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                menu.setAttribute('aria-hidden', 'true');
+            }
+        });
+    });
+
+    //for comms yuh
+    document.querySelectorAll('.comment-options').forEach(btn => {
+        const menu = btn.parentElement.querySelector('.comment-options-menu');
+        if(!menu) return;
+
+        btn.addEventListener('click', (e) => {
+            const isOpen = menu.classList.contains('open');
+            document.querySelectorAll('.comment-options-menu.open').forEach(m => m.classList.remove('open'));
+            if(!isOpen){
+                menu.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                menu.setAttribute('aria-hidden', 'false');
+            } else {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                menu.setAttribute('aria-hidden', 'true');
+            }
+        });
+    });
+}
+
 //calls the functions
 document.addEventListener("DOMContentLoaded", () => {
     setupPopups();
@@ -394,4 +438,5 @@ document.addEventListener("DOMContentLoaded", () => {
     setupLogout();
     updateUserUI();
     protectBookmarksPage();
+    setupPostOptions();
 });
