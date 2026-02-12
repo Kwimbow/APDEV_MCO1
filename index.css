@@ -72,6 +72,21 @@ body, textarea{
     margin-bottom: 15px;
 }
 
+#theme-switch svg {
+    fill: var(--orangey-red);
+    stroke: var(--orangey-red);
+    padding-top: 1.2rem;
+}
+#theme-switch svg:last-child{
+    display: none;
+}
+.darkmode #theme-switch svg:first-child{
+    display: none;
+}
+.darkmode #theme-switch svg:last-child{
+    display: block;
+}
+
 header{
     display: flex; 
     justify-content: space-between; 
@@ -281,8 +296,6 @@ header div{
     background-color: var(--background-color);
     color: var(--default-txt);
 }
-
-
 
 #reg-login-btn {
     background-color: var(--reglogin-btn);
