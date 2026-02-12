@@ -54,18 +54,23 @@ for(let i = 0 ; i< posts.length ; i++){
     const postTag = document.createElement("p");
     postTag.id = "post-tag";
     if (posts[i].tag === "discussion"){
+        posts[i].tag = "Discussion";
         postTag.classList.add('green-tag');
     }
     else if (posts[i].tag === "guides"){
+        posts[i].tag = "Guides";
         postTag.classList.add('red-tag');
     }
     else if (posts[i].tag === "showcase"){
+        posts[i].tag = "Showcase";
         postTag.classList.add('purple-tag');
     }
     else if (posts[i].tag === "joke"){
+        posts[i].tag = "Joke";
         postTag.classList.add('blue-tag');
     }
     else if (posts[i].tag === "misc"){
+        posts[i].tag = "Miscellaneous";
         postTag.classList.add('orange-tag');
     }
     postTag.appendChild(document.createTextNode(posts[i].tag));

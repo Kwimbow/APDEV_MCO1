@@ -625,10 +625,13 @@ body.modal-open{
 
 #post-tag{
     height:25px;
-    display:inline-block;
+    display:inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-right: 10px;
     margin-top: 20px;
     border-radius:8px;
+    border-radius: 8px;
     font-family: 'Reddit Sans', sans-serif;
     padding-left: 8px;
     padding-right:8px;
@@ -642,6 +645,8 @@ body.modal-open{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+
+    color: var(--default-txt);
 }
 
 #post-flex-top{
@@ -666,11 +671,15 @@ body.modal-open{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+
+    color: var(--default-txt);
 }
 
 #post-date{
     margin-left:auto;
     font-family: 'Reddit Sans', sans-serif;
+
+    color: var(--default-txt);
 }
 
 .view-post-button{
@@ -910,6 +919,8 @@ body.modal-open{
     position: absolute;
     top: 12px;
     right: 12px;
+
+    background-color: var(--closebtn-bg);
 }
 
 .post-options-menu{
@@ -924,6 +935,8 @@ body.modal-open{
     display: none;
     flex-direction: column;
     padding: 6px 8px;
+
+    background-color: var(--closebtn-bg);
 }
 
 .post-options-menu.open{
@@ -938,10 +951,13 @@ body.modal-open{
     font-family: 'Reddit Sans', sans-serif;
     cursor: pointer;
     border-radius: 6px;
+
+    background-color: var(--closebtn-bg);
+    color: var(--closebtn-clr);
 }
 
 .post-options-menu-item:hover{
-    background: #f3f3f3;
+    background-color: var(--closebtn-hover);
 }
 
 .comment-options{
@@ -959,10 +975,12 @@ body.modal-open{
     background-color: transparent;
     border-radius: 20px;
     margin-top: 0%;
+
+    background-color: var(--closebtn-bg);
 }
 
 .comment-options:hover, .post-options:hover{
-    background-color: #e1e1e1;
+    background-color: var(--closebtn-hover);
 }
 
 .comment-actions{ 
@@ -988,6 +1006,8 @@ body.modal-open{
     display: none;
     flex-direction: column;
     padding: 6px 8px;
+
+    background-color: var(--closebtn-bg);
 }
 
 .comment-options-menu.open{ 
@@ -1002,8 +1022,12 @@ body.modal-open{
     font-family: 'Reddit Sans', sans-serif;
     cursor: pointer;
     border-radius: 6px;
+
+    background-color: var(--closebtn-bg);
+    color: var(--closebtn-clr);
 }
 
 .comment-options-menu-item:hover{ 
-    background: #f3f3f3; 
+    background-color: var(--closebtn-hover);
 }
+
