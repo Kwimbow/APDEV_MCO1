@@ -602,9 +602,12 @@ body.modal-open{
     width: 75vw; 
     height: 80%;
 	padding-bottom: 30px;
+    display:flex;
+    flex-direction:column;
+    overflow:auto;
 }
 
-#view-post-title{
+.view-post-title{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
@@ -640,13 +643,13 @@ body.modal-open{
     color:white;
 }
 
-#view-post-flex-h{
+.view-post-flex-h{
     width: 100%;
     display: flex;
     
 }
 
-#view-post-left{
+.view-post-left{
     display:flex;
     flex-direction: column;
     width:15%;
@@ -655,7 +658,7 @@ body.modal-open{
 }
 
 
-#view-post-right{
+.view-post-right{
     display:flex;
     flex-direction: column;
     width: 85%;
@@ -669,12 +672,9 @@ body.modal-open{
     word-wrap:break-word;
     overflow-wrap: break-word;
     margin-right:80px;
+    height:auto;
 }
 
-#OP-pfp{
-    scale:80%;
-    margin-bottom:-30px;
-}
 
 #OP-username, #OP-date{
     align-self: center;
@@ -724,3 +724,41 @@ body.modal-open{
     color: white;
     font-weight: bold;
 }
+
+#reply-area{
+    resize:none;
+    margin-left:30px;
+    height: 60px;
+}
+
+#reply-button{
+    margin-left: auto;
+    width: 100px;
+    height:40px;
+    background-color: rgba(223, 75, 75);
+    color: white;
+    border-radius:30px;
+    margin-top:10px;
+    font-family: 'Reddit Sans', sans-serif; 
+}
+
+.comment-pfp{
+    scale:50%;
+    margin-bottom:-50px;
+}
+
+.comment-username, .comment-date{
+    align-self: center;
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 14px;
+    margin-bottom: -2px;
+}
+
+.comment-content{
+    border: 2px solid black;
+    font-family: 'Reddit Sans', sans-serif; 
+    margin-top:10px;
+    margin-left: 30px;
+    padding:10px;  
+}
+

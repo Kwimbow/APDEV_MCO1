@@ -80,6 +80,40 @@
         <i class="bx bx-menu" id="btn"></i>
         <!--Main content area-->
         <div id="main-content">
+            <button class="view-post-button" onclick = "
+                const viewingTitle = document.getElementById('view-post-title');
+                viewingTitle.textContent = ('text title');
+
+                const viewingContent = document.getElementById('view-post-content');
+                viewingContent.textContent = ('content text');
+
+                const viewingOpPfp = document.getElementById('OP-pfp');
+                viewingOpPfp.src = 'images/freddyt_logo.png';
+
+                const OPusername = document.getElementById('OP-username');
+                OPusername.textContent = ('user');
+
+                const OPdate = document.getElementById('OP-date');
+                OPdate.textContent = ('Posted  april');
+
+                showPopup('view-post-popup');" 
+                    
+            >
+                <div id = "post-display">
+                    <img src = "images/freddyt_logo.png" id = "user-pfp">
+                    <div id = "post-flex-display">
+                        <div id = "post-flex-top">
+                            <p id = "post-tag" style = "background-color:rgb(51, 118, 51); color:white">Discussion</p>
+                            <p id = "post-title">test</p>
+                            <p id = "post-date">jan 12 2013</p>
+                        </div>
+                        <div id = "post-flex-bottom">
+                            <p id = "post-content">test</p>
+                        </div>
+                    </div>
+                </div>
+            </button>
+
 
         </div>
 
@@ -227,20 +261,74 @@
                     <div class="xcontainer">
                         <span onclick="hidePopup('view-post-popup')" class="close">&times;</span>
                     </div>
-                    <!--Separate box for the register details-->
-                    <div id = "view-post-flex-h">
-                        <div id = "view-post-left">
+                    <div class = "view-post-flex-h">
+                        <div class = "view-post-left">
                               <img id = "OP-pfp">
                               <p id = "OP-username"></p>
                               <p id = "OP-date"></p>
                         </div>
-                        <div id = "view-post-right">
+                        <div class = "view-post-right">
                             <h2 id = "view-post-title"></h2> 
                             <hr>
                             <br>
                             <p id = "view-post-content"></p>
+                            <textarea id = "reply-area" placeholder="Reply here"></textarea>
+                            <button id = "reply-button">Post Reply</button>
+                        </div>
+                        
+                    </div>
+
+                    <div class = "view-post-flex-h">
+                        <div class = "view-post-left">
+                             <img class = "comment-pfp" src = "images/freddyt_logo.png">
+                              <p class = "comment-username">Posted by that guy</p>
+                              <p class = "comment-date"> Posted on 09/02/2025</p>
+                        </div>
+                         <div class = "view-post-right">
+                             <p class = "comment-content">I agree, this is generally a decent sentiment but I feel like the whole thing suffers from a lack of sincerity. While I would agree that a lot of charts are deserving of 13+ and their general chart constants, I just think Tetoris is not nearly a 13.7. Sure, it's a bit of a drain stamina wise, maybe more than a 13, but it still feels like something that's a 13.4 or 13.5 at worst.</p>
                         </div>
                     </div>
+                    <div class = "view-post-flex-h">
+                        <div class = "view-post-left">
+                             <img class = "comment-pfp" src = "images/freddyt_logo.png">
+                              <p class = "comment-username">Posted by that guy</p>
+                              <p class = "comment-date"> Posted on 09/02/2025</p>
+                        </div>
+                         <div class = "view-post-right">
+                             <p class = "comment-content">I agree, this is generally a decent sentiment but I feel like the whole thing suffers from a lack of sincerity. While I would agree that a lot of charts are deserving of 13+ and their general chart constants, I just think Tetoris is not nearly a 13.7. Sure, it's a bit of a drain stamina wise, maybe more than a 13, but it still feels like something that's a 13.4 or 13.5 at worst.</p>
+                        </div>
+                    </div>
+                    <div class = "view-post-flex-h">
+                        <div class = "view-post-left">
+                             <img class = "comment-pfp" src = "images/freddyt_logo.png">
+                              <p class = "comment-username">Posted by that guy</p>
+                              <p class = "comment-date"> Posted on 09/02/2025</p>
+                        </div>
+                         <div class = "view-post-right">
+                             <p class = "comment-content">I agree, this is generally a decent sentiment but I feel like the whole thing suffers from a lack of sincerity. While I would agree that a lot of charts are deserving of 13+ and their general chart constants, I just think Tetoris is not nearly a 13.7. Sure, it's a bit of a drain stamina wise, maybe more than a 13, but it still feels like something that's a 13.4 or 13.5 at worst.</p>
+                        </div>
+                    </div>
+                    <div class = "view-post-flex-h">
+                        <div class = "view-post-left">
+                             <img class = "comment-pfp" src = "images/freddyt_logo.png">
+                              <p class = "comment-username">Posted by that guy</p>
+                              <p class = "comment-date"> Posted on 09/02/2025</p>
+                        </div>
+                         <div class = "view-post-right">
+                             <p class = "comment-content">I agree, this is generally a decent sentiment but I feel like the whole thing suffers from a lack of sincerity. While I would agree that a lot of charts are deserving of 13+ and their general chart constants, I just think Tetoris is not nearly a 13.7. Sure, it's a bit of a drain stamina wise, maybe more than a 13, but it still feels like something that's a 13.4 or 13.5 at worst.</p>
+                        </div>
+                    </div>
+                    <div class = "view-post-flex-h">
+                        <div class = "view-post-left">
+                             <img class = "comment-pfp" src = "images/freddyt_logo.png">
+                              <p class = "comment-username">Posted by that guy</p>
+                              <p class = "comment-date"> Posted on 09/02/2025</p>
+                        </div>
+                         <div class = "view-post-right">
+                             <p class = "comment-content">I agree, this is generally a decent sentiment but I feel like the whole thing suffers from a lack of sincerity. While I would agree that a lot of charts are deserving of 13+ and their general chart constants, I just think Tetoris is not nearly a 13.7. Sure, it's a bit of a drain stamina wise, maybe more than a 13, but it still feels like something that's a 13.4 or 13.5 at worst.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
