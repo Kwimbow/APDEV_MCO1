@@ -753,8 +753,8 @@ body.modal-open{
     flex-direction: column;
     width: 85%;
     margin-right: 80px;
-    position: relative; /* allow absolute positioning for post-options/menu */
-    padding-right: 84px; /* reserve space so long text doesn't flow under the button */
+    position: relative;
+    padding-right: 84px;
 }
 
 #view-post-content{
