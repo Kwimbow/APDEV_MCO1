@@ -69,7 +69,6 @@
 	position: absolute;
 	width: 100%;
 	height: 45%;
-	border: 2px solid black;
 	border-radius: 15px;
 }
 
@@ -82,6 +81,7 @@ with an actual image */
 	position: absolute;
 	height: 100%;	
 	width: 100%;
+	border-radius: 15px;
 	object-fit: cover;
 
 }
@@ -99,8 +99,8 @@ with an actual image */
 	height: 140px;
 	width: 140px;
 
-	border-radius: 100%;
-	border: 2px solid black;
+	border-radius: 50%;
+	border: none;
 	box-sizing: border-box;
 
 	margin-top: 20%;
@@ -152,30 +152,104 @@ with an actual image */
 
 /* relative to info */
 
-.user-bio {
-	position: relative;
-	margin: 0 auto;
+.user-bio, .edit-btn {
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	height: auto;
 
 }
 
-.user-bio p {
+#bio {
 
 	text-align: center;
-    font-family: sans-serif;
-
+    font-family: 'Reddit Sans', sans-serif;
+	display: block;
 }
 
-.user-bio button {
-
-	margin-left: 45%;	
-    font-family: sans-serif;
-
+#bio.hide{
+	display: none;
 }
+
 
 #user-content-space {
 
-	position: ab		
+	position: absolute;		
 	width: 100%;	
 
 }
 
+#edit-profile-btn{
+	width: 100px;
+    height:40px;
+    background-color:white;
+    color: rgba(223, 75, 75);
+    border-radius:30px;
+    margin-top:0%;
+    margin-bottom: 0%;
+    font-family: 'Reddit Sans', sans-serif; 
+    border: 1px solid rgba(223, 75, 75);
+	cursor: pointer;
+}
+
+#edit-profile-btn.hide{
+	display: none;
+}
+
+#cancel-btn, #save-btn{
+	width: 100px;
+    height:40px;
+    background-color:white;
+    color: rgba(223, 75, 75);
+    border-radius:30px;
+    margin-top:0%;
+    margin-bottom: 0%;
+    font-family: 'Reddit Sans', sans-serif; 
+    border: 1px solid rgba(223, 75, 75);
+	cursor: pointer;
+	margin-right: 10px;
+	margin-left: 10px;
+	display: none;
+}
+
+#cancel-btn.show, #save-btn.show{
+	display: block;
+}
+
+#camera-icon{
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background: #00b7ff;
+	color: white;
+	border-radius: 50%;
+	padding: 6px;
+	cursor: pointer;
+	font-size: 18px;
+	display: none;
+}
+
+#camera-icon.show {
+  	display: block;
+}
+
+#bio-edit{
+	width: 100%;
+	border-radius: 15px;
+	padding: 10px;
+	display: none;
+	font-family: 'Reddit Sans', sans-serif;
+	margin-bottom: 10px;
+}
+
+#bio-edit:focus{
+    text-align: left;
+    border-color: var(--yellow-border);
+    outline: none;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px var(--orange-glow); 
+}
+
+#bio-edit.show{
+	display: block;
+}

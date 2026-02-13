@@ -42,16 +42,9 @@ using a templating engine .
                 </form>
             </div>
 
-            <!--The register and log in buttons-->
-            <div id="reg-login-group">
-                <button id="reg">Register</button>
-                <button id="log">Log In</button>
-                <button id="settings-visitor"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
-            </div>
-
             <!--Mini profile displayed when logged in-->
-            <div id="mini-profile">
-                <button id="profile-clickable"><i class='bx bxs-user-circle' id="profile-icon"></i></button>
+            <div id="mini-profile" style="display: block;">
+                <button id="profile-clickable" onclick = "location.href='user.html';"><i class='bx bxs-user-circle' id="profile-icon"></i></button>
                 <button id="settings-logged-in"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
             </div>
         </header>
@@ -94,7 +87,12 @@ using a templating engine .
 
 				<!-- wrapper div for controlling the clickable area around the profile picture -->
 				<div id = "user-pfp">	
-					<img src="images/freddyt_logo.png">	
+					<img src="images/freddyt_logo.png" id="pfp">
+					<input type="file" id="profile-upload" style="display: none;" accept="image/png, image/jpeg, image/gif">
+					<label for="profile-upload" id="camera-icon">
+						<i class='bx bxs-camera'></i>
+					</label>
+					
 				</div>
 
 				<!-- this is fr just for the wave -->
@@ -107,9 +105,16 @@ using a templating engine .
 
 				<!-- wrapper div for the space around the user bio -->
 				<div class = "user-bio">
-					<p> this is a sample description.. oooo this is really long </p>
-					<button> Edit Profile </button>
+					<p id="bio"> this is a sample description.. oooo this is really long </p>
+					<textarea id="bio-edit"></textarea>
 				</div>
+				<div class = "edit-btn">
+					<button id="edit-profile-btn"> Edit Profile </button>
+					<button id="cancel-btn"> Cancel </button>
+					<button id="save-btn"> Save Changes </button>
+				</div>
+
+				<hr>
 
 				<!-- wrapper div for the horizontal nav bar inside the user profile -->
 				<div class = "user-nav-bar">
@@ -158,6 +163,7 @@ using a templating engine .
         <!--Connect to JS script for animations-->
         <script src="main.js"></script>
         <script src = "darkmode.js"></script>
+		<script src = "user.js"></script>
 
     </body>
 </html>
