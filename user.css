@@ -182,7 +182,7 @@ with an actual image */
 #edit-profile-btn{
 	width: 100px;
     height:40px;
-    background-color:white;
+    background-color:var(--background-color);
     color: rgba(223, 75, 75);
     border-radius:30px;
     margin-top:0%;
@@ -199,7 +199,7 @@ with an actual image */
 #cancel-btn, #save-btn{
 	width: 100px;
     height:40px;
-    background-color:white;
+    background-color:var(--background-color);
     color: rgba(223, 75, 75);
     border-radius:30px;
     margin-top:0%;
