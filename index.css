@@ -645,6 +645,7 @@ body.modal-open{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+    font-weight: bold;
 
     color: var(--default-txt);
 }
