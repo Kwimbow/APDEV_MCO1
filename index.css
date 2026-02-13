@@ -785,8 +785,13 @@ body.modal-open{
     font-family: 'Reddit Sans', sans-serif;
     font-size: 18px;
     margin-bottom: -12px;
+    text-align: center;
 }
 
+.profile-color{
+    text-decoration: none;
+    color: #df4b4b;
+}
 
 
 /* horizontal line in sidenav bar */
