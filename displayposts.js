@@ -6,10 +6,22 @@ let currentPostIndex = -1;
 function loadPostsList() {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = "";
+
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+    posts.forEach(post => {
+        if (post.votes === undefined) post.votes = 0;
+    });
+
+    if (posts.length === 0) {
+        mainContent.innerHTML =
+            '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'; font-size: 50px;">Nothing yet.. Start a discussion!</h3>';
+        return;
+    }
     
     for(let i = 0 ; i< posts.length ; i++){
         const viewButton = document.createElement("button");
-        viewButton.className = "view-post-button"
+        viewButton.className = "view-post-button";
 
         let postTime = (posts[i].date).toString();
         const timeString = postTime.split("T")
@@ -23,6 +35,10 @@ function loadPostsList() {
         const postFlexTop = document.createElement("div")
         const postFlexBottom = document.createElement("div")
         const flexArea = document.createElement("div")
+        const leftArea = document.createElement("div");
+        const rightArea = document.createElement("div");
+        rightArea.id = "post-right-area";
+        leftArea.id = "post-left-area";
         postFlexTop.id = "post-flex-top";
         flexArea.id = "post-flex-display";
         postFlexBottom.id = "post-flex-bottom";
@@ -33,6 +49,16 @@ function loadPostsList() {
         userPfp.src = 'images/freddyt_logo.png';
         userPfp.id = "user-pfp"
 
+        const upvoteBtn = document.createElement("button");
+        const downvoteBtn = document.createElement("button");
+        upvoteBtn.id = "upvote-btn";
+        downvoteBtn.id = "downvote-btn";
+        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
+        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
+
+        let voteCount = document.createElement("p");
+        voteCount.id = "vote-count";
+        voteCount.appendChild(document.createTextNode(posts[i].votes));
 
         const postTag = document.createElement("p");
         postTag.id = "post-tag";
@@ -65,19 +91,39 @@ function loadPostsList() {
         postDate.id = "post-date"
         postDate.appendChild(document.createTextNode(dateString));
 
-        newPost.append(userPfp);
+        leftArea.append(userPfp);
+        leftArea.append(upvoteBtn);
+        leftArea.append(voteCount);
+        leftArea.append(downvoteBtn);
+        newPost.append(leftArea);
+        
         postFlexTop.append(postTag);
         postFlexTop.append(postTitle);
         postFlexTop.append(postDate);
         postFlexBottom.append(postContent);
-        flexArea.append(postFlexTop);
-        flexArea.append(postFlexBottom);
+        rightArea.append(postFlexTop);
+        rightArea.append(postFlexBottom);
+        flexArea.append(rightArea);
         newPost.append(flexArea);
 
         newPost.id="post-display";
         viewButton.append(newPost);
 
         mainContent.appendChild(viewButton);
+
+        upvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes += 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+
+        downvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes -= 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
 
         console.log(posts[i].tag);
         console.log(posts[i].title);
@@ -101,8 +147,14 @@ function viewFullPost(postIndex) {
     fullPostView.id = "full-post-view";
     
     fullPostView.innerHTML = `
-        <button id="back-to-posts-btn" class="back-button"><i class='bx bx-arrow-back' id="back-arrow-btn"></i></button>
-        
+        <div id="full-post-header">
+            <button id="back-to-posts-btn" class="back-button"><i class='bx bx-arrow-back' id="back-arrow-btn"></i></button>
+            <button id="post-settings-btn" class="post-options" style="display: none;" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-vertical-rounded' id="post-settings-icon"></i></button>
+                <div class="post-options-menu" role="menu" aria-hidden="true">
+                    <button class="post-options-menu-item" id="delete-post">Delete Post</button>
+                    <button class="post-options-menu-item" id="edit-post">Edit Post</button>
+                </div>
+        </div>
         <div id="full-post-wrapper">
             <div id="full-post-container">
                 <div id="full-post-left">
@@ -111,7 +163,10 @@ function viewFullPost(postIndex) {
                     <p id="full-post-date"></p>
                 </div>
                 <div id="full-post-right">
-                    <h2 id="full-post-title"></h2>
+                    <div id="full-post-top">
+                        <p id="full-post-tag"></p>
+                        <h2 id="full-post-title"></h2>
+                    </div>
                     <p id="full-post-content"></p>
                 </div>
             </div>
@@ -124,17 +179,42 @@ function viewFullPost(postIndex) {
                 <div id="full-comments-display-area"></div>
             </div>
         </div>
+        <div id="del-post-success">
+            <span id="del-post-success-msg">Post successfully deleted! Redirecting...</span>
+        </div>
     `;
     
     mainContent.innerHTML = "";
     mainContent.appendChild(fullPostView);
     
+    const postTag = document.createElement("p");
+        postTag.id = "full-post-tag";
+        if (post.tag === "discussion"){
+            postTag.classList.add('green-tag');
+        }
+        else if (post.tag === "guides"){
+            postTag.classList.add('red-tag');
+        }
+        else if (post.tag === "showcase"){
+            postTag.classList.add('purple-tag');
+        }
+        else if (post.tag === "joke"){
+            postTag.classList.add('blue-tag');
+        }
+        else if (post.tag === "misc"){
+            postTag.classList.add('orange-tag');
+        }
+        postTag.appendChild(document.createTextNode(post.tag));
+
     // Populate the post data
     document.getElementById("full-post-title").textContent = post.title;
     document.getElementById("full-post-content").textContent = post.content;
     document.getElementById("full-post-username").textContent = post.user.username;
     document.getElementById("full-post-date").textContent = "Posted on " + formattedPostDate;
+    document.getElementById("full-post-tag").appendChild(postTag);
     
+    setupPostOptions(postIndex);
+
     // Show/hide comment input area based on login status
     // Comments display is always visible
     const commentInputArea = document.getElementById("full-comment-input-area");

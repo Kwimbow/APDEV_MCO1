@@ -32,13 +32,39 @@
             <div id="reg-login-group">
                 <button id="reg">Register</button>
                 <button id="log">Log In</button>
-                <button id="settings-visitor"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+                <button id="settings-visitor" class="general-options" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+                <div class="general-options-menu" role="menu" aria-hidden="true">
+                    <button class="general-options-menu-item" id="dark-mode">
+                        <div id="theme-switch">
+                            <i class='bx bx-moon' id="dark-mode-icon"></i>
+                            <i class='bx bx-sun' id="light-mode-icon"></i>
+                            <p id="dm-text">Dark Mode</p>
+                            <p id="lm-text">Light Mode</p>
+                        </div>
+                    </button>
+                </div>
             </div>
 
             <!--Mini profile displayed when logged in-->
             <div id="mini-profile">
                 <button id="profile-clickable"><i class='bx bxs-user-circle' id="profile-icon"></i></button>
-                <button id="settings-logged-in"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+                <button id="settings-logged-in" class="user-options" aria-haspopup="true" aria-expanded="false"><i class='bx bx-dots-horizontal-rounded' id="settings-icon"></i></button>
+                <div class="user-options-menu" role="menu" aria-hidden="true">
+                    <button class="user-options-menu-item" id="dark-mode2">
+                        <div id="theme-switch2">
+                            <i class='bx bx-moon' id="dark-mode-icon2"></i>
+                            <i class='bx bx-sun' id="light-mode-icon2"></i>
+                            <p id="dm-text2">Dark Mode</p>
+                            <p id="lm-text2">Light Mode</p>
+                        </div>
+                    </button>
+                    <button class="user-options-menu-item" id="logout-btn">
+                        <div id="logout-btn-content">
+                            <i class='bx bx-log-out' id="logout-icon"></i>
+                            <p id="lo-text">Log Out</p>
+                        </div>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -181,7 +207,7 @@
                     </div>
                     <!--Separate box for the register details-->
                     <div>
-                        <h2>Create Post</h2>
+                        <h2 id="create-title">Create Post</h2>
                         <hr>
                         <br>
 
@@ -213,43 +239,11 @@
                         </div>
 
                         <div>
-                            <input class="submit_btn" type="submit" value="Create Post">
+                            <input class="submit_btn" type="submit" id="create-post-submit" value="Create Post">
                             <script src="savepost.js"></script>
                         </div>
                     </div>
                 </form>
-            </div>
-
-        <div id="view-post-popup" class="modal">
-            <!--Displays the box to hold register inputs-->
-                <!--Contains the close (x) for the register-->
-                <div class = "view-post-modal">
-                    <div class="xcontainer">
-                        <span onclick="hidePopup('view-post-popup')" class="close">&times;</span>
-                    </div>
-                    <!--Separate box for the register details-->
-                    <div id = "view-post-flex-h">
-                        <div id = "view-post-left">
-                              <img id = "OP-pfp">
-                              <p id = "OP-username"></p>
-                              <p id = "OP-date"></p>
-                        </div>
-                        <div id = "view-post-right">
-                            <h2 id = "view-post-title"></h2> 
-                            <hr>
-                            <br>
-                            <p id = "view-post-content"></p>
-                            <div id = "comment-section" style="display: none;">
-                                <h3>Comments</h3>
-                                <div id = "comments-display-area"></div>
-                                <div id = "comment-input-area">
-                                    <textarea id = "comment-input" placeholder="Join the conversation"></textarea>
-                                    <button id = "submit-comment-btn">Post Comment</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         <div id="reg-success">
@@ -264,6 +258,7 @@
         <script src="savepost.js"></script>
         <script src="displayposts.js"></script>
         <script src = "viewposts.js"></script>
+        <script src="darkmode.js"></script>
 
         
 

@@ -53,7 +53,7 @@ function hidePopup(id) {
         clearLoginRegister("login-popup");
     }
     if (id === "create-post-popup"){
-        clearLoginRegister("login-popup");
+        clearCreatePost("create-post-popup");
     }
 }
 
@@ -71,6 +71,8 @@ function setupPopups(){
     });
     document.getElementById("create-post-btn")?.addEventListener("click", () => {
         showPopup("create-post-popup");
+        setupCreatePostForm();
+        lightUpCreateButton();
     });
 
     document.querySelectorAll(".modal").forEach(modal => {
@@ -83,7 +85,7 @@ function setupPopups(){
 }
 
 /* This function handles the logging out of the user,
-TO BE EDITED ONCE THE SETTINGS POPOUT IS MADE */
+TO BE EDITED ONCE THE SETTINGS POPOUT IS MADE 
 function setupLogout(){
     const logoutBtn = document.getElementById("settings-logged-in");//<-- change this to log out when actual button is made
 
@@ -92,7 +94,7 @@ function setupLogout(){
     logoutBtn.addEventListener("click", () => {
         logoutAndRedirect();
     });
-}
+}*/
 
 /* This function handles the data inputted in the log in pop-up,
 currently handles "errors" and shows animations (shaky red + error msg) when it comes into 
@@ -314,6 +316,15 @@ function successfullyRegMsg(){
     }, 3000);
 }
 
+/* This function displays a slide up message "successfully deleted post" for 3 seconds */
+function successfullyDelPostMsg(){
+    const msg = document.getElementById("del-post-success");
+    msg.classList.add("show");
+    setTimeout(() => {
+        msg.classList.remove("show");
+    }, 3000);
+}
+
 /* This function clears the log in / register input form so that when the user
 clicks out, their data that is in the input fields do not save when button is clicked again */
 function clearLoginRegister(formId){
@@ -359,6 +370,56 @@ function protectBookmarksPage(){
     }
 }
 
+function lightUpCreateButton(){
+    const createBtn = document.getElementById("create-post-submit");
+    let title = document.getElementById("title");
+    let content = document.getElementById("content");
+    let tag = document.querySelector('input[name="tag"]:checked');
+
+    if(title.value.trim() === "" || content.value.trim() === "" || tag === null){
+        createBtn.classList.remove("active");
+        createBtn.disabled = true;
+    } else {
+        createBtn.classList.add("active");
+        createBtn.disabled = false;
+    }
+}
+
+function setupCreatePostForm(){
+    const title = document.getElementById("title");
+    const content = document.getElementById("content");
+    const tags = document.querySelectorAll('input[name="tag"]');
+
+    if (!title || !content || !tags) return;
+
+    title.addEventListener("input", lightUpCreateButton);
+    content.addEventListener("input", lightUpCreateButton);
+
+    tags.forEach(tag => {
+        tag.addEventListener("change", lightUpCreateButton);
+    });
+}
+
+function clearCreatePost(formId){
+    let input = document.querySelector(`#${formId} form`);
+
+    if (!input) return;
+
+    let title = input.querySelector("#title");
+    let content = input.querySelector("#content");
+    let tags = input.querySelectorAll('input[name="tag"]');
+
+    if (!title || !content || !tags) return;
+
+    title.value = "";
+    content.value = "";
+    tags.forEach(tag => {
+        tag.checked = false;
+    });
+
+    lightUpCreateButton();
+}
+
 /* This function dynamically updates the user view as soon as they log in */
 function updateUserUI() {
     const user = getCurrentUser();
@@ -386,12 +447,145 @@ function updateUserUI() {
     }
 }
 
+/* This function displays the drop down menu for posts*/
+function setupPostOptions(postIndex) {
+    const user = getCurrentUser();
+    if (!user) return;
+
+    const btn = document.getElementById("post-settings-btn");
+    const menu = document.querySelector(".post-options-menu");
+    const postUsernameEl = document.getElementById("full-post-username"); // use this
+    if (!btn || !menu || !postUsernameEl) return;
+
+    const postUser = postUsernameEl.textContent.trim();
+    if (user.username !== postUser) {
+        btn.style.display = "none";
+        return;
+    }
+
+    btn.style.display = "block";
+
+    btn.addEventListener("click", () => {
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", !isOpen);
+        menu.setAttribute("aria-hidden", isOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            menu.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    //make delete and edit button work
+    const deleteBtn = document.getElementById("delete-post");
+    const editBtn = document.getElementById("edit-post");
+
+    if (deleteBtn && postIndex !== undefined) {
+        deleteBtn.addEventListener("click", () => {
+            const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+            posts.splice(postIndex, 1);
+            localStorage.setItem("posts", JSON.stringify(posts));
+            const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
+            delete allComments[postIndex];
+            localStorage.setItem("comments", JSON.stringify(allComments));
+            successfullyDelPostMsg();
+            setTimeout(() => {
+                window.location.replace("index.html");
+            }, 4000);
+            
+        });
+    }
+
+    if (editBtn) {
+        editBtn.addEventListener("click", () => {
+            // Implement edit functionality
+            alert("Edit post functionality to be implemented.");
+        });
+    }
+}
+
+/* This function displays the drop down menu for the main settings*/
+function setupGeneralOptions() {
+    const btn = document.getElementById("settings-visitor");
+    const menu = document.querySelector(".general-options-menu");
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", !isOpen);
+        menu.setAttribute("aria-hidden", isOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            menu.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    //make delete and edit button work
+    const darkModebtn = document.getElementById("dark-mode");
+
+    if (darkModebtn) {
+        darkModebtn.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+        });
+    }
+}
+
+/* This function displays the drop down menu for the user settings*/
+function setupUserOptions() {
+    const btn = document.getElementById("settings-logged-in");
+    const menu = document.querySelector(".user-options-menu");
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", !isOpen);
+        menu.setAttribute("aria-hidden", isOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            menu.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    const darkModebtn = document.getElementById("dark-mode2");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    if (darkModebtn) {
+        darkModebtn.addEventListener("click", () => {
+            document.body.classList.toggle("darkmode");
+            localStorage.setItem("darkMode", document.body.classList.contains("darkmode"));
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            logoutAndRedirect();
+        });
+    }
+}
+
 //calls the functions
 document.addEventListener("DOMContentLoaded", () => {
     setupPopups();
     setupLoginForm();
     setupRegisterForm();
-    setupLogout();
     updateUserUI();
     protectBookmarksPage();
+    setupPostOptions();
+    setupGeneralOptions();
+    setupUserOptions();
 });

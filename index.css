@@ -1,10 +1,127 @@
+:root {
+    --default-txt: black;
+
+    --orangey-red: #df4b4b;
+    --background-color: #ffffff;
+    --yellow-border: #ffaa17;
+    --orange-glow: #ff703c;
+
+    --sidenav-button: #000000;
+    --sidenav-btnhover: #f0f0f0;
+    --sidenav-active: #dddfdf;
+
+    --closenav-border: #868686;
+    --closenav-borderhover: #3b3b3b;
+
+    --reglogin-btn: #dedede;
+    --reglogin-btn-clr: #a0a0a0;
+
+    --closebtn-clr: #000;
+    --closebtn-bg: #f1f1f1;
+    --closebtn-hover: #e7e7e7;
+
+    --log-info-field: #f0f0f0;
+    --log-info-hover: #e8e8e8;
+    --log-info-pholder: #888888;
+    --log-info-wrong-border: #9d2727;
+    --log-info-wrong-bg: #ffcece;
+
+    --pop-to-pop: #397fc4;
+
+    --hr: #dddfdf;
+    --upvdwv: #fff;
+    --comment-bg: #f9f9f9;
+    --full-date: #666;
+}
+.darkmode {
+    --default-txt: white;
+    --background-color: #1c1c1c;
+    --sidenav-button: #fff;
+    --sidenav-btnhover: #4a4a4a;
+    --sidenav-active: #6b6b6b;
+
+    --closenav-borderhover: #bfbdbd;
+
+    --reglogin-btn: #828282;
+    --reglogin-btn-clr: black;
+
+    --closebtn-clr: #fff;
+    --closebtn-bg: #1f1f1f;
+    --closebtn-hover: #4d4d4d;
+
+    --log-info-field: #363636;
+    --log-info-hover: #595959;
+    --log-info-pholder: #888888;
+    --log-info-wrong-border: #9d2727;
+    --log-info-wrong-bg: #ffcece;
+
+    --hr: #595959;
+    --upvdwv: #8a8a8a;
+    --comment-bg: #2c2c2c;
+    --full-date: #b8b8b8;
+}
+
+body, textarea{
+    background-color: var(--background-color);
+    color: var(--default-txt);
+}
+
 #logo{
     font-family: 'Reddit Sans', sans-serif; 
     font-size: 27px; 
-    color: #df4b4b; 
+    color: var(--orangey-red); 
     text-decoration: none;
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+#theme-switch #dark-mode-icon, #theme-switch2 #dark-mode-icon2 {
+    font-size: 20px;
+    padding-top: 3px;
+}
+#theme-switch #light-mode-icon, #theme-switch2 #light-mode-icon2{
+    display: none;
+    font-size: 20px;
+    padding-top: 3px;
+}
+
+#logout-btn-content #logout-icon {
+    font-size: 20px;
+    padding-top: 3px;
+    color: var(--default-txt);
+}
+
+.darkmode #theme-switch #dark-mode-icon, .darkmode #theme-switch2 #dark-mode-icon2 {
+    display: none;
+}
+.darkmode #theme-switch #light-mode-icon, .darkmode #theme-switch2 #light-mode-icon2{
+    display: block;
+}
+
+#theme-switch #dm-text, #theme-switch2 #dm-text2 {
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    margin-left: 8px;   
+}
+#theme-switch #lm-text, #theme-switch2 #lm-text2 {
+    display: none;
+    font-family: 'Reddit Sans', sans-serif;
+    color: white;
+    font-size: 16px;
+    margin-left: 8px;
+}
+.darkmode #theme-switch #dm-text, .darkmode #theme-switch2 #dm-text2 {
+    display: none;
+}
+.darkmode #theme-switch #lm-text, .darkmode #theme-switch2 #lm-text2 {
+    display: block;
+}
+
+#logout-btn-content #lo-text {
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    margin-left: 8px;   
+    color: var(--default-txt);
 }
 
 header{
@@ -14,10 +131,11 @@ header{
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #ffffff;
+    background-color: var(--background-color);
     border-bottom: 1px solid #b8b8b8;
     width: 100%;
     height: 66;
+    z-index: 2;
 }
 
 header div{
@@ -29,10 +147,13 @@ header div{
     width: 550px;
     height: 45px;
     border-radius: 25px;
-    border: 1.5px solid #df4b4b;
+    border: 1.5px solid var(--orangey-red);
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     box-sizing: border-box;
     padding-left: 45px;
+
+    background-color: var(--background-color);
+    color: var(--default-txt);
 
     background-image: url("images/freddyt_logo.png");
     background-repeat: no-repeat;
@@ -48,11 +169,11 @@ header div{
 
 #search-bar:focus{
     text-align: left;
-    border-color: #ffaa17;
+    border-color: var(--yellow-border);
     outline: none;
     box-sizing: border-box;
     padding-left: 45px;
-    box-shadow: 0 0 20px #ff703c; 
+    box-shadow: 0 0 20px var(--orange-glow); 
 }
 
 #search-bar:focus::placeholder{
@@ -78,7 +199,7 @@ header div{
     border-radius: 25px;
     border: transparent;
     text-align: center;
-    background-color: #df4b4b;
+    background-color: var(--orangey-red);
     color: white;
     font-weight: bold;
     transition: background-color 0.3s ease;
@@ -101,7 +222,7 @@ header div{
     position: fixed; 
     top: 66.5px; 
     left: 0; 
-    background-color: #ffffff; 
+    background-color: var(--background-color); 
     padding-top: 10px; 
     border-right: 1px solid #b8b8b8;
     transition: all 0.3s ease;
@@ -121,7 +242,7 @@ header div{
 .side-nav-buttons{
     font-family: 'Reddit Sans', sans-serif;
     text-decoration: none; 
-    color: #000000; 
+    color: var(--sidenav-button); 
     font-size: 16px;
     background-color: transparent;
     width: 230px;
@@ -136,12 +257,12 @@ header div{
 }
 
 .side-nav-buttons:hover{
-    background-color: #f0f0f0;
+    background-color: var(--sidenav-btnhover);
     cursor: pointer;
 }
 
 .side-nav-buttons.active{
-    background-color: #dddfdf;
+    background-color: var(--sidenav-btnactive);
 }
 
 #btn{
@@ -149,9 +270,9 @@ header div{
     top: 90px;
     left: 256px;
     font-size: 20px;
-    color: #000000;
-    background-color: #ffffff;
-    border: 1px solid #868686;
+    color: var(--sidenav-button);
+     background-color: var(--background-color);
+    border: 1px solid var(--closenav-border);
     border-radius: 50%;
     width: 28px;
     height: 28px;
@@ -164,7 +285,7 @@ header div{
 
 #btn:hover{
     transform: scale(1.1);
-    border-color: #3b3b3b;
+    border-color: var(--closenav-borderhover);
 }
 
 #btn.clicked{
@@ -192,8 +313,8 @@ header div{
     bottom: 20px;
     right: 25px;
     font-size: 30px;
-    color: #ffffff;
-    background-color: #df4b4b;
+    color:var(--background-color);
+    background-color:var(--orangey-red);
     border: none;
     border-radius: 50%;
     width: 50px;
@@ -212,13 +333,14 @@ header div{
     box-shadow: 0 0 20px #ffbb63; 
 }
 
-
-
-
+.title_inpt {
+    background-color: var(--background-color);
+    color: var(--default-txt);
+}
 
 #reg-login-btn {
-    background-color: #dedede;
-    color: rgb(160, 160, 160);
+    background-color: var(--reglogin-btn);
+    color: var(--reglogin-btn-clr);
     padding: 14px 20px;
     margin: 8px 26px;
     border: none;
@@ -230,7 +352,7 @@ header div{
 }
 
 #reg-login-btn:hover {
-    background-color: #df4b4b;
+    background-color: var(--orangey-red);
     color: white;
 }
 
@@ -254,7 +376,7 @@ header div{
 }
 /* Modal Content Box */
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--background-color);
     margin: 4% auto 15% auto;
     border: 1px solid #888;
     border-radius: 20px;
@@ -264,24 +386,36 @@ header div{
 }
 
 .create-post-modal {
-    background-color: #fefefe;
-    margin: 4% auto 15% auto;
+    background-color: var(--background-color);
+    margin: 3% auto 15% auto;
     border: 1px solid #888;
     border-radius: 20px;
-    width: 70%; 
-    height: 700px;
+    width: 600px; 
+    height: 600px;
 	padding-bottom: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
 
 }
+
+#create-title{
+    font-family: 'Reddit Sans', sans-serif; 
+    font-size: 27px; 
+    color: var(--default-txt); 
+    text-decoration: none;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 /* The Close Button (x) */
 .close {
     position: absolute;
     right: 25px;
     top: 0;
-    color: #000;
+    color: var(--closebtn-clr);
     border-radius: 100px;
     border: none;
-    background-color: rgb(241, 241, 241);
+    background-color: var(--closebtn-bg);
     width: 28px;
     height: 28px;
     font-size: 22px;
@@ -289,7 +423,7 @@ header div{
     text-align: center;
 }
 .close:hover,.close:focus {
-    background-color: rgb(231, 231, 231);
+    background-color: var(--closebtn-hover);
     cursor: pointer;
 }
 
@@ -305,7 +439,8 @@ body.modal-open{
 #log-user-info, #log-pw-info, 
 #reg-user-info, #reg-pw-info, #reg-repw-info{
     height: 60px;
-    background-color: #f0f0f0;
+    background-color: var(--log-info-field);
+    color: var(--default-txt);    
     border-radius: 20px;
     border: none;
     bottom: 1px;
@@ -321,7 +456,7 @@ body.modal-open{
 
 #log-user-info:hover, #log-pw-info:hover, 
 #reg-user-info:hover, #reg-pw-info:hover, #reg-repw-info:hover{
-    background-color: #e8e8e8;
+    background-color: var(--log-info-hover);
 }
 
 #log-user-info::placeholder, #log-pw-info::placeholder, 
@@ -338,7 +473,7 @@ body.modal-open{
     font-size: 16px;
     font-family: 'Reddit Sans', sans-serif;
     transition: all 0.3s ease;
-    color: #888888;
+    color: var(--log-info-pholder);
 }
 
 #log-user-info:focus + .pholder,
@@ -362,7 +497,7 @@ body.modal-open{
 #reg-repw-info:not(:focus).wrong + .pholder {
     transform: translateY(-.75rem);
     font-size: 12px;
-    color: #9d2727;
+    color: var(--log-info-wrong-border);
 }
 
 #log-user-info:not(:focus).wrong, 
@@ -370,8 +505,9 @@ body.modal-open{
 #reg-user-info:not(:focus).wrong, 
 #reg-pw-info:not(:focus).wrong, 
 #reg-repw-info:not(:focus).wrong{
-    border: 1px solid #9d2727;
-    background-color: #ffcece;
+    border: 1px solid var(--log-info-wrong-border);
+    background-color: var(--log-info-wrong-bg);
+    color: black;
 }
 
 .error-shake{
@@ -394,7 +530,7 @@ body.modal-open{
 }
 
 #pop-to-pop{
-    color: #397fc4;
+    color: var(--pop-to-pop);
     cursor: pointer;
 }
 
@@ -406,7 +542,7 @@ body.modal-open{
     font-size: 45px;
     border-radius: 50%;
     align-items: center;
-    color: #df4b4b;
+    color: var(--orangey-red);
 }
 
 #profile-clickable{
@@ -423,7 +559,7 @@ body.modal-open{
 }
 
 #profile-clickable:hover{
-    background-color: #e8e8e8;
+    background-color: var(--log-info-hover);
 }
 
 #settings-logged-in, #settings-visitor{
@@ -439,7 +575,7 @@ body.modal-open{
     vertical-align: middle;
 }
 #settings-logged-in:hover, #settings-visitor:hover{
-    background-color: #e8e8e8;
+    background-color: var(--log-info-hover);
 }
 
 #settings-icon{
@@ -447,7 +583,7 @@ body.modal-open{
     font-size: 25px;
     border-radius: 50%;
     align-items: center;
-    color: #000000;
+    color: var(--sidenav-button);
 }
 
 #mini-profile{
@@ -478,7 +614,7 @@ body.modal-open{
     margin-left: 26px;
     box-sizing: border-box;
 	font-size:12px;
-    color: #ff4848;
+    color: var(--orangey-red);
 }
 
 #reg-success{
@@ -495,7 +631,7 @@ body.modal-open{
     font-size: 16px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    opacity: 1;
+    opacity: 0;
     z-index: 10;
     pointer-events: none;
     transition: all 1s ease, transform 1s ease;
@@ -511,18 +647,48 @@ body.modal-open{
 }
 
 #post-display{
-    background-color:rgb(255, 255, 255);
+    background-color: var(--background-color);
     margin-bottom:20px;
     width:100%;
     padding-left:15px;
     height:200px;
     display:flex;
+    flex-direction: row;
     border-radius: 10px;
     padding-top: 15px;
     padding-bottom: 15px;
     border: 1px solid #df4b4b;
 }
 
+#post-left-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#post-right-area{
+    display: flex;
+    flex-direction: column;
+}
+
+#upvote-btn, #downvote-btn{
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+    margin-right: 10px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    color: var(--default-txt);
+}
+
+#vote-count{
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    margin-right: 10px;
+    color: var(--default-txt);
+}
 
 #post-flex-display{
     display:flex;
@@ -534,6 +700,7 @@ body.modal-open{
     width:70px;
     margin-right:10px;
     display:block;
+    margin-bottom: 15px;
 }
 
 #post-tag{
@@ -542,11 +709,27 @@ body.modal-open{
     align-items: center;
     justify-content: center;
     margin-right: 10px;
-    margin-top: 20px;
+    margin-top: 16px;
     border-radius:8px;
     font-family: 'Reddit Sans', sans-serif;
     padding-left: 8px;
     padding-right:8px;
+}
+
+#full-post-top{
+    display: flex;
+    align-items: center;
+}
+
+#full-post-tag{
+    display:inline;
+    border-radius:8px;
+    font-family: 'Reddit Sans', sans-serif;
+    padding-left: 8px;
+    padding-right:8px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin-bottom: 6px;
 }
 
 #post-title{
@@ -558,6 +741,8 @@ body.modal-open{
     overflow:hidden;
     text-overflow: ellipsis;
     font-weight: 600;
+    color: var(--default-txt);
+
 }
 
 #post-flex-top{
@@ -582,11 +767,15 @@ body.modal-open{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
+    color: var(--default-txt);
+
 }
 
 #post-date{
     margin-left:auto;
     font-family: 'Reddit Sans', sans-serif;
+    color: var(--default-txt);
+
 }
 
 .view-post-button{
@@ -600,7 +789,7 @@ body.modal-open{
 }
 
 .view-post-modal {
-    background-color: #fefefe;
+    background-color: var(--background-color);
     margin: 4% auto 15% auto;
     border: 1px solid #888;
     border-radius: 20px;
@@ -609,6 +798,8 @@ body.modal-open{
 	padding-bottom: 30px;
     display: flex;
     flex-direction: column;
+    overflow:auto;
+    overflow-x: hidden;
 }
 
 
@@ -655,7 +846,7 @@ body.modal-open{
 
 /* horizontal line in sidenav bar */
 #sidenav-hr {
-    color:  #dddfdf;
+    color: var(--hr);
 }
 
 /* for tag filters part */
@@ -675,9 +866,7 @@ body.modal-open{
     margin: 0.7rem;
     padding: 1rem;
     font-size: 1rem;
-    background-color: #f0f0f0;
-    border-color: darkgray;
-    border-width: 10px;
+    background-color: var(--log-info-field);
     cursor: pointer;
     transition: background 0.1s;
 
@@ -688,7 +877,7 @@ body.modal-open{
 }
 
 .filter-input:checked + .filter-label {
-    background-color: rgba(223, 75, 75);
+    background-color: var(--orangey-red);
     color: white;
     font-weight: bold;
 }
@@ -758,13 +947,13 @@ body.modal-open{
     background-color: #df4b4b;
     color: white;
     border: none;
-    border-radius: 100%;
+    border-radius: 50%;
     cursor: pointer;
-    font-family: 'Reddit Sans', sans-serif;
     font-weight: bold;
     font-size: 14px;
     transition: background-color 0.3s ease;
     width: fit-content;
+    text-align: center;
 }
 
 .back-button:hover {
@@ -817,7 +1006,7 @@ body.modal-open{
     font-family: 'Reddit Sans', sans-serif;
     font-size: 14px;
     text-align: center;
-    color: #666;
+    color: var(--full-date);
     margin: 5px 0;
 }
 
@@ -833,9 +1022,11 @@ body.modal-open{
     margin-bottom: 10px;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    flex-shrink: 0;
+    white-space: normal;
+    flex: 1;
     font-size: 22px;
     margin-left: 0%;
+    max-width: 90%;
 }
 
 #full-post-content {
@@ -847,6 +1038,7 @@ body.modal-open{
     overflow-y: auto;
     flex: 1;
     min-height: 0;
+    margin-left: 10px;
 }
 
 #full-comment-section {
@@ -917,7 +1109,7 @@ body.modal-open{
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 10px;
-    background-color: #f9f9f9;
+    background-color: var(--comment-bg);
     min-height: 0;
 }
 
@@ -1032,5 +1224,171 @@ body.modal-open{
 }
 
 #back-arrow-btn{
-    font-size: 20px;
+    padding: 0px;
+    font-size: 25px;
+    border-radius: 50%;
+    align-items: center;
+    color: white;
+}
+
+#post-settings-btn{
+    width: 45px;
+    height: 45px;
+    border-radius: 25px;
+    border: transparent;
+    text-align: center;
+    background-color: transparent;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    vertical-align: middle;
+    margin-bottom: 20px;
+}
+
+#post-settings-btn:hover{
+    background-color: #e8e8e8;
+}
+
+#post-settings-icon{
+    padding: 0px;
+    font-size: 25px;
+    border-radius: 50%;
+    align-items: center;
+    color: #727272;
+}
+
+#full-post-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.post-options-menu{
+    position: absolute;
+    top: 120px;
+    right: 240px;
+    width: 160px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    padding: 6px 8px;
+    background-color: white;
+}
+
+.post-options-menu.open{
+    display: flex;
+}
+
+.post-options-menu-item{
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    text-align: left;
+    font-family: 'Reddit Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 6px;
+
+    background-color: white;
+    color: black;
+}
+
+.post-options-menu-item:hover{
+    background-color: #f0f0f0;
+}
+
+#del-post-success{
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(300%); /* start lower */
+    background-color: rgb(235, 255, 235);
+    border: 1px solid rgb(45, 179, 45);
+    color: rgb(45, 179, 45);
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+    transition: all 0.5s ease, transform 0.5s ease;
+}
+
+#del-post-success.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+#del-post-success-msg{
+    color: rgb(45, 179, 45);
+}
+
+.general-options-menu{
+    position: absolute;
+    top: 60px;
+    right: 5px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    padding: 5px 5px;
+    background-color: var(--log-info-field);
+    height: 50px;
+    transition: all 0.5s ease;
+}
+
+ .user-options-menu{
+    position: absolute;
+    top: 60px;
+    right: 5px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    padding: 5px 5px;
+    background-color: var(--log-info-field);
+    height: 120px;
+    transition: all 0.5s ease;
+}
+
+.general-options-menu.open, .user-options-menu.open{
+    display: flex;
+}
+
+.general-options-menu-item, .user-options-menu-item {
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-family: 'Reddit Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 6px;
+    height: 98%;
+    background-color: var(--log-info-field);
+    color: black;
+}
+
+.general-options-menu-item:hover , .user-options-menu-item:hover{
+    background-color: var(--log-info-hover);
+}
+
+#theme-switch, #theme-switch2, #logout-btn-content {
+    display: flex;
+    align-items: center;   /* vertical alignment */
+    justify-content: center; /* horizontal centering */
+    gap: 8px; /* space between icon and text */
+}
+
+#dark-mode-icon, #light-mode-icon, #dark-mode-icon2, #light-mode-icon2, #logout-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--sidenav-button);
 }
