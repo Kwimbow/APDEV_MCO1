@@ -11,6 +11,7 @@ new_post.addEventListener("submit", function(e) {
 	let voteCount = 0;
 	
 	const post = {
+		postID: crypto.randomUUID(), // Unique ID
 		tag: tag,
 		title: title,
 		content: content,

@@ -5,8 +5,6 @@ let btn = document.querySelector("#btn");
 let sideNav = document.querySelector("#side-bar");
 let navItem = document.querySelector("#nav-item");
 let mainContent = document.querySelector("#main-content");
-let home = document.querySelector("#home-btn");
-let bookmark = document.querySelector("#bookmarks-btn");
 
 var modal = document.getElementById('register-popup');
 var modal2 = document.getElementById('login-popup');
@@ -26,12 +24,26 @@ btn.onclick = function() {
     mainContent.classList.toggle("expand");
 }
 
-/* Brute forced active navigation button to indicate which page the user is in */
-if (window.location.href.indexOf("index.html") > -1) {
-    home.classList.add("active");
-} else if (window.location.href.indexOf("bookmarks.html") > -1) {
-    bookmark.classList.add("active");
+const navButtons = document.querySelectorAll('.side-nav-buttons');
+const homeBtn = document.getElementById('home-btn');
+const bookmarksBtn = document.getElementById('bookmarks-bar');
+
+function resetNavActive() {
+    navButtons.forEach(btn => btn.classList.remove('active'));
 }
+
+if (window.location.pathname.split('/').pop() === 'index.html') {
+    homeBtn.classList.add('active');
+} else if (window.location.pathname.split('/').pop() === 'bookmarks.html') {
+    bookmarksBtn.classList.add('active');
+}
+
+const filters = document.querySelectorAll('.filter-input');
+filters.forEach(filter => {
+    filter.addEventListener('change', () => {
+        resetNavActive();
+    });
+});
 
 /* This function shows the pop-up of the register and login "page", 
 it also locks the body's content so that it cannot be scrolled */
@@ -83,18 +95,6 @@ function setupPopups(){
         });
     });
 }
-
-/* This function handles the logging out of the user,
-TO BE EDITED ONCE THE SETTINGS POPOUT IS MADE 
-function setupLogout(){
-    const logoutBtn = document.getElementById("settings-logged-in");//<-- change this to log out when actual button is made
-
-    if (!logoutBtn) return;
-
-    logoutBtn.addEventListener("click", () => {
-        logoutAndRedirect();
-    });
-}*/
 
 /* This function handles the data inputted in the log in pop-up,
 currently handles "errors" and shows animations (shaky red + error msg) when it comes into 
@@ -578,6 +578,130 @@ function setupUserOptions() {
     }
 }
 
+function searchPostsByKeyword(keyword) {
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+    const lowerKeyword = keyword.toLowerCase();
+
+    return posts.filter(post => {
+        const titleMatch = post.title.toLowerCase().includes(lowerKeyword);
+        const contentMatch = post.content.toLowerCase().includes(lowerKeyword);
+        const tagMatch = post.tag.toLowerCase().includes(lowerKeyword);
+        return titleMatch || contentMatch || tagMatch;
+    });
+}
+
+function setupSearchFunctionality() {
+    const searchForm = document.getElementById("search-for");
+    const searchInput = document.getElementById("search-bar");
+
+    searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const keyword = searchInput.value.trim();
+        if (keyword === "") window.location.href = "index.html";
+        if (keyword) {
+            const results = searchPostsByKeyword(keyword);
+            displaySearchResults(results, keyword);
+        }
+    });
+}
+
+function displaySearchResults(results, keyword) {
+    const mainContent = document.getElementById("main-content");
+    if (!mainContent) return;
+
+    mainContent.innerHTML = `<h2 id="search-results-title">Search Results for "<span id="search-results-keyword">${keyword}</span>"</h2>`;
+
+    if (results.length === 0) {
+        mainContent.innerHTML += "<p id='search-no-posts'>No posts found.. *cricket noises*</p>";
+        return;
+    }
+
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+    results.forEach(result => {
+        const i = posts.findIndex(p => p.postID === result.postID);
+
+        const viewButton = document.createElement("button");
+        viewButton.className = "view-post-button";
+
+        const newPost = document.createElement("div");
+        const postFlexTop = document.createElement("div")
+        const postFlexBottom = document.createElement("div")
+        const flexArea = document.createElement("div")
+        const leftArea = document.createElement("div");
+        const rightArea = document.createElement("div");
+        rightArea.id = "post-right-area";
+        leftArea.id = "post-left-area";
+        postFlexTop.id = "post-flex-top";
+        flexArea.id = "post-flex-display";
+        postFlexBottom.id = "post-flex-bottom";
+
+        const userPfp = new Image();
+        userPfp.src = 'images/freddyt_logo.png';
+        userPfp.id = "user-pfp"
+
+        const upvoteBtn = document.createElement("button");
+        const downvoteBtn = document.createElement("button");
+        upvoteBtn.id = "upvote-btn";
+        downvoteBtn.id = "downvote-btn";
+        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
+        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
+
+        let voteCount = document.createElement("p");
+        voteCount.id = "vote-count";
+        voteCount.textContent = posts[i].votes;
+
+        const postTag = document.createElement("p");
+        postTag.id = "post-tag";
+        if (result.tag === "discussion") postTag.classList.add('green-tag');
+        else if (result.tag === "guides") postTag.classList.add('red-tag');
+        else if (result.tag === "showcase") postTag.classList.add('purple-tag');
+        else if (result.tag === "joke") postTag.classList.add('blue-tag');
+        else if (result.tag === "misc") postTag.classList.add('orange-tag');
+        postTag.textContent = result.tag;
+
+        const postTitle = document.createElement("p");
+        postTitle.id = "post-title";
+        postTitle.textContent = result.title;
+
+        const postContent = document.createElement("p");
+        postContent.id = "post-content";
+        postContent.textContent = result.content;
+
+        const postDate = document.createElement("p");
+        postDate.id = "post-date";
+        postDate.textContent = result.date.split("T")[0];
+
+        leftArea.append(userPfp, upvoteBtn, voteCount, downvoteBtn);
+        newPost.append(leftArea);
+        postFlexTop.append(postTag, postTitle, postDate);
+        postFlexBottom.append(postContent);
+        rightArea.append(postFlexTop, postFlexBottom);
+        flexArea.append(rightArea);
+        newPost.append(flexArea);
+
+        newPost.id = "post-display";
+        viewButton.append(newPost);
+        mainContent.appendChild(viewButton);
+
+        upvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes += 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+
+        downvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes -= 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+
+        viewButton.onclick = () => viewFullPost(posts[i]);
+    });
+}
+
 //calls the functions
 document.addEventListener("DOMContentLoaded", () => {
     setupPopups();
@@ -588,4 +712,5 @@ document.addEventListener("DOMContentLoaded", () => {
     setupPostOptions();
     setupGeneralOptions();
     setupUserOptions();
+    setupSearchFunctionality();
 });
