@@ -1,9 +1,10 @@
 /* FOR DISPLAYING POSTS */
-let currentFilter = "all";
+let currentFilter = "none";
+let currentTag = "all";
 
 const posts = JSON.parse(localStorage.getItem('posts') || '[]');
 
-function loadPostsList() {
+function loadPostsList(filter = "none", tag = "all") {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = "";
 
@@ -15,85 +16,37 @@ function loadPostsList() {
         if (post.votes === undefined) post.votes = 0;
     });
 
-    //sort from most recent to oldest
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    let displayPostsList = posts;
+    if (tag !== "all") {
+        displayPostsList = posts.filter(post => post.tag === tag);
+    }
 
-    if (posts.length === 0) {
-        mainContent.innerHTML =
-            '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'; font-size: 50px;">Nothing yet.. Start a discussion!</h3>';
+    if (displayPostsList.length === 0) {
+        mainContent.innerHTML = tag !== "all"
+            ? `<h3 align="center" style="color: #999; font-family: 'Reddit Sans'; font-size: 50px;">No ${tag} posts yet..</h3>`
+            : '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'; font-size: 50px;">Nothing yet.. Start a discussion!</h3>';
         return;
     }
-    
-    for(let i = 0 ; i< posts.length ; i++){
-        displayPosts(posts, i);
-    }
-}
-
-function loadPostsByTag(tag) {
-    const mainContent = document.getElementById("main-content");
-    mainContent.innerHTML = "";
-
-    const storedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-    posts.length = 0;
-    posts.push(...storedPosts);
-
-    posts.forEach(post => {
-        if (post.votes === undefined) post.votes = 0;
-    });
-
-    const filteredPosts = posts.filter(post => post.tag === tag);
-
-    if (filteredPosts.length === 0) {
-        mainContent.innerHTML =
-            `<h3 align="center" style="color: #999; font-family: 'Reddit Sans'; font-size: 50px;">No ${tag} posts yet..</h3>`;
-        return;
-    }
-
-    filteredPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    for(let i = 0 ; i< filteredPosts.length ; i++){
-        displayPosts(filteredPosts, i);
-    }
-}
-
-function loadPostByFilter(filter){
-    const mainContent = document.getElementById("main-content");
-    mainContent.innerHTML = "";
-
-    const storedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-    posts.length = 0;
-    posts.push(...storedPosts);
-
-    posts.forEach(post => {
-        if (post.votes === undefined) post.votes = 0;
-    });
 
     if (filter === "filter-controversial") {
-        posts.sort((a, b) => a.votes - b.votes);
+        displayPostsList.sort((a, b) => a.votes - b.votes);
     } else if (filter === "filter-popular") {
-        posts.sort((a, b) => {
         const allComments = JSON.parse(localStorage.getItem('comments') || '{}');
-
-        const aComments = allComments[a.postID] ? allComments[a.postID].length : 0;
-        const bComments = allComments[b.postID] ? allComments[b.postID].length : 0;
-
-        const aScore = a.votes + aComments;
-        const bScore = b.votes + bComments;
-
-        return bScore - aScore;
-    });
+        displayPostsList.sort((a, b) => {
+            const aComments = allComments[a.postID] ? allComments[a.postID].length : 0;
+            const bComments = allComments[b.postID] ? allComments[b.postID].length : 0;
+            const aScore = a.votes + aComments;
+            const bScore = b.votes + bComments;
+            return bScore - aScore;
+        });
     } else if (filter === "filter-oldest") {
-        posts.sort((a, b) => new Date(a.date) - new Date(b.date));
+        displayPostsList.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else {
+        displayPostsList.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
 
-    if (posts.length === 0) {
-        mainContent.innerHTML =
-            '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'; font-size: 50px;">Nothing yet.. Start a discussion!</h3>';
-        return;
-    }
-    
-    for(let i = 0 ; i< posts.length ; i++){
-        displayPosts(posts, i);
+    for (let i = 0; i < displayPostsList.length; i++) {
+        displayPosts(displayPostsList, i);
     }
 }
 
@@ -312,19 +265,8 @@ function viewFullPost(post) {
     
     // Back button functionality
     document.getElementById("back-to-posts-btn").onclick = function() {
-    switch(currentFilter) {
-        case "all":loadPostsList(); break;
-        case "filter-popular":
-        case "filter-oldest":
-        case "filter-controversial": loadPostByFilter(currentFilter); break;
-        case "guides":
-        case "discussion":
-        case "showcase":
-        case "joke":
-        case "misc": loadPostsByTag(currentFilter); break;
-        default: loadPostsList();
-    }
-};
+    loadPostsList(currentFilter, currentTag);
+    };
 
     function findPostIndex(postID) {
         const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
@@ -463,69 +405,30 @@ function toggleReplyInput(commentIndex) {
     }
 }
 
+// Tag filters
+document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
+    radio.addEventListener("change", function() {
+        if (!this.checked) return;
+
+        currentTag = this.value.replace("filter-", "");
+        if (currentTag === "all") currentTag = "all";
+
+        loadPostsList(currentFilter, currentTag);
+    });
+});
+
+// Sort filters
+document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
+    radio.addEventListener("change", function() {
+        if (!this.checked) return;
+
+        currentFilter = this.value;
+
+        loadPostsList(currentFilter, currentTag);
+    });
+});
+
 // Initial load
-loadPostsList();
-
-//for filtering posts by tag
-document.getElementById("filter-all").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "all";
-        loadPostsList();
-    }
-});
-
-document.getElementById("filter-guides").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "guides";
-        loadPostsByTag("guides");
-    }
-});
-
-document.getElementById("filter-discussion").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "discussion";
-        loadPostsByTag("discussion");
-    }
-});
-
-document.getElementById("filter-showcase").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "showcase";
-        loadPostsByTag("showcase");
-    }
-});
-
-document.getElementById("filter-jokes").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "jokes";
-        loadPostsByTag("joke");
-    }
-});
-
-document.getElementById("filter-misc").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "misc";
-        loadPostsByTag("misc");
-    }
-});
-
-document.getElementById("filter-popular").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "filter-popular";
-        loadPostByFilter("filter-popular");
-    }
-});
-
-document.getElementById("filter-oldest").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "filter-oldest";
-        loadPostByFilter("filter-oldest");
-    }
-});
-
-document.getElementById("filter-controversial").addEventListener("change", function() {
-    if (this.checked) {
-        currentFilter = "filter-controversial";
-        loadPostByFilter("filter-controversial");
-    }
-});
+currentTag = "all";
+currentFilter = "none";
+loadPostsList(currentFilter, currentTag);
