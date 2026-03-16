@@ -76,12 +76,36 @@ function displayPosts(posts, i){
         userPfp.src = 'images/freddyt_logo.png';
         userPfp.id = "user-pfp"
 
-        const upvoteBtn = document.createElement("button");
-        const downvoteBtn = document.createElement("button");
-        upvoteBtn.id = "upvote-btn";
-        downvoteBtn.id = "downvote-btn";
-        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
-        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
+        const upvCheckbox = document.createElement("input");
+        upvCheckbox.type = "checkbox";
+        upvCheckbox.className = "upv-checkbox";
+        upvCheckbox.id = "upv-check-" + i;
+
+        const downvCheckbox = document.createElement("input");
+        downvCheckbox.type = "checkbox";
+        downvCheckbox.className = "downv-checkbox";
+        downvCheckbox.id = "downv-check-" + i;
+
+        const upvoteLabel = document.createElement("label");
+        const downvoteLabel = document.createElement("label");
+        upvoteLabel.setAttribute("for", upvCheckbox.id);
+        downvoteLabel.setAttribute("for", downvCheckbox.id);
+
+        const upvoteIcon = document.createElement("i");
+        const downvoteIcon = document.createElement("i");
+
+        upvoteIcon.className = "bx bx-upvote";
+        downvoteIcon.className = "bx bx-downvote";
+        upvoteIcon.id = "upvote-btn";
+        downvoteIcon.id = "downvote-btn";
+
+        upvoteLabel.appendChild(upvoteIcon);
+        downvoteLabel.appendChild(downvoteIcon);
+
+        upvoteLabel.addEventListener("click", (e) => e.stopPropagation());
+        downvoteLabel.addEventListener("click", (e) => e.stopPropagation());
+        upvCheckbox.addEventListener("click", (e) => e.stopPropagation());
+        downvCheckbox.addEventListener("click", (e) => e.stopPropagation());
 
         let voteCount = document.createElement("p");
         voteCount.id = "vote-count";
@@ -119,9 +143,11 @@ function displayPosts(posts, i){
         postDate.appendChild(document.createTextNode(dateString));
 
         leftArea.append(userPfp);
-        leftArea.append(upvoteBtn);
+        leftArea.append(upvCheckbox);
+        leftArea.append(upvoteLabel);
         leftArea.append(voteCount);
-        leftArea.append(downvoteBtn);
+        leftArea.append(downvCheckbox);
+        leftArea.append(downvoteLabel);
         newPost.append(leftArea);
         
         postFlexTop.append(postTag);
@@ -138,16 +164,48 @@ function displayPosts(posts, i){
 
         mainContent.appendChild(viewButton);
 
-        upvoteBtn.addEventListener("click", (event) => {
+        upvCheckbox.addEventListener("change", (event) => {
             event.stopPropagation();
-            posts[i].votes += 1;
+            if(upvCheckbox.checked){
+                upvoteIcon.classList.replace("bx-upvote","bxs-upvote");
+                upvoteIcon.style.color = "#df4b4b";
+
+                if(downvCheckbox.checked){
+                    downvCheckbox.checked = false;
+                    downvoteIcon.classList.replace("bxs-downvote","bx-downvote");
+                    downvoteIcon.style.color = ""; 
+                    posts[i].votes += 2;
+                }else{
+                    posts[i].votes += 1;
+                }
+            }else{
+                upvoteIcon.classList.replace("bxs-upvote","bx-upvote");
+                upvoteIcon.style.color = ""; 
+                posts[i].votes -= 1;
+            }
             voteCount.textContent = posts[i].votes;
             localStorage.setItem("posts", JSON.stringify(posts));
         });
 
-        downvoteBtn.addEventListener("click", (event) => {
+        downvCheckbox.addEventListener("change", (event) => {
             event.stopPropagation();
-            posts[i].votes -= 1;
+            if(downvCheckbox.checked){
+                downvoteIcon.classList.replace("bx-downvote","bxs-downvote");
+                downvoteIcon.style.color = "#0004ff"; 
+
+                if(upvCheckbox.checked){
+                    upvCheckbox.checked = false;
+                    upvoteIcon.classList.replace("bxs-upvote","bx-upvote");
+                    upvoteIcon.style.color = "";   
+                    posts[i].votes -= 2;
+                }else{
+                    posts[i].votes -= 1;
+                }
+            }else{
+                downvoteIcon.classList.replace("bxs-downvote","bx-downvote");
+                downvoteIcon.style.color = "";
+                posts[i].votes += 1;
+            }
             voteCount.textContent = posts[i].votes;
             localStorage.setItem("posts", JSON.stringify(posts));
         });
@@ -182,9 +240,15 @@ function viewFullPost(post) {
                         <p id="full-post-username"></p>
                         <p id="full-post-date"></p>
                         <div id="full-vote-area">
-                            <i class='bx bx-upvote' id="full-upvote-btn"></i>
+                            <input type="checkbox" id="upv-checkbox">
+                            <label for="upv-checkbox">
+                                <i class='bx bx-upvote' id="full-upvote-btn"></i>
+                            </label>
                             <p id="full-vote-count"></p>
-                            <i class='bx bx-downvote' id="full-downvote-btn"></i>
+                            <input type="checkbox" id="downv-checkbox">
+                            <label for="downv-checkbox">
+                                <i class='bx bx-downvote' id="full-downvote-btn"></i>
+                            </label>
                         </div>
                     </div>
                     <div id="full-post-right">
@@ -237,19 +301,50 @@ function viewFullPost(post) {
     const fullVoteCount = document.getElementById("full-vote-count");
     fullVoteCount.textContent = post.votes;
 
-    document.getElementById("full-upvote-btn").onclick = (e) => {
-        e.stopPropagation();
-        post.votes += 1;
-        fullVoteCount.textContent = post.votes;
-        updatePostInStorage(post);
-    };
+    const upvCheckbox = document.getElementById("upv-checkbox");
+    const downvCheckbox = document.getElementById("downv-checkbox");
+    const upvoteIcon = document.getElementById("full-upvote-btn");
+    const downvoteIcon = document.getElementById("full-downvote-btn");
 
-    document.getElementById("full-downvote-btn").onclick = (e) => {
+    upvCheckbox.addEventListener("change", (e) => {
         e.stopPropagation();
-        post.votes -= 1;
+        if(upvCheckbox.checked){
+            upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+
+            if(downvCheckbox.checked){
+                downvCheckbox.checked = false;
+                downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
+                post.votes += 2;
+            }else{
+                post.votes += 1;
+            }
+        }else{
+            upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
+            post.votes -= 1;
+        }
         fullVoteCount.textContent = post.votes;
         updatePostInStorage(post);
-    };
+    });
+
+    downvCheckbox.addEventListener("change", (e) => {
+        e.stopPropagation();
+        if(downvCheckbox.checked){
+            downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+
+            if(upvCheckbox.checked){
+                upvCheckbox.checked = false;
+                upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
+                post.votes -= 2;
+            }else{
+                post.votes -= 1;
+            }
+        }else{
+            downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
+            post.votes += 1;
+        }
+        fullVoteCount.textContent = post.votes;
+        updatePostInStorage(post);
+    });
     
     const postIndex = findPostIndex(post.postID);
     setupPostOptions(postIndex);

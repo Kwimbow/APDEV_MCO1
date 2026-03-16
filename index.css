@@ -691,6 +691,8 @@ body.modal-open{
     font-size: 16px;
     margin-right: 10px;
     color: var(--default-txt);
+    margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 #post-flex-display{
@@ -1064,6 +1066,23 @@ body.modal-open{
     cursor: pointer;
     color: var(--default-txt);
     font-size: 20px;
+}
+
+#upv-checkbox, #downv-checkbox{
+    display: none;
+}
+
+#upv-checkbox:checked + label i{
+    color: #df4b4b
+}
+
+#downv-checkbox:checked + label i{
+    color: #0004ff
+}
+
+.upv-checkbox,
+.downv-checkbox{
+    display:none;
 }
 
 #full-vote-count {
