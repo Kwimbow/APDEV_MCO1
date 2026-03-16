@@ -17,7 +17,8 @@ new_post.addEventListener("submit", function(e) {
 		content: content,
 		date: new Date(),
 		user: getCurrentUser(),
-		votes: voteCount
+		votes: voteCount,
+		edited: false
 	}
 
 	const posts = JSON.parse(localStorage.getItem("posts")) || [];

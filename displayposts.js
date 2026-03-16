@@ -295,7 +295,12 @@ function viewFullPost(post) {
     document.getElementById("full-post-title").textContent = post.title;
     document.getElementById("full-post-content").textContent = post.content;
     document.getElementById("full-post-username").textContent = post.user.username;
-    document.getElementById("full-post-date").textContent = "Posted on " + formattedPostDate;
+    //This sets the posts' left side to be marked as edited or posted
+    const fullPostDate = document.getElementById("full-post-date");
+    fullPostDate.textContent = post.edited 
+        ? `Edited on ${formattedPostDate}` 
+        : `Posted on ${formattedPostDate}`;
+        
     document.getElementById("full-post-tag").appendChild(postTag);
 
     const fullVoteCount = document.getElementById("full-vote-count");
