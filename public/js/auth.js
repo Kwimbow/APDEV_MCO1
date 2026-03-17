@@ -72,19 +72,30 @@ function getCurrentUser() {
 RETURN: true if successfully registered and stored in local storage
         false if username already exists in local storage
         null if password does not match the re-entered password's  */
-function register(username, password, repassword) {
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+async function register() {
+  const username = document.getElementById('reg-user-info').value;
+  const password = document.getElementById('reg-pw-info').value;
+  const repassword = document.getElementById('reg-repw-info').value;
 
   //passwords dont match
   if (password !== repassword){
-    return null;
-  }
-  //there exists a user with the same username
-  if (users.some(user => user.username === username)){
-    return false;
+    document.getElementById('reg-unmatch-pw').classList.add('invalid');
+    return;
   }
 
-  users.push({ username, password });
-  localStorage.setItem("users", JSON.stringify(users));
-  return true;
+  // le post
+  const res = await fetch('/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+
+  if (res.ok) { // if successful
+    hidePopup('register-popup');
+    document.getElementById('reg-success').classList.add('show');
+  }
+
+  else { // le error. username alr exists
+    document.getElementById('reg-taken-user').classList.add('invalid');
+  }
 }

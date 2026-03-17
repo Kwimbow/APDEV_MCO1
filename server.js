@@ -10,11 +10,17 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB worken!"))
   .catch((err) => console.error("MongoDB error: ", err));
 
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// getting le schema
 const User = require('./models/User');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
 
-app.use(express.static(path.join(__dirname, 'public')));
+// getting le routes
+const authRoutes = require('./routes/auth');
+app.use('/api', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
