@@ -16,8 +16,6 @@ hr {
 
 
 /* TAG STUFF */
-.tag_holder {
-}
 
 .tag_input {
 	display: none;
@@ -25,19 +23,39 @@ hr {
 
 .tag_label {
 	font-family: 'Reddit Sans', sans-serif; 
-	font-weight: 600;
-	border-radius: 13px;
-	margin: .5rem;
+	border-radius: 10px;
 	padding: .5rem;
-	font-size: 1.2rem;
+	font-size: 15px;
 	color: white;
 	background: gray;
 	cursor: pointer;
 	transition: background 0.1s;
+	margin-left: 7px;
 }
 
-.tag_input:checked + .tag_label {
-	background: red;
+#guides:checked + .tag_label, #guides:hover + .tag_label {
+	background-color:rgb(195, 19, 19);
+    color:white;
+}
+
+#discussion:checked + .tag_label, #discussion:hover + .tag_label {
+	background-color:rgb(51, 118, 51);
+    color:white;
+}
+
+#showcase:checked + .tag_label, #showcase:hover + .tag_label {
+	background-color:rgb(99, 23, 144);
+    color:white;
+}
+
+#joke:checked + .tag_label, #joke:hover + .tag_label {
+	background-color:rgb(29, 47, 186);
+    color:white;
+}
+
+#misc:checked + .tag_label, #misc:hover + .tag_label {
+	background-color:rgb(207, 69, 0);
+    color:white;
 }
 
 .tag_header {
@@ -50,16 +68,26 @@ hr {
 
 /*txt inputs*/
 .title_inpt {
-	font-family: 'Reddit Sans', sans-serif; 
-	font-weight: 600;
+	font-family: 'Reddit Sans', sans-serif;
 	width: 90%;
-	margin-top: 2rem;
+	height: 15px;
+	margin-top: 1.5rem;
 	margin-bottom: 1rem;
+	margin-left: auto;
+	margin-right: auto;
 	padding: 1rem;
-	font-size: 1.5rem;
+	font-size: 1.1rem;
 	border-radius: 15px;
-	border-color: light-gray;
-	margin-left: 2vw;
+	border: 1px solid #7d7d7d;
+	display: block;
+	transition: all 0.3s;
+	
+}
+
+.title_inpt:focus, .post_content:focus {
+	outline: none;
+	border-color: #df4b4b;
+	box-shadow: 0 0 5px rgba(223, 75, 75, 0.5);
 }
 
 .post_content {
@@ -67,25 +95,34 @@ hr {
 	width: 90%;
 	height: 300px;
 	padding: 1rem;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	resize: none;
 	border-radius: 15px;
-	border-color: light-gray;
-	margin-left: 2vw;
+	border: 1px solid #7d7d7d;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 
 /*submit btn*/
-.submit_btn {
-	font-family: 'Reddit Sans', sans-serif; 
-	font-weight: 800;
+#create-post-submit {
+	font-family: 'Reddit Sans', sans-serif;	
 	margin-top: 1rem;
-	font-size: 1.4rem;
-	padding: .8rem 1rem;
-	background: red;
-	color: white;
+	font-size: 1.2rem;
+	padding: 10px 10px;
+	background-color: #dedede;
+    color: rgb(160, 160, 160);
 	border-radius: 15px;
 	border: none;
 	float: right;
 	margin-right: 1vw;
+	transition: background-color 0.1s, color 0.1s;
+	cursor: not-allowed;
+}
+
+#create-post-submit.active {
+	background-color: #df4b4b;
+	color: #ffffff;
+	cursor: pointer;
 }

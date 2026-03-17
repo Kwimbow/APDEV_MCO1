@@ -5,8 +5,6 @@ let btn = document.querySelector("#btn");
 let sideNav = document.querySelector("#side-bar");
 let navItem = document.querySelector("#nav-item");
 let mainContent = document.querySelector("#main-content");
-let home = document.querySelector("#home-btn");
-let bookmark = document.querySelector("#bookmarks-btn");
 
 var modal = document.getElementById('register-popup');
 var modal2 = document.getElementById('login-popup');
@@ -26,12 +24,26 @@ btn.onclick = function() {
     mainContent.classList.toggle("expand");
 }
 
-/* Brute forced active navigation button to indicate which page the user is in */
-if (window.location.href.indexOf("index.html") > -1) {
-    home.classList.add("active");
-} else if (window.location.href.indexOf("bookmarks.html") > -1) {
-    bookmark.classList.add("active");
+const navButtons = document.querySelectorAll('.side-nav-buttons');
+const homeBtn = document.getElementById('home-btn');
+const bookmarksBtn = document.getElementById('bookmarks-bar');
+
+function resetNavActive() {
+    navButtons.forEach(btn => btn.classList.remove('active'));
 }
+
+if (window.location.pathname.split('/').pop() === 'index.html') {
+    homeBtn.classList.add('active');
+} else if (window.location.pathname.split('/').pop() === 'bookmarks.html') {
+    bookmarksBtn.classList.add('active');
+}
+
+const filters = document.querySelectorAll('.filter-input');
+filters.forEach(filter => {
+    filter.addEventListener('change', () => {
+        resetNavActive();
+    });
+});
 
 /* This function shows the pop-up of the register and login "page", 
 it also locks the body's content so that it cannot be scrolled */
@@ -53,7 +65,7 @@ function hidePopup(id) {
         clearLoginRegister("login-popup");
     }
     if (id === "create-post-popup"){
-        clearLoginRegister("login-popup");
+        clearCreatePost("create-post-popup");
     }
 }
 
@@ -71,6 +83,8 @@ function setupPopups(){
     });
     document.getElementById("create-post-btn")?.addEventListener("click", () => {
         showPopup("create-post-popup");
+        setupCreatePostForm();
+        lightUpCreateButton();
     });
 
     document.querySelectorAll(".modal").forEach(modal => {
@@ -79,18 +93,6 @@ function setupPopups(){
                 hidePopup(modal.id);
             }
         });
-    });
-}
-
-/* This function handles the logging out of the user,
-TO BE EDITED ONCE THE SETTINGS POPOUT IS MADE */
-function setupLogout(){
-    const logoutBtn = document.getElementById("settings-logged-in");//<-- change this to log out when actual button is made
-
-    if (!logoutBtn) return;
-
-    logoutBtn.addEventListener("click", () => {
-        logoutAndRedirect();
     });
 }
 
@@ -314,6 +316,15 @@ function successfullyRegMsg(){
     }, 3000);
 }
 
+/* This function displays a slide up message "successfully deleted post" for 3 seconds */
+function successfullyDelPostMsg(){
+    const msg = document.getElementById("del-post-success");
+    msg.classList.add("show");
+    setTimeout(() => {
+        msg.classList.remove("show");
+    }, 3000);
+}
+
 /* This function clears the log in / register input form so that when the user
 clicks out, their data that is in the input fields do not save when button is clicked again */
 function clearLoginRegister(formId){
@@ -359,6 +370,56 @@ function protectBookmarksPage(){
     }
 }
 
+function lightUpCreateButton(){
+    const createBtn = document.getElementById("create-post-submit");
+    let title = document.getElementById("title");
+    let content = document.getElementById("content");
+    let tag = document.querySelector('input[name="tag"]:checked');
+
+    if(title.value.trim() === "" || content.value.trim() === "" || tag === null){
+        createBtn.classList.remove("active");
+        createBtn.disabled = true;
+    } else {
+        createBtn.classList.add("active");
+        createBtn.disabled = false;
+    }
+}
+
+function setupCreatePostForm(){
+    const title = document.getElementById("title");
+    const content = document.getElementById("content");
+    const tags = document.querySelectorAll('input[name="tag"]');
+
+    if (!title || !content || !tags) return;
+
+    title.addEventListener("input", lightUpCreateButton);
+    content.addEventListener("input", lightUpCreateButton);
+
+    tags.forEach(tag => {
+        tag.addEventListener("change", lightUpCreateButton);
+    });
+}
+
+function clearCreatePost(formId){
+    let input = document.querySelector(`#${formId} form`);
+
+    if (!input) return;
+
+    let title = input.querySelector("#title");
+    let content = input.querySelector("#content");
+    let tags = input.querySelectorAll('input[name="tag"]');
+
+    if (!title || !content || !tags) return;
+
+    title.value = "";
+    content.value = "";
+    tags.forEach(tag => {
+        tag.checked = false;
+    });
+
+    lightUpCreateButton();
+}
+
 /* This function dynamically updates the user view as soon as they log in */
 function updateUserUI() {
     const user = getCurrentUser();
@@ -386,47 +447,258 @@ function updateUserUI() {
     }
 }
 
-/* This function displays the drop down menu for posts or comms*/
-function setupPostOptions(){
+/* This function displays the drop down menu for posts*/
+function setupPostOptions(postIndex) {
+    const user = getCurrentUser();
+    if (!user) return;
 
-    //dropdown for posts type shi
-    document.querySelectorAll('.post-options').forEach(btn => {
-        const menu = btn.parentElement.querySelector('.post-options-menu');
-        if(!menu) return;
+    const btn = document.getElementById("post-settings-btn");
+    const menu = document.querySelector(".post-options-menu");
+    const postUsernameEl = document.getElementById("full-post-username"); // use this
+    if (!btn || !menu || !postUsernameEl) return;
 
-        btn.addEventListener('click', (e) => {
-            const isOpen = menu.classList.contains('open');
-            document.querySelectorAll('.post-options-menu.open').forEach(m => m.classList.remove('open'));
-            if(!isOpen){
-                menu.classList.add('open');
-                btn.setAttribute('aria-expanded', 'true');
-                menu.setAttribute('aria-hidden', 'false');
-            } else {
-                menu.classList.remove('open');
-                btn.setAttribute('aria-expanded', 'false');
-                menu.setAttribute('aria-hidden', 'true');
-            }
-        });
+    const postUser = postUsernameEl.textContent.trim();
+    if (user.username !== postUser) {
+        btn.style.display = "none";
+        return;
+    }
+
+    btn.style.display = "block";
+
+    btn.addEventListener("click", () => {
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", !isOpen);
+        menu.setAttribute("aria-hidden", isOpen);
     });
 
-    //for comms yuh
-    document.querySelectorAll('.comment-options').forEach(btn => {
-        const menu = btn.parentElement.querySelector('.comment-options-menu');
-        if(!menu) return;
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            menu.setAttribute("aria-hidden", "true");
+        }
+    });
 
-        btn.addEventListener('click', (e) => {
-            const isOpen = menu.classList.contains('open');
-            document.querySelectorAll('.comment-options-menu.open').forEach(m => m.classList.remove('open'));
-            if(!isOpen){
-                menu.classList.add('open');
-                btn.setAttribute('aria-expanded', 'true');
-                menu.setAttribute('aria-hidden', 'false');
-            } else {
-                menu.classList.remove('open');
-                btn.setAttribute('aria-expanded', 'false');
-                menu.setAttribute('aria-hidden', 'true');
-            }
+    //make delete and edit button work
+    const deleteBtn = document.getElementById("delete-post");
+    const editBtn = document.getElementById("edit-post");
+
+    if (deleteBtn && postIndex !== undefined) {
+        deleteBtn.addEventListener("click", () => {
+            const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+            posts.splice(postIndex, 1);
+            localStorage.setItem("posts", JSON.stringify(posts));
+            const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
+            delete allComments[postIndex];
+            localStorage.setItem("comments", JSON.stringify(allComments));
+            successfullyDelPostMsg();
+            setTimeout(() => {
+                window.location.replace("index.html");
+            }, 4000);
+            
         });
+    }
+
+    if (editBtn) {
+        editBtn.addEventListener("click", () => {
+            // Implement edit functionality
+            alert("Edit post functionality to be implemented.");
+        });
+    }
+}
+
+/* This function displays the drop down menu for the main settings*/
+function setupGeneralOptions() {
+    const btn = document.getElementById("settings-visitor");
+    const menu = document.querySelector(".general-options-menu");
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", !isOpen);
+        menu.setAttribute("aria-hidden", isOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            menu.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    //make delete and edit button work
+    const darkModebtn = document.getElementById("dark-mode");
+
+    if (darkModebtn) {
+        darkModebtn.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+        });
+    }
+}
+
+/* This function displays the drop down menu for the user settings*/
+function setupUserOptions() {
+    const btn = document.getElementById("settings-logged-in");
+    const menu = document.querySelector(".user-options-menu");
+    if (!btn || !menu) return;
+
+    btn.addEventListener("click", () => {
+        const isOpen = menu.classList.contains("open");
+        menu.classList.toggle("open", !isOpen);
+        btn.setAttribute("aria-expanded", !isOpen);
+        menu.setAttribute("aria-hidden", isOpen);
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.classList.remove("open");
+            btn.setAttribute("aria-expanded", "false");
+            menu.setAttribute("aria-hidden", "true");
+        }
+    });
+
+    const darkModebtn = document.getElementById("dark-mode2");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    if (darkModebtn) {
+        darkModebtn.addEventListener("click", () => {
+            document.body.classList.toggle("darkmode");
+            localStorage.setItem("darkMode", document.body.classList.contains("darkmode"));
+        });
+    }
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            logoutAndRedirect();
+        });
+    }
+}
+
+function searchPostsByKeyword(keyword) {
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+    const lowerKeyword = keyword.toLowerCase();
+
+    return posts.filter(post => {
+        const titleMatch = post.title.toLowerCase().includes(lowerKeyword);
+        const contentMatch = post.content.toLowerCase().includes(lowerKeyword);
+        const tagMatch = post.tag.toLowerCase().includes(lowerKeyword);
+        return titleMatch || contentMatch || tagMatch;
+    });
+}
+
+function setupSearchFunctionality() {
+    const searchForm = document.getElementById("search-for");
+    const searchInput = document.getElementById("search-bar");
+
+    searchForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const keyword = searchInput.value.trim();
+        if (keyword === "") window.location.href = "index.html";
+        if (keyword) {
+            const results = searchPostsByKeyword(keyword);
+            displaySearchResults(results, keyword);
+        }
+    });
+}
+
+function displaySearchResults(results, keyword) {
+    const mainContent = document.getElementById("main-content");
+    if (!mainContent) return;
+
+    mainContent.innerHTML = `<h2 id="search-results-title">Search Results for "<span id="search-results-keyword">${keyword}</span>"</h2>`;
+
+    if (results.length === 0) {
+        mainContent.innerHTML += "<p id='search-no-posts'>No posts found.. *cricket noises*</p>";
+        return;
+    }
+
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+
+    results.forEach(result => {
+        const i = posts.findIndex(p => p.postID === result.postID);
+
+        const viewButton = document.createElement("button");
+        viewButton.className = "view-post-button";
+
+        const newPost = document.createElement("div");
+        const postFlexTop = document.createElement("div")
+        const postFlexBottom = document.createElement("div")
+        const flexArea = document.createElement("div")
+        const leftArea = document.createElement("div");
+        const rightArea = document.createElement("div");
+        rightArea.id = "post-right-area";
+        leftArea.id = "post-left-area";
+        postFlexTop.id = "post-flex-top";
+        flexArea.id = "post-flex-display";
+        postFlexBottom.id = "post-flex-bottom";
+
+        const userPfp = new Image();
+        userPfp.src = 'images/freddyt_logo.png';
+        userPfp.id = "user-pfp"
+
+        const upvoteBtn = document.createElement("button");
+        const downvoteBtn = document.createElement("button");
+        upvoteBtn.id = "upvote-btn";
+        downvoteBtn.id = "downvote-btn";
+        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
+        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
+
+        let voteCount = document.createElement("p");
+        voteCount.id = "vote-count";
+        voteCount.textContent = posts[i].votes;
+
+        const postTag = document.createElement("p");
+        postTag.id = "post-tag";
+        if (result.tag === "discussion") postTag.classList.add('green-tag');
+        else if (result.tag === "guides") postTag.classList.add('red-tag');
+        else if (result.tag === "showcase") postTag.classList.add('purple-tag');
+        else if (result.tag === "joke") postTag.classList.add('blue-tag');
+        else if (result.tag === "misc") postTag.classList.add('orange-tag');
+        postTag.textContent = result.tag;
+
+        const postTitle = document.createElement("p");
+        postTitle.id = "post-title";
+        postTitle.textContent = result.title;
+
+        const postContent = document.createElement("p");
+        postContent.id = "post-content";
+        postContent.textContent = result.content;
+
+        const postDate = document.createElement("p");
+        postDate.id = "post-date";
+        postDate.textContent = result.date.split("T")[0];
+
+        leftArea.append(userPfp, upvoteBtn, voteCount, downvoteBtn);
+        newPost.append(leftArea);
+        postFlexTop.append(postTag, postTitle, postDate);
+        postFlexBottom.append(postContent);
+        rightArea.append(postFlexTop, postFlexBottom);
+        flexArea.append(rightArea);
+        newPost.append(flexArea);
+
+        newPost.id = "post-display";
+        viewButton.append(newPost);
+        mainContent.appendChild(viewButton);
+
+        upvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes += 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+
+        downvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes -= 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+
+        viewButton.onclick = () => viewFullPost(posts[i]);
     });
 }
 
@@ -435,8 +707,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setupPopups();
     setupLoginForm();
     setupRegisterForm();
-    setupLogout();
     updateUserUI();
     protectBookmarksPage();
     setupPostOptions();
+    setupGeneralOptions();
+    setupUserOptions();
+    setupSearchFunctionality();
 });
