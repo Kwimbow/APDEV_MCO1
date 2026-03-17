@@ -478,11 +478,15 @@ function displayFullComments(postID) {
 
 function renderCommentThread(container, comment, allComments, postID, commentIndex) {
     const isDeleted = comment.deleted === true;
+    const isEdited = comment.edited === true;
 
     const commentItem = document.createElement("div");
     commentItem.className = "comment-item";
-    if (isDeleted) {
+    if (isDeleted){
         commentItem.classList.add("deleted");
+    }
+    if(isEdited){
+        commentItem.classList.add("edited");
     }
     
     const commentDate = new Date(comment.date);
@@ -523,12 +527,13 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     
     const commentText = isDeleted ? "[deleted]" : comment.text;
     const usernameText = isDeleted ? `<span class="deleted-text">[deleted]</span>`  : comment.user.username;
+    const editedFlag = isEdited ? `<span class="edited-comment">(edited)</span>` : "";
 
     commentItem.innerHTML = `
         <div class="comment-content">
             <div class="comment-header">
                 <span class="comment-username">${usernameText}</span>
-                <span class="comment-date">${formattedDate}</span>
+                <span class="comment-date">${formattedDate} ${editedFlag}</span>
             </div>
             <div class="comment-text">${commentText}</div>
             ${replyButtonHTML}
@@ -625,6 +630,7 @@ function setupCommentOptions() {
                     }
                     comment.text = newText;
                     comment.date = new Date().toISOString();
+                    comment.edited = true;
                     allComments[postID] = postComments;
                     localStorage.setItem("comments", JSON.stringify(allComments));
                     document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {

@@ -1590,3 +1590,7 @@ body.modal-open{
     background-color: #df4b4b;
     color: var(--background-color);
 }
+
+.edited-comment{
+    font-style: italic;
+}
