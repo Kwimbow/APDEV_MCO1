@@ -80,6 +80,22 @@ async function register() {
   //passwords dont match
   if (password !== repassword){
     document.getElementById('reg-unmatch-pw').classList.add('invalid');
+    document.getElementById('reg-pw-info').classList.add('wrong');
+    document.getElementById('reg-repw-info').classList.add('wrong');
+    document.getElementById('reg-pw-info').classList.add('error-shake');
+    document.getElementById('reg-repw-info').classList.add('error-shake');
+    return;
+  }
+  else if (username.trim() == ''){
+    document.getElementById('reg-empty-user').classList.add('invalid');
+    document.getElementById('reg-user-info').classList.add('wrong');
+    document.getElementById('reg-user-info').classList.add('error-shake');
+    return;
+  }
+  else if (password.trim() == ''){
+    document.getElementById('reg-empty-pw').classList.add('invalid');
+    document.getElementById('reg-pw-info').classList.add('wrong');
+    document.getElementById('reg-pw-info').classList.add('error-shake');
     return;
   }
 
@@ -97,5 +113,7 @@ async function register() {
 
   else { // le error. username alr exists
     document.getElementById('reg-taken-user').classList.add('invalid');
+    document.getElementById('reg-user-info').classList.add('wrong');
+    document.getElementById('reg-user-info').classList.add('error-shake');
   }
 }
