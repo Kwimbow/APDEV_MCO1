@@ -449,13 +449,14 @@ function updateUserUI() {
 }
 
 /* This function displays the drop down menu for posts*/
-function setupPostOptions(postIndex) {
+function setupPostOptions() {
     const user = getCurrentUser();
     if (!user) return;
 
     const btn = document.getElementById("post-settings-btn");
     const menu = document.querySelector(".post-options-menu");
     const postUsernameEl = document.getElementById("full-post-username"); // use this
+    const currentPostID = document.getElementById("full-post-view")?.dataset.postId;
     if (!btn || !menu || !postUsernameEl) return;
 
     const postUser = postUsernameEl.textContent.trim();
@@ -485,13 +486,13 @@ function setupPostOptions(postIndex) {
     const deleteBtn = document.getElementById("delete-post");
     const editBtn = document.getElementById("edit-post");
 
-    if (deleteBtn && postIndex !== undefined) {
+    if(deleteBtn && currentPostID){
         deleteBtn.addEventListener("click", () => {
             const posts = JSON.parse(localStorage.getItem("posts") || "[]");
-            posts.splice(postIndex, 1);
-            localStorage.setItem("posts", JSON.stringify(posts));
+            const updatedPosts = posts.filter(p => p.postID !== currentPostID);
+            localStorage.setItem("posts", JSON.stringify(updatedPosts));
             const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
-            delete allComments[postIndex];
+            delete allComments[currentPostID];
             localStorage.setItem("comments", JSON.stringify(allComments));
             successfullyDelPostMsg();
             setTimeout(() => {
@@ -501,10 +502,11 @@ function setupPostOptions(postIndex) {
         });
     }
 
-    if (editBtn && postIndex !== undefined) {
+    if(editBtn && currentPostID) {
         editBtn.addEventListener("click", () => {
             const posts = JSON.parse(localStorage.getItem("posts") || "[]");
-            const postToEdit = posts[postIndex];
+            const postToEdit = posts.find(p => p.postID === currentPostID);
+            if (!postToEdit) return;
 
             const oldPopup = document.getElementById("create-post-popup");
             if (oldPopup) oldPopup.remove();
@@ -512,7 +514,7 @@ function setupPostOptions(postIndex) {
             const editPopup = document.createElement("div");
             editPopup.innerHTML =
                 "<div id='create-post-popup' class='modal'>" +
-                    "<form id='createpost-form' class='create-post-modal'>" +
+                    "<form id='createpost_form' class='create-post-modal'>" +
                         "<div class='xcontainer'>" +
                             "<span onclick='hidePopup(\"create-post-popup\")' class='close'>&times;</span>" +
                         "</div>" +
@@ -568,7 +570,7 @@ function setupPostOptions(postIndex) {
             lightUpCreateButton();
 
             // saving the post data
-            const form = modalEl.querySelector("#createpost-form");
+            const form = modalEl.querySelector("#createpost_form");
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
 
@@ -600,7 +602,8 @@ function setupPostOptions(postIndex) {
                 }
 
                 //save post
-                posts[postIndex] = postToEdit;
+                const index = posts.findIndex(p => p.postID === currentPostID);
+                if(index !== -1) posts[index] = postToEdit;
                 localStorage.setItem("posts", JSON.stringify(posts));
 
                 //close modal
@@ -818,6 +821,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateUserUI();
     protectBookmarksPage();
     setupPostOptions();
+    setupCommentOptions();
     setupGeneralOptions();
     setupUserOptions();
     setupSearchFunctionality();

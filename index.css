@@ -588,10 +588,11 @@ body.modal-open{
     border: transparent;
     text-align: center;
     background-color: transparent;
-    color: white;
+    color: var(--sidenav-button);
     font-weight: bold;
     transition: background-color 0.3s ease;
     vertical-align: middle;
+    cursor: pointer;
 }
 
 #settings-icon{
@@ -1210,8 +1211,8 @@ body.modal-open{
 .reply-button {
     margin-top: 8px;
     padding: 5px 12px;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--default-txt);
     border: 1px solid #b8b8b8;
     border-radius: 15px;
     font-family: 'Reddit Sans', sans-serif;
@@ -1222,8 +1223,9 @@ body.modal-open{
 }
 
 .reply-button:hover {
-    background-color: #e0e0e0;
+    background-color: var(--background-color);
     border-color: #df4b4b;
+    color: #df4b4b;
 }
 
 .reply-input-container {
@@ -1497,8 +1499,94 @@ body.modal-open{
 
 #comment-settings-icon{
     padding: 0px;
-    font-size: 15px;
+    font-size: 16px;
     border-radius: 50%;
     align-items: center;
-    color: var(--sidenav-button);   
+    color: #727272;   
+}
+
+.comment-options-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.comment-options-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 160px;
+    background-color: var(--log-info-field);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    padding: 6px 8px;
+    z-index: 10;
+}
+.comment-options-menu.open {
+    display: flex;
+}
+
+.comment-options-menu-item{
+    border: none;
+    padding: 8px 10px;
+    text-align: left;
+    font-family: 'Reddit Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: var(--log-info-field);
+    color: var(--default-txt);
+}
+
+.comment-options-menu-item:hover{
+    background-color: var(--log-info-hover);
+}
+
+.comment-item.deleted > .comment-content > .comment-text,
+.comment-item.deleted > .comment-content > .comment-username {
+    color: #999999ea;
+    font-style: italic;
+    pointer-events: none;
+}
+
+.deleted-text{
+    opacity: 0.7;
+    font-style: italic;
+}
+
+.comment-edit-overlay {
+    margin-top: 10px;
+}
+
+.comment-edit-textarea {
+    min-width: 90%;
+    max-width: 90%;
+    min-height:100px;
+    max-height: 100px;
+    padding: 5px;
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    border-radius: 15px;
+    outline:none;
+    border: 2px solid #df4b4b;
+}
+
+.comment-edit-buttons button{
+    margin-top: 8px;
+    padding: 5px 12px;
+    background-color: var(--background-color);
+    color: var(--default-txt);
+    border: 1px solid #b8b8b8;
+    border-radius: 15px;
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.comment-edit-buttons button:hover {
+    background-color: #df4b4b;
+    color: var(--background-color);
 }
