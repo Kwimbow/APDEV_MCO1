@@ -52,120 +52,122 @@ function loadPostsList(filter = "none", tag = "all") {
 
 function displayPosts(posts, i){
     const viewButton = document.createElement("button");
-        viewButton.className = "view-post-button";
+    viewButton.className = "view-post-button";
+    const user = getCurrentUser();
 
-        let postTime = (posts[i].date).toString();
-        const timeString = postTime.split("T")
-        let dateString = timeString[0]
+    let postTime = (posts[i].date).toString();
+    const timeString = postTime.split("T")
+    let dateString = timeString[0]
 
-        viewButton.onclick = () => viewFullPost(posts[i]);
+    viewButton.onclick = () => viewFullPost(posts[i]);
 
-        const newPost = document.createElement("div");
-        const postFlexTop = document.createElement("div")
-        const postFlexBottom = document.createElement("div")
-        const flexArea = document.createElement("div")
-        const leftArea = document.createElement("div");
-        const rightArea = document.createElement("div");
-        rightArea.id = "post-right-area";
-        leftArea.id = "post-left-area";
-        postFlexTop.id = "post-flex-top";
-        flexArea.id = "post-flex-display";
-        postFlexBottom.id = "post-flex-bottom";
-        
-        const userPfp = new Image();
-        userPfp.src = 'images/freddyt_logo.png';
-        userPfp.id = "user-pfp"
+    const newPost = document.createElement("div");
+    const postFlexTop = document.createElement("div")
+    const postFlexBottom = document.createElement("div")
+    const flexArea = document.createElement("div")
+    const leftArea = document.createElement("div");
+    const rightArea = document.createElement("div");
+    rightArea.id = "post-right-area";
+    leftArea.id = "post-left-area";
+    postFlexTop.id = "post-flex-top";
+    flexArea.id = "post-flex-display";
+    postFlexBottom.id = "post-flex-bottom";
+    
+    const userPfp = new Image();
+    userPfp.src = 'images/freddyt_logo.png';
+    userPfp.id = "user-pfp"
 
-        const upvCheckbox = document.createElement("input");
-        upvCheckbox.type = "checkbox";
-        upvCheckbox.className = "upv-checkbox";
-        upvCheckbox.id = "upv-check-" + i;
+    const upvCheckbox = document.createElement("input");
+    upvCheckbox.type = "checkbox";
+    upvCheckbox.className = "upv-checkbox";
+    upvCheckbox.id = "upv-check-" + i;
 
-        const downvCheckbox = document.createElement("input");
-        downvCheckbox.type = "checkbox";
-        downvCheckbox.className = "downv-checkbox";
-        downvCheckbox.id = "downv-check-" + i;
+    const downvCheckbox = document.createElement("input");
+    downvCheckbox.type = "checkbox";
+    downvCheckbox.className = "downv-checkbox";
+    downvCheckbox.id = "downv-check-" + i;
 
-        const upvoteLabel = document.createElement("label");
-        const downvoteLabel = document.createElement("label");
-        upvoteLabel.setAttribute("for", upvCheckbox.id);
-        downvoteLabel.setAttribute("for", downvCheckbox.id);
+    const upvoteLabel = document.createElement("label");
+    const downvoteLabel = document.createElement("label");
+    upvoteLabel.setAttribute("for", upvCheckbox.id);
+    downvoteLabel.setAttribute("for", downvCheckbox.id);
 
-        const upvoteIcon = document.createElement("i");
-        const downvoteIcon = document.createElement("i");
+    const upvoteIcon = document.createElement("i");
+    const downvoteIcon = document.createElement("i");
 
-        upvoteIcon.className = "bx bx-upvote";
-        downvoteIcon.className = "bx bx-downvote";
-        upvoteIcon.id = "upvote-btn";
-        downvoteIcon.id = "downvote-btn";
+    upvoteIcon.className = "bx bx-upvote";
+    downvoteIcon.className = "bx bx-downvote";
+    upvoteIcon.id = "upvote-btn";
+    downvoteIcon.id = "downvote-btn";
 
-        upvoteLabel.appendChild(upvoteIcon);
-        downvoteLabel.appendChild(downvoteIcon);
+    upvoteLabel.appendChild(upvoteIcon);
+    downvoteLabel.appendChild(downvoteIcon);
 
-        upvoteLabel.addEventListener("click", (e) => e.stopPropagation());
-        downvoteLabel.addEventListener("click", (e) => e.stopPropagation());
-        upvCheckbox.addEventListener("click", (e) => e.stopPropagation());
-        downvCheckbox.addEventListener("click", (e) => e.stopPropagation());
+    upvoteLabel.addEventListener("click", (e) => e.stopPropagation());
+    downvoteLabel.addEventListener("click", (e) => e.stopPropagation());
+    upvCheckbox.addEventListener("click", (e) => e.stopPropagation());
+    downvCheckbox.addEventListener("click", (e) => e.stopPropagation());
 
-        let voteCount = document.createElement("p");
-        voteCount.id = "vote-count";
-        voteCount.appendChild(document.createTextNode(posts[i].votes));
+    let voteCount = document.createElement("p");
+    voteCount.id = "vote-count";
+    voteCount.appendChild(document.createTextNode(posts[i].votes));
 
-        const postTag = document.createElement("p");
-        postTag.id = "post-tag";
-        if (posts[i].tag === "discussion"){
-            postTag.classList.add('green-tag');
-        }
-        else if (posts[i].tag === "guides"){
-            postTag.classList.add('red-tag');
-        }
-        else if (posts[i].tag === "showcase"){
-            postTag.classList.add('purple-tag');
-        }
-        else if (posts[i].tag === "joke"){
-            postTag.classList.add('blue-tag');
-        }
-        else if (posts[i].tag === "misc"){
-            postTag.classList.add('orange-tag');
-        }
-        postTag.appendChild(document.createTextNode(posts[i].tag));
+    const postTag = document.createElement("p");
+    postTag.id = "post-tag";
+    if (posts[i].tag === "discussion"){
+        postTag.classList.add('green-tag');
+    }
+    else if (posts[i].tag === "guides"){
+        postTag.classList.add('red-tag');
+    }
+    else if (posts[i].tag === "showcase"){
+        postTag.classList.add('purple-tag');
+    }
+    else if (posts[i].tag === "joke"){
+        postTag.classList.add('blue-tag');
+    }
+    else if (posts[i].tag === "misc"){
+        postTag.classList.add('orange-tag');
+    }
+    postTag.appendChild(document.createTextNode(posts[i].tag));
 
-        const postContent = document.createElement("p");
-        postContent.id = "post-content";
-        postContent.appendChild(document.createTextNode(posts[i].content));
+    const postContent = document.createElement("p");
+    postContent.id = "post-content";
+    postContent.appendChild(document.createTextNode(posts[i].content));
 
-        const postTitle = document.createElement("p");
-        postTitle.id = "post-title";
-        postTitle.appendChild(document.createTextNode(posts[i].title));
-        
-        const postDate = document.createElement("p");
-        postDate.id = "post-date"
-        postDate.appendChild(document.createTextNode(dateString));
+    const postTitle = document.createElement("p");
+    postTitle.id = "post-title";
+    postTitle.appendChild(document.createTextNode(posts[i].title));
+    
+    const postDate = document.createElement("p");
+    postDate.id = "post-date"
+    postDate.appendChild(document.createTextNode(dateString));
 
-        leftArea.append(userPfp);
-        leftArea.append(upvCheckbox);
-        leftArea.append(upvoteLabel);
-        leftArea.append(voteCount);
-        leftArea.append(downvCheckbox);
-        leftArea.append(downvoteLabel);
-        newPost.append(leftArea);
-        
-        postFlexTop.append(postTag);
-        postFlexTop.append(postTitle);
-        postFlexTop.append(postDate);
-        postFlexBottom.append(postContent);
-        rightArea.append(postFlexTop);
-        rightArea.append(postFlexBottom);
-        flexArea.append(rightArea);
-        newPost.append(flexArea);
+    leftArea.append(userPfp);
+    leftArea.append(upvCheckbox);
+    leftArea.append(upvoteLabel);
+    leftArea.append(voteCount);
+    leftArea.append(downvCheckbox);
+    leftArea.append(downvoteLabel);
+    newPost.append(leftArea);
+    
+    postFlexTop.append(postTag);
+    postFlexTop.append(postTitle);
+    postFlexTop.append(postDate);
+    postFlexBottom.append(postContent);
+    rightArea.append(postFlexTop);
+    rightArea.append(postFlexBottom);
+    flexArea.append(rightArea);
+    newPost.append(flexArea);
 
-        newPost.id="post-display";
-        viewButton.append(newPost);
+    newPost.id="post-display";
+    viewButton.append(newPost);
 
-        mainContent.appendChild(viewButton);
+    mainContent.appendChild(viewButton);
 
-        upvCheckbox.addEventListener("change", (event) => {
-            event.stopPropagation();
+    upvCheckbox.addEventListener("change", (event) => {
+        event.stopPropagation();
+        if(user !== null){
             if(upvCheckbox.checked){
                 upvoteIcon.classList.replace("bx-upvote","bxs-upvote");
                 upvoteIcon.style.color = "#df4b4b";
@@ -185,10 +187,14 @@ function displayPosts(posts, i){
             }
             voteCount.textContent = posts[i].votes;
             localStorage.setItem("posts", JSON.stringify(posts));
-        });
+        } else{
+            showPopup("login-popup");
+        }
+    });
 
-        downvCheckbox.addEventListener("change", (event) => {
-            event.stopPropagation();
+    downvCheckbox.addEventListener("change", (event) => {
+        event.stopPropagation();
+        if(user !== null){
             if(downvCheckbox.checked){
                 downvoteIcon.classList.replace("bx-downvote","bxs-downvote");
                 downvoteIcon.style.color = "#0004ff"; 
@@ -208,12 +214,16 @@ function displayPosts(posts, i){
             }
             voteCount.textContent = posts[i].votes;
             localStorage.setItem("posts", JSON.stringify(posts));
-        });
+        }else{
+            showPopup("login-popup");
+        }
+    });
 }
 
 function viewFullPost(post) {
     if(!post) return;
     const mainContent = document.getElementById("main-content");
+    const userNow = getCurrentUser();
     
     resetNavActive(); //Reset active state of nav buttons when viewing a post
     
@@ -313,42 +323,56 @@ function viewFullPost(post) {
 
     upvCheckbox.addEventListener("change", (e) => {
         e.stopPropagation();
-        if(upvCheckbox.checked){
-            upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+        if (userNow !== null){
+            if(upvCheckbox.checked){
+                upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+                upvoteIcon.style.color = "#df4b4b";
 
-            if(downvCheckbox.checked){
-                downvCheckbox.checked = false;
-                downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
-                post.votes += 2;
+                if(downvCheckbox.checked){
+                    downvCheckbox.checked = false;
+                    downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
+                    downvoteIcon.style.color = "";
+                    post.votes += 2;
+                }else{
+                    post.votes += 1;
+                }
             }else{
-                post.votes += 1;
+                upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
+                upvoteIcon.style.color = "";
+                post.votes -= 1;
             }
-        }else{
-            upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
-            post.votes -= 1;
+            fullVoteCount.textContent = post.votes;
+            updatePostInStorage(post);
+        } else{
+            showPopup("login-popup");
         }
-        fullVoteCount.textContent = post.votes;
-        updatePostInStorage(post);
     });
 
     downvCheckbox.addEventListener("change", (e) => {
         e.stopPropagation();
-        if(downvCheckbox.checked){
-            downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+        if(userNow !== null){
+            if(downvCheckbox.checked){
+                downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+                downvoteIcon.style.color = "#0004ff"; 
 
-            if(upvCheckbox.checked){
-                upvCheckbox.checked = false;
-                upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
-                post.votes -= 2;
+                if(upvCheckbox.checked){
+                    upvCheckbox.checked = false;
+                    upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
+                    upvoteIcon.style.color = "";
+                    post.votes -= 2;
+                }else{
+                    post.votes -= 1;
+                }
             }else{
-                post.votes -= 1;
+                downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
+                downvoteIcon.style.color = "";
+                post.votes += 1;
             }
-        }else{
-            downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
-            post.votes += 1;
+            fullVoteCount.textContent = post.votes;
+            updatePostInStorage(post);
+        } else{
+            showPopup("login-popup");
         }
-        fullVoteCount.textContent = post.votes;
-        updatePostInStorage(post);
     });
     
     const postIndex = findPostIndex(post.postID);
@@ -365,13 +389,8 @@ function viewFullPost(post) {
     
     // Back button functionality
     document.getElementById("back-to-posts-btn").onclick = function() {
-    loadPostsList(currentFilter, currentTag);
+        loadPostsList(currentFilter, currentTag);
     };
-
-    function findPostIndex(postID) {
-        const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-        return allPosts.findIndex(p => p.postID === postID);
-    }
         
     function updatePostInStorage(updatedPost) {
         const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
@@ -386,6 +405,11 @@ function viewFullPost(post) {
     document.getElementById("full-submit-comment-btn").onclick = function() {
         submitComment(post.postID, null); // null = top-level comment, no parent
     };
+}
+
+function findPostIndex(postID) {
+    const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
+    return allPosts.findIndex(p => p.postID === postID);
 }
 
 function submitComment(postID, parentCommentIndex) {
@@ -459,8 +483,15 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     
     const user = getCurrentUser();
     const isLoggedIn = user !== null;
+    const posts = JSON.parse(localStorage.getItem("posts"))
+    const post = posts.find(p => p.postID == postID);
+    const currUser = isLoggedIn && (comment.user.username === user.username || post.user.username === user.username);
     const replyButtonHTML = isLoggedIn 
         ? `<button class="reply-button" onclick="toggleReplyInput(${commentIndex})">Reply</button>
+           ${currUser 
+            ? `<button class="comment-options"><i class='bx bx-dots-horizontal-rounded'></i></button>
+                ` 
+            : ''}
            <div id="reply-input-container-${commentIndex}" class="reply-input-container" style="display: none; margin-top: 10px;">
                <textarea id="reply-input-${commentIndex}" class="reply-input"></textarea>
                <button onclick="submitComment('${postID}', ${commentIndex})" class="submit-reply-btn">Reply</button>

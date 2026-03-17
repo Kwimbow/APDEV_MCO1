@@ -577,8 +577,21 @@ body.modal-open{
     transition: background-color 0.3s ease;
     vertical-align: middle;
 }
-#settings-logged-in:hover, #settings-visitor:hover{
+#settings-logged-in:hover, #settings-visitor:hover, .comment-options:hover{
     background-color: var(--log-info-hover);
+}
+
+.comment-options{
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+    border: transparent;
+    text-align: center;
+    background-color: transparent;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    vertical-align: middle;
 }
 
 #settings-icon{
@@ -1072,14 +1085,6 @@ body.modal-open{
     display: none;
 }
 
-#upv-checkbox:checked + label i{
-    color: #df4b4b
-}
-
-#downv-checkbox:checked + label i{
-    color: #0004ff
-}
-
 .upv-checkbox,
 .downv-checkbox{
     display:none;
@@ -1488,4 +1493,12 @@ body.modal-open{
     text-align: left;
     margin-left: 40px;
     margin-top: 20px;
+}
+
+#comment-settings-icon{
+    padding: 0px;
+    font-size: 15px;
+    border-radius: 50%;
+    align-items: center;
+    color: var(--sidenav-button);   
 }

@@ -172,6 +172,7 @@ function setupLoginForm(){
             if (successful) {
                 hidePopup("login-popup");
                 updateUserUI();
+                loadPostsList();
             //otherwise, not successfully logged in because of wrong credentials or account not registered
             } else {
                 errorShake(log_user, log_pw, log_unmatch_user_pw);
