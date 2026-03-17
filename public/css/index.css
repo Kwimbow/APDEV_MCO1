@@ -30,11 +30,8 @@
 
     --hr: #dddfdf;
     --upvdwv: #fff;
-<<<<<<< HEAD:public/css/index.css
-=======
     --comment-bg: #f9f9f9;
     --full-date: #666;
->>>>>>> origin/full-screen-post:index.css
 }
 .darkmode {
     --default-txt: white;
@@ -143,9 +140,6 @@ header{
 
 header div{
     margin: 0 30px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-sizing: border-box;
 }
 
 #search-bar{
@@ -160,7 +154,7 @@ header div{
 
     background-color: var(--background-color);
     color: var(--default-txt);
-    
+
     background-image: url("images/freddyt_logo.png");
     background-repeat: no-repeat;
     background-position-x: 3px;
@@ -224,22 +218,12 @@ header div{
 
 
 .side-nav{
-<<<<<<< HEAD:public/css/index.css
-    height: 100%; 
-    width: 270px; 
-    position: fixed; 
-    top: 66.5px; 
-    left: 0; 
-    background-color: var(--background-color); 
-    padding-top: 10px; 
-=======
     position: fixed;
     top: 66px;
     left: 0;
     width: 270px;
     height: calc(100vh - 66.5px);
     background-color: var(--background-color);
->>>>>>> origin/full-screen-post:index.css
     border-right: 1px solid #b8b8b8;
     overflow-y: auto;
     overflow-x: hidden;
@@ -290,11 +274,7 @@ header div{
     left: 256px;
     font-size: 20px;
     color: var(--sidenav-button);
-<<<<<<< HEAD:public/css/index.css
-    background-color: var(--background-color);
-=======
      background-color: var(--background-color);
->>>>>>> origin/full-screen-post:index.css
     border: 1px solid var(--closenav-border);
     border-radius: 50%;
     width: 28px;
@@ -369,7 +349,7 @@ header div{
     border: none;
     cursor: pointer;
     width: 90%;
-	font-size:20px;
+    font-size:20px;
     font-family: 'Reddit Sans', sans-serif;
     border-radius: 25px;
 }
@@ -386,7 +366,7 @@ header div{
 }
 /* The Modal (background) */
 .modal {
-	display:none;
+    display:none;
     position: fixed;
     z-index: 3;
     left: 0;
@@ -405,21 +385,17 @@ header div{
     border-radius: 20px;
     width: 530px; 
     height: 600px;
-	padding-bottom: 30px;
+    padding-bottom: 30px;
 }
 
 .create-post-modal {
     background-color: var(--background-color);
-<<<<<<< HEAD:public/css/index.css
-    margin: 4% auto 15% auto;
-=======
     margin: 3% auto 15% auto;
->>>>>>> origin/full-screen-post:index.css
     border: 1px solid #888;
     border-radius: 20px;
     width: 600px; 
     height: 600px;
-	padding-bottom: 30px;
+    padding-bottom: 30px;
     padding-left: 10px;
     padding-right: 10px;
 
@@ -467,11 +443,7 @@ body.modal-open{
 #reg-user-info, #reg-pw-info, #reg-repw-info{
     height: 60px;
     background-color: var(--log-info-field);
-<<<<<<< HEAD:public/css/index.css
-    color: var(--default-txt);
-=======
     color: var(--default-txt);    
->>>>>>> origin/full-screen-post:index.css
     border-radius: 20px;
     border: none;
     bottom: 1px;
@@ -481,7 +453,7 @@ body.modal-open{
     margin: 8px 26px;
     display: inline-block;
     box-sizing: border-box;
-	font-size:16px;
+    font-size:16px;
     padding-bottom: 0px;
 }
 
@@ -644,7 +616,7 @@ body.modal-open{
     font-family: 'Reddit Sans', sans-serif;
     margin-left: 26px;
     box-sizing: border-box;
-	font-size:12px;
+    font-size:12px;
     color: var(--orangey-red);
 }
 
@@ -719,6 +691,8 @@ body.modal-open{
     font-size: 16px;
     margin-right: 10px;
     color: var(--default-txt);
+    margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 #post-flex-display{
@@ -742,7 +716,6 @@ body.modal-open{
     margin-right: 10px;
     margin-top: 16px;
     border-radius:8px;
-    border-radius: 8px;
     font-family: 'Reddit Sans', sans-serif;
     padding-left: 8px;
     padding-right:8px;
@@ -772,15 +745,9 @@ body.modal-open{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
-<<<<<<< HEAD:public/css/index.css
-    font-weight: bold;
-
-    color: var(--default-txt);
-=======
     font-weight: 600;
     color: var(--default-txt);
 
->>>>>>> origin/full-screen-post:index.css
 }
 
 #post-flex-top{
@@ -805,25 +772,15 @@ body.modal-open{
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
-<<<<<<< HEAD:public/css/index.css
-
-    color: var(--default-txt);
-=======
     color: var(--default-txt);
 
->>>>>>> origin/full-screen-post:index.css
 }
 
 #post-date{
     margin-left:auto;
     font-family: 'Reddit Sans', sans-serif;
-<<<<<<< HEAD:public/css/index.css
-
-    color: var(--default-txt);
-=======
     color: var(--default-txt);
 
->>>>>>> origin/full-screen-post:index.css
 }
 
 .view-post-button{
@@ -843,31 +800,13 @@ body.modal-open{
     border-radius: 20px;
     width: 75vw; 
     height: 80vh;
-	padding-bottom: 30px;
-<<<<<<< HEAD:public/css/index.css
-    display:flex;
-    flex-direction:column;
-=======
+    padding-bottom: 30px;
     display: flex;
     flex-direction: column;
->>>>>>> origin/full-screen-post:index.css
     overflow:auto;
     overflow-x: hidden;
 }
 
-<<<<<<< HEAD:public/css/index.css
-.view-post-title{
-    white-space: nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-    font-size: 50px;
-    margin-bottom:-15px;
-    word-wrap:break-word;
-    overflow-wrap: break-word;
-    margin-right:80px;
-}
-=======
->>>>>>> origin/full-screen-post:index.css
 
 .green-tag{
     background-color:rgb(51, 118, 51);
@@ -894,60 +833,20 @@ body.modal-open{
     color:white;
 }
 
-<<<<<<< HEAD:public/css/index.css
-.view-post-flex-h{
-    width: 100%;
-    display: flex;
-    
+
+
+#OP-pfp{
+    scale:80%;
+    margin-bottom:-30px;
 }
-
-.view-post-left{
-    display:flex;
-    flex-direction: column;
-    width:15%;
-    margin-left: 20px;
-    border-right:2px solid black;
-}
-
-
-.view-post-right{
-    display:flex;
-    flex-direction: column;
-    width: 85%;
-    margin-right: 80px;
-    position: relative;
-    padding-right: 84px;
-}
-
-#view-post-content{
-    font-family: 'Reddit Sans', sans-serif;
-    margin-left: 45px;
-    font-size: 18px;
-    word-wrap:break-word;
-    overflow-wrap: break-word;
-    margin-right:80px;
-    height:auto;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-}
-=======
-
->>>>>>> origin/full-screen-post:index.css
-
 
 #OP-username, #OP-date{
     align-self: center;
     font-family: 'Reddit Sans', sans-serif;
     font-size: 18px;
     margin-bottom: -12px;
-    text-align: center;
 }
 
-.profile-color{
-    text-decoration: none;
-    color: #df4b4b;
-}
 
 
 /* horizontal line in sidenav bar */
@@ -987,107 +886,6 @@ body.modal-open{
     font-weight: bold;
 }
 
-<<<<<<< HEAD:public/css/index.css
-#reply-area{
-    resize:none;
-    margin-left:30px;
-    height: 60px;
-}
-
-#reply-button{
-    margin-left: auto;
-    width: 100px;
-    height:40px;
-    background-color: var(--orangey-red);
-    color: white;
-    border-radius:30px;
-    margin-top:10px;
-    font-family: 'Reddit Sans', sans-serif; 
-    border: none;
-}
-
-.reply-button-comments{
-    width: 100px;
-    height:40px;
-    background-color: rgba(223, 75, 75);
-    color: white;
-    border-radius:30px;
-    margin-top:0%;
-    margin-bottom: 0%;
-    font-family: 'Reddit Sans', sans-serif; 
-    border: none;
-    margin-left: 30px;
-}
-
-.reply-button-comments:hover{
-    background-color: #ca3a3a;
-}
-
-.comment-pfp{
-    scale:50%;
-    margin-bottom:-50px;
-}
-
-.comment-username, .comment-date{
-    align-self: center;
-    font-family: 'Reddit Sans', sans-serif;
-    font-size: 14px;
-    margin-bottom: -2px;
-}
-
-.comment-content{
-    border: 2px solid black;
-    font-family: 'Reddit Sans', sans-serif; 
-    margin-top:60px;
-    margin-left: 30px;
-    padding:10px;  
-}
-
-.upvote{
-    margin-top:10px;
-    margin-right:5px;
-    background-color: var(--upvdwv);
-}
-
-.downvote{
-    margin-top:10px;
-    margin-left:5px;
-    background-color: var(--upvdwv);
-}
-
-.upvote:active{
-    background-color: rgba(250, 78, 52, 0.855);
-}
-
-.downvote:active{
-    background-color: rgba(108, 52, 250, 0.855);
-}
-
-.score{
-    font-size:14px;
-    align-self: center;
-    font-family: 'Reddit Sans', sans-serif;
-    margin-bottom:5px;
-}
-
-.post-options{
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-size: large;
-    color: gray;
-    position: absolute;
-    top: 12px;
-    right: 12px;
-
-    background-color: var(--closebtn-bg);
-=======
 .filter-input:checked + .filter-label-g {
     background-color:rgb(195, 19, 19);
     color: white;
@@ -1268,6 +1066,23 @@ body.modal-open{
     cursor: pointer;
     color: var(--default-txt);
     font-size: 20px;
+}
+
+#upv-checkbox, #downv-checkbox{
+    display: none;
+}
+
+#upv-checkbox:checked + label i{
+    color: #df4b4b
+}
+
+#downv-checkbox:checked + label i{
+    color: #0004ff
+}
+
+.upv-checkbox,
+.downv-checkbox{
+    display:none;
 }
 
 #full-vote-count {
@@ -1527,33 +1342,20 @@ body.modal-open{
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
->>>>>>> origin/full-screen-post:index.css
 }
 
 .post-options-menu{
     position: absolute;
-<<<<<<< HEAD:public/css/index.css
-    top: 56px;
-    right: 8px;
-    width: 160px;
-    background: #ffffff;
-=======
     top: 120px;
     right: 240px;
     width: 160px;
     background-color: var(--log-info-field);
->>>>>>> origin/full-screen-post:index.css
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     display: none;
     flex-direction: column;
     padding: 6px 8px;
-<<<<<<< HEAD:public/css/index.css
-
-    background-color: var(--closebtn-bg);
-=======
->>>>>>> origin/full-screen-post:index.css
 }
 
 .post-options-menu.open{
@@ -1569,56 +1371,6 @@ body.modal-open{
     cursor: pointer;
     border-radius: 6px;
 
-<<<<<<< HEAD:public/css/index.css
-    background-color: var(--closebtn-bg);
-    color: var(--closebtn-clr);
-}
-
-.post-options-menu-item:hover{
-    background-color: var(--closebtn-hover);
-}
-
-.comment-options{
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-size: large;
-    color: gray;
-    align-self: flex-end;
-    background-color: transparent;
-    border-radius: 20px;
-    margin-top: 0%;
-
-    background-color: var(--closebtn-bg);
-}
-
-.comment-options:hover, .post-options:hover{
-    background-color: var(--closebtn-hover);
-}
-
-.comment-actions{ 
-    display:flex; 
-    justify-content:space-between; 
-    align-items:center; 
-    gap:12px; 
-    position: relative; 
-}
-.comment-content{ 
-    padding:10px;
-}
-
-.comment-options-menu{
-    position: absolute;
-    top: 36px;
-    right: 8px;
-    width: 140px;
-    background: #ffffff;
-=======
     background-color: var(--log-info-field);
     color: var(--default-txt);
 }
@@ -1661,27 +1413,11 @@ body.modal-open{
     top: 60px;
     right: 5px;
     width: 200px;
->>>>>>> origin/full-screen-post:index.css
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     display: none;
     flex-direction: column;
-<<<<<<< HEAD:public/css/index.css
-    padding: 6px 8px;
-
-    background-color: var(--closebtn-bg);
-}
-
-.comment-options-menu.open{ 
-    display:flex; 
-}
-
-.comment-options-menu-item{
-    background: transparent;
-    border: none;
-    padding: 8px 10px;
-=======
     padding: 5px 5px;
     background-color: var(--log-info-field);
     height: 50px;
@@ -1711,22 +1447,10 @@ body.modal-open{
 .general-options-menu-item, .user-options-menu-item {
     background: transparent;
     border: none;
->>>>>>> origin/full-screen-post:index.css
     text-align: left;
     font-family: 'Reddit Sans', sans-serif;
     cursor: pointer;
     border-radius: 6px;
-<<<<<<< HEAD:public/css/index.css
-
-    background-color: var(--closebtn-bg);
-    color: var(--closebtn-clr);
-}
-
-.comment-options-menu-item:hover{ 
-    background-color: var(--closebtn-hover);
-}
-
-=======
     height: 98%;
     background-color: var(--log-info-field);
     color: black;
@@ -1765,4 +1489,3 @@ body.modal-open{
     margin-left: 40px;
     margin-top: 20px;
 }
->>>>>>> origin/full-screen-post:index.css

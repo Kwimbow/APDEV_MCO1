@@ -15,4 +15,16 @@ router.post('/register', async (req, res) => {
 	res.json({ success: true });
 });
 
+/* This function logs in the user. */
+router.post('/login', async (req, res) => {
+	const { username, password } = req.body;
+
+	const user = await User.findOne({ username, password });
+	if (!user) {
+		return res.status(400).json({ message: "Invalid username or password "});
+	}
+
+	res.json({ success: true, user: { username } });
+});
+
 module.exports = router;

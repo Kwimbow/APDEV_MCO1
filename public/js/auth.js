@@ -3,15 +3,45 @@
 /* This function searches the users stored in local storage and logs in using session storage (temporary)
 RETURN: true if username & password matches one in the storage
         false if either of them don't match */
-function login(username, password) {
-  let existingUsers = JSON.parse(localStorage.getItem("users")) || [];
-  let validUser = existingUsers.find(user => user.username === username && user.password === password);
+async function login() {
+  const username = document.getElementById('log-user-info').value;
+  const password = document.getElementById('log-pw-info').value;
 
-  if (validUser){
-    sessionStorage.setItem("user", JSON.stringify({ username }));
-    return true;
+  // checking for empty fields
+  if (username.trim() === ''){
+    document.getElementById('log-empty-user').classList.add('invalid');
+    document.getElementById('log-user-info').classList.add('wrong');
+    document.getElementById('log-user-info').classList.add('error-shake');
+    return;
   }
-  return false;
+  else if (password.trim() === ''){
+    document.getElementById('log-empty-pw').classList.add('invalid');
+    document.getElementById('log-pw-info').classList.add('wrong');
+    document.getElementById('log-pw-info').classList.add('error-shake');
+    return;
+  }
+
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    sessionStorage.setItem('user', JSON.stringify({ username }));
+    hidePopup('login-popup');
+    location.reload();
+  }
+
+  else {
+    document.getElementById('log-unmatch-user-pw').classList.add('invalid');
+    document.getElementById('log-user-info').classList.add('wrong');
+    document.getElementById('log-user-info').classList.add('error-shake');
+
+    document.getElementById('log-pw-info').classList.add('wrong');
+    document.getElementById('log-pw-info').classList.add('error-shake');
+  }
 }
 
 /* This function is accessed when the user clicks the remember me button. Remembers user for 3 weeks
@@ -86,13 +116,13 @@ async function register() {
     document.getElementById('reg-repw-info').classList.add('error-shake');
     return;
   }
-  else if (username.trim() == ''){
+  if (username.trim() === ''){
     document.getElementById('reg-empty-user').classList.add('invalid');
     document.getElementById('reg-user-info').classList.add('wrong');
     document.getElementById('reg-user-info').classList.add('error-shake');
     return;
   }
-  else if (password.trim() == ''){
+  if (password.trim() === ''){
     document.getElementById('reg-empty-pw').classList.add('invalid');
     document.getElementById('reg-pw-info').classList.add('wrong');
     document.getElementById('reg-pw-info').classList.add('error-shake');
