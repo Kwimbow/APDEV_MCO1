@@ -21,6 +21,8 @@ const Comment = require('./models/Comment');
 // getting le routes
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
+const postRoutes = require('./routes/authpost');
+app.use('/api', postRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

@@ -1,30 +1,14 @@
 const router = require('express').Router();
-const User = require('../models/Post');
+const Post = require('../models/Post');
 
 /* This function registers the user.
     Can return an error if there is another user with the inputted username.*/
-router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+router.post('/create_post', async (req, res) => {
+    const { post } = req.body;
 
-    const notUnique = await User.findOne({ username });
-    if (notUnique) {
-        return res.status(400).json({message: 'Username already exists' });
-    }
-
-    await User.create({ username, password });
+    await Post.create({post});
     res.json({ success: true });
 });
 
-/* This function logs in the user. */
-router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    const user = await User.findOne({ username, password });
-    if (!user) {
-        return res.status(400).json({ message: "Invalid username or password "});
-    }
-
-    res.json({ success: true, user: { username } });
-});
 
 module.exports = router;
