@@ -449,23 +449,29 @@ function findPostIndex(postID) {
 }
 
 function submitComment(postID, parentCommentID) {
+    const currentUser = getCurrentUser();
+    if (!currentUser) return showPopup("login-popup");
+
     let commentInput;
-    
-    if (parentCommentID) {
+    if(parentCommentID){
         commentInput = document.getElementById(`reply-input-${parentCommentID}`);
-    } else {
+        const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
+        const parentComment = (allComments[postID] || []).find(c => c.commentID === parentCommentID);
+        if(!parentComment || parentComment.deleted){
+            return;
+        }
+    }else {
         commentInput = document.getElementById("full-comment-input");
     }
 
+    if(!commentInput) return;
+
     const commentText = commentInput.value.trim();
-    if (!commentText) {
-        alert("Please write a comment");
+    if(!commentText) {
         return;
     }
 
-    const currentUser = getCurrentUser();
     const newCommentID = crypto.randomUUID();
-
     const comment = {
         commentID: newCommentID,
         user: currentUser,
@@ -477,8 +483,7 @@ function submitComment(postID, parentCommentID) {
     };
 
     let allComments = JSON.parse(localStorage.getItem("comments") || "{}");
-
-    if (!allComments[postID]) allComments[postID] = [];
+    if(!allComments[postID]) allComments[postID] = [];
     allComments[postID].push(comment);
     localStorage.setItem("comments", JSON.stringify(allComments));
 
@@ -488,101 +493,191 @@ function submitComment(postID, parentCommentID) {
 
 function displayFullComments(postID) {
     const commentsArea = document.getElementById("full-comments-display-area");
-    if (!commentsArea) return;
-    
+    if(!commentsArea) return;
+
     commentsArea.innerHTML = "";
-    
+
     const allComments = JSON.parse(localStorage.getItem('comments') || '{}');
     const postComments = allComments[postID] || [];
-    
+
     if (postComments.length === 0) {
         commentsArea.innerHTML = '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'">Be the first to comment</h3>';
         return;
     }
-    
-    const topLevelComments = postComments
-        .map((comment, index) => ({ ...comment, index }))
-        .filter(c => !c.parent_id && c.parent_id !== 0);
-    
-    topLevelComments.forEach((comment) => {
-        renderCommentThread(commentsArea, comment, postComments, postID, comment.index);
+
+    const topLevelComments = postComments.filter(c => !c.parent_id);
+
+    topLevelComments.forEach(comment => {
+        renderCommentThread(commentsArea, comment, postComments, postID, comment.commentID); 
     });
 
     setupCommentOptions();
 }
 
-function renderCommentThread(container, comment, allComments, postID, commentIndex) {
+function renderCommentThread(container, comment, allComments, postID, commentIndex){
     const isDeleted = comment.deleted === true;
     const isEdited = comment.edited === true;
 
     const commentItem = document.createElement("div");
     commentItem.className = "comment-item";
-    if (isDeleted){
-        commentItem.classList.add("deleted");
-    }
-    if(isEdited){
-        commentItem.classList.add("edited");
-    }
-    
+    if (isDeleted) commentItem.classList.add("deleted");
+    if (isEdited) commentItem.classList.add("edited");
+
     const commentDate = new Date(comment.date);
-    const formattedDate = commentDate.toLocaleDateString() + " " + commentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    
+    const formattedDate = commentDate.toLocaleDateString() + " " + commentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
     const user = getCurrentUser();
     const isLoggedIn = user !== null;
-    const posts = JSON.parse(localStorage.getItem("posts"))
+
+    const posts = JSON.parse(localStorage.getItem("posts") || "[]");
     const post = posts.find(p => p.postID == postID);
+
     const currUser = isLoggedIn && (comment.user.username === user.username || post.user.username === user.username);
-    const editComUser = isLoggedIn && (comment.user.username === user.username) //only the user who posted the comment can edit their comment data, even the post's authoer is not allowed
+    const editComUser = isLoggedIn && (comment.user.username === user.username); //only author can edit
 
-    const popUpHTML = editComUser //if true editable and deletable, else only deletable
-        ? `<div class="comment-options-menu" role="menu" aria-hidden="true">
-                <button class="comment-options-menu-item delete-comment" data-comment-id="${comment.commentID}" data-post-id="${postID}">Delete Comment</button>
-                <button class="comment-options-menu-item edit-comment" data-comment-id="${comment.commentID}" data-post-id="${postID}">Edit Comment</button>
-            </div>`
-        : `<div class="comment-options-menu" role="menu" aria-hidden="true">
-                <button class="comment-options-menu-item delete-comment" data-comment-id="${comment.commentID}" data-post-id="${postID}">Delete Comment</button>
-            </div>`;
-
-    const commentSettingsHTML = currUser
-        ? `<div class="comment-options-wrapper">
-            <button class="comment-options comments-settings-btn" data-comment-id="${commentIndex}" data-post-id="${postID}" data-comment-user="${comment.user.username}"><i class='bx bx-dots-horizontal-rounded' id="comment-settings-icon"></i></button>
-            ${popUpHTML}
+    const upvDownv = !isDeleted //this is the container for the upvote, count, downvote in the comments
+        ? `<div class="upvote-downvote-comm">
+               <input type="checkbox" id="upv-${comment.commentID}" class="comment-checkbox">
+               <label for="upv-${comment.commentID}">
+                   <i class='bx bx-upvote comment-vote-btns' id="upvote-${comment.commentID}"></i>
+               </label>
+               <p id="votes-${comment.commentID}">${comment.votes || 0}</p>
+               <input type="checkbox" id="downv-${comment.commentID}" class="comment-checkbox">
+               <label for="downv-${comment.commentID}">
+                   <i class='bx bx-downvote comment-vote-btns' id="downvote-${comment.commentID}"></i>
+               </label>
            </div>`
         : '';
-    
-    const replyButtonHTML = isLoggedIn && !isDeleted
-        ? `<button class="reply-button" onclick="toggleReplyInput('${comment.commentID}')">Reply</button>
-        ${commentSettingsHTML}
-        <div id="reply-input-container-${comment.commentID}" class="reply-input-container" style="display: none; margin-top: 10px;">
-            <textarea id="reply-input-${comment.commentID}" class="reply-input"></textarea>
-            <button onclick="submitComment('${postID}', '${comment.commentID}')" class="submit-reply-btn">Reply</button>
-            <button onclick="toggleReplyInput('${comment.commentID}')" class="cancel-reply-btn">Cancel</button>
-        </div>`
+
+    const popUpHTML = editComUser //if user is poster of comment, they can edit or delete, else if theyre owner of post, can only delete
+        ? `<div class="comment-options-menu" role="menu" aria-hidden="true">
+               <button class="comment-options-menu-item delete-comment" data-comment-id="${comment.commentID}" data-post-id="${postID}">Delete Comment</button>
+               <button class="comment-options-menu-item edit-comment" data-comment-id="${comment.commentID}" data-post-id="${postID}">Edit Comment</button>
+           </div>`
+        : `<div class="comment-options-menu" role="menu" aria-hidden="true">
+               <button class="comment-options-menu-item delete-comment" data-comment-id="${comment.commentID}" data-post-id="${postID}">Delete Comment</button>
+           </div>`;
+
+    const commentSettingsHTML = currUser && !isDeleted //shows comment options > pop up options
+        ? `<div class="comment-options-wrapper">
+               <button class="comment-options comments-settings-btn" data-comment-id="${commentIndex}" data-post-id="${postID}" data-comment-user="${comment.user.username}">
+                   <i class='bx bx-dots-horizontal-rounded' id="comment-settings-icon"></i>
+               </button>
+               ${popUpHTML}
+           </div>`
         : '';
-    
+
+    const replyHTML = isLoggedIn && !isDeleted //reply button, options and the reply box
+        ? `<div class="comment-actions">
+               <button class="reply-button" onclick="toggleReplyInput('${comment.commentID}')">Reply</button>
+               ${commentSettingsHTML}
+           </div>
+           <div id="reply-input-container-${comment.commentID}" class="reply-input-container" style="display: none; margin-top: 10px;">
+               <textarea id="reply-input-${comment.commentID}" class="reply-input"></textarea>
+               <button onclick="submitComment('${postID}', '${comment.commentID}')" class="submit-reply-btn">Reply</button>
+               <button onclick="toggleReplyInput('${comment.commentID}')" class="cancel-reply-btn">Cancel</button>
+           </div>`
+        : '';
+
     const commentText = isDeleted ? "[deleted]" : comment.text;
-    const usernameText = isDeleted ? `<span class="deleted-text">[deleted]</span>`  : comment.user.username;
+    const usernameText = isDeleted ? `<span class="deleted-text">[deleted]</span>` : comment.user.username;
     const editedFlag = isEdited ? `<span class="edited-comment">(edited)</span>` : "";
 
-    commentItem.innerHTML = `
-        <div class="comment-content">
+    const actionsHTML = !isDeleted //show the comment vote stuff, reply,and options as long as its not deleted
+    ? `<div class="comment-actions-container">
+           ${upvDownv}
+           ${replyHTML}
+       </div>`
+    : '';
+
+    commentItem.innerHTML = 
+        `<div class="comment-content">
             <div class="comment-header">
                 <span class="comment-username">${usernameText}</span>
                 <span class="comment-date">${formattedDate} ${editedFlag}</span>
             </div>
             <div class="comment-text">${commentText}</div>
-            ${replyButtonHTML}
+            ${actionsHTML}
             <div id="replies-${commentIndex}" class="replies-container"></div>
         </div>`;
-    
+
     container.appendChild(commentItem);
-    
+
+    const upvCheckbox = commentItem.querySelector(`#upv-${comment.commentID}`);
+    const downvCheckbox = commentItem.querySelector(`#downv-${comment.commentID}`);
+    const voteDisplay = commentItem.querySelector(`#votes-${comment.commentID}`);
+    const upvoteIcon = commentItem.querySelector(`#upvote-${comment.commentID}`);
+    const downvoteIcon = commentItem.querySelector(`#downvote-${comment.commentID}`);
+
+    if (upvCheckbox && downvCheckbox){ //actions for upvote down vote
+        upvCheckbox.addEventListener("change", (e) => { 
+            e.stopPropagation(); 
+            if(user !== null){ 
+                if(upvCheckbox.checked){ 
+                    upvoteIcon.classList.replace("bx-upvote", "bxs-upvote"); 
+                    upvoteIcon.style.color = "#df4b4b"; 
+                    if(downvCheckbox.checked){ 
+                        downvCheckbox.checked = false; 
+                        downvoteIcon.classList.replace("bxs-downvote", "bx-downvote"); 
+                        downvoteIcon.style.color = ""; comment.votes += 2; 
+                    }else{ comment.votes += 1; 
+
+                    } 
+                }else{ 
+                    upvoteIcon.classList.replace("bxs-upvote", "bx-upvote"); 
+                    upvoteIcon.style.color = ""; 
+                    comment.votes -= 1; 
+                } 
+                voteDisplay.textContent = comment.votes; 
+                saveCommentVotes(postID, comment.commentID, comment.votes); 
+            }else{ 
+                showPopup("login-popup"); 
+            } 
+        }); 
+        
+        downvCheckbox.addEventListener("change", (e) => { 
+            e.stopPropagation(); 
+            if(user !== null){ 
+                if (downvCheckbox.checked){ 
+                    downvoteIcon.classList.replace("bx-downvote", "bxs-downvote"); 
+                    downvoteIcon.style.color = "#0004ff"; 
+                    if(upvCheckbox.checked){ 
+                        upvCheckbox.checked = false; 
+                        upvoteIcon.classList.replace("bxs-upvote", "bx-upvote"); 
+                        upvoteIcon.style.color = ""; 
+                        comment.votes -= 2; 
+                    }else{ 
+                        comment.votes -= 1; 
+                    } 
+                }else{ 
+                    downvoteIcon.classList.replace("bxs-downvote", "bx-downvote"); 
+                    downvoteIcon.style.color = ""; 
+                    comment.votes += 1; 
+                } 
+                voteDisplay.textContent = comment.votes; 
+                saveCommentVotes(postID, comment.commentID, comment.votes); 
+            }else{ 
+                showPopup("login-popup"); 
+            } 
+        }); 
+    }
+
+    // Render replies recursively
     const replies = allComments.filter(c => c.parent_id === comment.commentID);
     if (replies.length > 0) {
-        const repliesContainer = commentItem.querySelector(`#replies-${commentIndex}`);
+        const repliesContainer = commentItem.querySelector(`#replies-${comment.commentID}`);
         replies.forEach(reply => {
-            renderCommentThread(repliesContainer, reply, allComments, postID, reply.index);
+            renderCommentThread(repliesContainer, reply, allComments, postID, reply.commentID);
         });
+    }
+}
+
+function saveCommentVotes(postID, commentID, votes) {
+    const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
+    const comment = allComments[postID].find(c => c.commentID === commentID);
+    if(comment){
+        comment.votes = votes;
+        localStorage.setItem("comments", JSON.stringify(allComments));
     }
 }
 
@@ -635,6 +730,9 @@ function setupCommentOptions() {
                 document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {
                     b.style.display = "none";
                 });
+                document.querySelectorAll('.upvote-downvote-comm').forEach(b => {
+                    b.style.display = "none";
+                });
 
                 const commentTextDiv = commentItem.querySelector(".comment-text");
 
@@ -659,8 +757,7 @@ function setupCommentOptions() {
                 // Submit changes
                 submitBtn.onclick = () => {
                     const newText = textarea.value.trim();
-                    if (!newText) {
-                        alert("Comment cannot be empty!");
+                    if(!newText){
                         return;
                     }
                     comment.text = newText;
@@ -670,6 +767,9 @@ function setupCommentOptions() {
                     localStorage.setItem("comments", JSON.stringify(allComments));
                     document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {
                         b.style.display = "inline-block";
+                    });
+                    document.querySelectorAll('.upvote-downvote-comm').forEach(b => {
+                        b.style.display = "flex";
                     });
                     displayFullComments(postID);
                 };
@@ -681,6 +781,9 @@ function setupCommentOptions() {
                     document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {
                         b.style.display = "inline-block";
                     });
+                    document.querySelectorAll('.upvote-downvote-comm').forEach(b => {
+                    b.style.display = "flex";
+                });
                 };
             };
         }
@@ -709,11 +812,13 @@ function deleteCommentById(postID, commentID) {
     displayFullComments(postID);
 }
 
-function toggleReplyInput(commentID) {
+function toggleReplyInput(commentID){
+    const user = getCurrentUser();
+    if (!user) return showPopup("login-popup");
     const inputContainer = document.getElementById(`reply-input-container-${commentID}`);
-    if (inputContainer) {
+    if(inputContainer){
         inputContainer.style.display = inputContainer.style.display === "none" ? "block" : "none";
-        if (inputContainer.style.display === "block") {
+        if(inputContainer.style.display === "block"){
             document.getElementById(`reply-input-${commentID}`).focus();
         }
     }

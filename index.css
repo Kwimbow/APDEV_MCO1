@@ -1067,7 +1067,7 @@ body.modal-open{
     margin: 5px 0;
 }
 
-#full-vote-area {
+#full-vote-area{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1082,16 +1082,26 @@ body.modal-open{
     font-size: 20px;
 }
 
+.comment-vote-btns{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--default-txt);
+    font-size: 28px;
+    line-height: 1;
+}
+
 #upv-checkbox, #downv-checkbox, #bookmark-checkbox{
     display: none;
 }
 
 .upv-checkbox,
-.downv-checkbox{
+.downv-checkbox,
+.comment-checkbox{
     display:none;
 }
 
-#full-vote-count {
+#full-vote-count, .comment-vote-count {
     font-family: 'Reddit Sans', sans-serif;
     font-size: 16px;
     color: var(--default-txt);
@@ -1594,3 +1604,36 @@ body.modal-open{
 .edited-comment{
     font-style: italic;
 }
+
+.comment-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.upvote-downvote-comm {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.upvote-downvote-comm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.comment-vote-btns {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.comment-vote-count {
+    min-width: 20px;
+    text-align: center;
+}
+
