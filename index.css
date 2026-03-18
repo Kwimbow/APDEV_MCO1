@@ -1074,7 +1074,7 @@ body.modal-open{
     gap: 8px;
 }
 
-#full-upvote-btn, #full-downvote-btn {
+#full-upvote-btn, #full-downvote-btn, #full-bookmark-btn {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -1082,7 +1082,7 @@ body.modal-open{
     font-size: 20px;
 }
 
-#upv-checkbox, #downv-checkbox{
+#upv-checkbox, #downv-checkbox, #bookmark-checkbox{
     display: none;
 }
 

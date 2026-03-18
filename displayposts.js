@@ -261,6 +261,12 @@ function viewFullPost(post) {
                                 <i class='bx bx-downvote' id="full-downvote-btn"></i>
                             </label>
                         </div>
+                        <div id="bookmarkBTN">
+                            <input type="checkbox" id="bookmark-checkbox">
+                            <label for="bookmark-checkbox">
+                                <i class='bx bx-bookmark' id="full-bookmark-btn"></i>
+                            </label>
+                        </div>
                     </div>
                     <div id="full-post-right">
                         <div id="full-post-top">
@@ -319,8 +325,17 @@ function viewFullPost(post) {
 
     const upvCheckbox = document.getElementById("upv-checkbox");
     const downvCheckbox = document.getElementById("downv-checkbox");
+    const bookmarkCheckbox = document.getElementById("bookmark-checkbox");
     const upvoteIcon = document.getElementById("full-upvote-btn");
     const downvoteIcon = document.getElementById("full-downvote-btn");
+    const bookmarkIcon = document.getElementById("full-bookmark-btn");
+    const bookmarkContainer = document.getElementById("bookmarkBTN");
+
+    if (userNow) {
+        bookmarkContainer.style.display = "block"; // or "flex" depending on your CSS
+    } else {
+        bookmarkContainer.style.display = "none";
+    }
 
     upvCheckbox.addEventListener("change", (e) => {
         e.stopPropagation();
@@ -375,6 +390,27 @@ function viewFullPost(post) {
             showPopup("login-popup");
         }
     });
+
+    bookmarkCheckbox.addEventListener("change", (e) => {
+        e.stopPropagation();
+        if(userNow !== null){
+            if(bookmarkCheckbox.checked){
+                bookmarkIcon.classList.replace("bx-bookmark", "bxs-bookmark");
+                bookmarkIcon.style.color = "#3600a2"; 
+
+                //update to user bookmarks array by appending the post!!!
+            }else{
+                bookmarkIcon.classList.replace("bxs-bookmark", "bx-bookmark");
+                bookmarkIcon.style.color = "";
+
+                //update to user bookmarks by removing the post from the user's bookmarks array!!!
+            }
+
+            //update users bookmark list!!!
+        } else{
+            showPopup("login-popup");
+        }
+    });
     
     const postIndex = findPostIndex(post.postID);
     setupPostOptions(postIndex);
@@ -382,8 +418,7 @@ function viewFullPost(post) {
     // Show/hide comment input area based on login status
     // Comments display is always visible
     const commentInputArea = document.getElementById("full-comment-input-area");
-    const user = getCurrentUser();
-    commentInputArea.style.display = user ? "block" : "none";
+    commentInputArea.style.display = userNow ? "block" : "none";
     
     // Display comments
     displayFullComments(post.postID);
