@@ -4,6 +4,7 @@ let currentTag = "all";
 
 const posts = JSON.parse(localStorage.getItem('posts') || '[]');
 
+//loads the entire list of posts in the home screen
 function loadPostsList(filter = "none", tag = "all") {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = "";
@@ -50,6 +51,7 @@ function loadPostsList(filter = "none", tag = "all") {
     }
 }
 
+//Refers to each singular post in the home page
 function displayPosts(posts, i){
     const viewButton = document.createElement("button");
     viewButton.className = "view-post-button";
@@ -220,6 +222,7 @@ function displayPosts(posts, i){
     });
 }
 
+//when clicking a post, you entire full screen mode, home shi is gone, now its full of the post shi
 function viewFullPost(post) {
     if(!post) return;
     const mainContent = document.getElementById("main-content");
@@ -331,9 +334,9 @@ function viewFullPost(post) {
     const bookmarkIcon = document.getElementById("full-bookmark-btn");
     const bookmarkContainer = document.getElementById("bookmarkBTN");
 
-    if (userNow) {
-        bookmarkContainer.style.display = "block"; // or "flex" depending on your CSS
-    } else {
+    if(userNow){
+        bookmarkContainer.style.display = "block";
+    }else{
         bookmarkContainer.style.display = "none";
     }
 
@@ -415,15 +418,15 @@ function viewFullPost(post) {
     const postIndex = findPostIndex(post.postID);
     setupPostOptions(postIndex);
 
-    // Show/hide comment input area based on login status
-    // Comments display is always visible
+    //show/hide comment input area based on login status
+    //comments display is always visible
     const commentInputArea = document.getElementById("full-comment-input-area");
     commentInputArea.style.display = userNow ? "block" : "none";
     
-    // Display comments
+    //display comments
     displayFullComments(post.postID);
     
-    // Back button functionality
+    //back button functionality
     document.getElementById("back-to-posts-btn").onclick = function() {
         loadPostsList(currentFilter, currentTag);
     };
@@ -437,18 +440,20 @@ function viewFullPost(post) {
         }
     }
     
-    // Comment submit button
+    //submit button for comment
     document.getElementById("full-submit-comment-btn").onclick = function() {
-        submitComment(post.postID, null); // null = top-level comment, no parent
+        submitComment(post.postID, null);
     };
 }
 
-function findPostIndex(postID) {
+//returns post index of postid given
+function findPostIndex(postID){
     const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
     return allPosts.findIndex(p => p.postID === postID);
 }
 
-function submitComment(postID, parentCommentID) {
+//creating a comment 
+function submitComment(postID, parentCommentID){
     const currentUser = getCurrentUser();
     if (!currentUser) return showPopup("login-popup");
 
@@ -491,6 +496,7 @@ function submitComment(postID, parentCommentID) {
     displayFullComments(postID);
 }
 
+//like loadpostlist() but for comments
 function displayFullComments(postID) {
     const commentsArea = document.getElementById("full-comments-display-area");
     if(!commentsArea) return;
@@ -500,7 +506,7 @@ function displayFullComments(postID) {
     const allComments = JSON.parse(localStorage.getItem('comments') || '{}');
     const postComments = allComments[postID] || [];
 
-    if (postComments.length === 0) {
+    if (postComments.length === 0){
         commentsArea.innerHTML = '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'">Be the first to comment</h3>';
         return;
     }
@@ -514,6 +520,7 @@ function displayFullComments(postID) {
     setupCommentOptions();
 }
 
+//creates a single comment and its replies are shown recursively
 function renderCommentThread(container, comment, allComments, postID, commentIndex){
     const isDeleted = comment.deleted === true;
     const isEdited = comment.edited === true;
@@ -672,6 +679,7 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     }
 }
 
+//updates comment vote count
 function saveCommentVotes(postID, commentID, votes) {
     const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
     const comment = allComments[postID].find(c => c.commentID === commentID);
@@ -681,6 +689,7 @@ function saveCommentVotes(postID, commentID, votes) {
     }
 }
 
+//comment option popups and their actions
 function setupCommentOptions() {
     const buttons = document.querySelectorAll(".comments-settings-btn");
 
@@ -798,6 +807,7 @@ function setupCommentOptions() {
     });
 }
 
+//makes a comment "delete"
 function deleteCommentById(postID, commentID) {
     const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
     if (!allComments[postID]) return;
@@ -812,6 +822,7 @@ function deleteCommentById(postID, commentID) {
     displayFullComments(postID);
 }
 
+//text box input showing and hiding
 function toggleReplyInput(commentID){
     const user = getCurrentUser();
     if (!user) return showPopup("login-popup");
@@ -824,7 +835,7 @@ function toggleReplyInput(commentID){
     }
 }
 
-// Tag filters
+// Tag filters (discussion, guide, joke,...)
 document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
     radio.addEventListener("change", function() {
         if (!this.checked) return;
@@ -836,7 +847,7 @@ document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
     });
 });
 
-// Sort filters
+// Sort filters (most popular, by date, ...)
 document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
     radio.addEventListener("change", function() {
         if (!this.checked) return;
