@@ -1,4 +1,127 @@
 /* FOR DISPLAYING POSTS */
+
+async function load_posts() {
+
+    const res = await fetch('api/posts');
+    const posts = await res.json();
+
+    const container = document.getElementById("main-content");
+
+    console.log(posts)
+    
+    posts.slice().reverse().forEach((post) => {
+
+        if (post.votes === undefined) post.votes = 0;
+
+        const viewButton = document.createElement("button");
+        viewButton.className = "view-post-button";
+
+        let postTime = (post.createdAt).toString();
+        const timeString = postTime.split("T")
+        let dateString = timeString[0]
+
+        viewButton.onclick = () => viewFullPost(post);
+
+        const newPost = document.createElement("div");
+        const postFlexTop = document.createElement("div")
+        const postFlexBottom = document.createElement("div")
+        const flexArea = document.createElement("div")
+        const leftArea = document.createElement("div");
+        const rightArea = document.createElement("div");
+        rightArea.id = "post-right-area";
+        leftArea.id = "post-left-area";
+        postFlexTop.id = "post-flex-top";
+        flexArea.id = "post-flex-display";
+        postFlexBottom.id = "post-flex-bottom";
+        
+        const userPfp = new Image();
+        userPfp.src = 'images/freddyt_logo.png';
+        userPfp.id = "user-pfp"
+
+        const upvoteBtn = document.createElement("button");
+        const downvoteBtn = document.createElement("button");
+        upvoteBtn.id = "upvote-btn";
+        downvoteBtn.id = "downvote-btn";
+        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
+        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
+
+        let voteCount = document.createElement("p");
+        voteCount.id = "vote-count";
+        voteCount.appendChild(document.createTextNode(post.votes));
+
+        const postTag = document.createElement("p");
+        postTag.id = "post-tag";
+        if (post.tag === "discussion"){
+            postTag.classList.add('green-tag');
+        }
+        else if (post.tag === "guides"){
+            postTag.classList.add('red-tag');
+        }
+        else if (post.tag === "showcase"){
+            postTag.classList.add('purple-tag');
+        }
+        else if (post.tag === "joke"){
+            postTag.classList.add('blue-tag');
+        }
+        else if (post.tag === "misc"){
+            postTag.classList.add('orange-tag');
+        }
+        postTag.appendChild(document.createTextNode(post.tag));
+
+        const postContent = document.createElement("p");
+        postContent.id = "post-content";
+        postContent.appendChild(document.createTextNode(post.content));
+
+        const postTitle = document.createElement("p");
+        postTitle.id = "post-title";
+        postTitle.appendChild(document.createTextNode(post.title));
+        
+        const postDate = document.createElement("p");
+        postDate.id = "post-date"
+        postDate.appendChild(document.createTextNode(dateString));
+
+        leftArea.append(userPfp);
+        leftArea.append(upvoteBtn);
+        leftArea.append(voteCount);
+        leftArea.append(downvoteBtn);
+        newPost.append(leftArea);
+        
+        postFlexTop.append(postTag);
+        postFlexTop.append(postTitle);
+        postFlexTop.append(postDate);
+        postFlexBottom.append(postContent);
+        rightArea.append(postFlexTop);
+        rightArea.append(postFlexBottom);
+        flexArea.append(rightArea);
+        newPost.append(flexArea);
+
+        newPost.id="post-display";
+        viewButton.append(newPost);
+
+        container.appendChild(viewButton);
+        /*
+        upvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes += 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+
+        downvoteBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            posts[i].votes -= 1;
+            voteCount.textContent = posts[i].votes;
+            localStorage.setItem("posts", JSON.stringify(posts));
+        });
+        */
+    })
+
+	console.log(res);
+
+}
+
+
+/*
 let currentFilter = "none";
 let currentTag = "all";
 
@@ -50,116 +173,18 @@ function loadPostsList(filter = "none", tag = "all") {
     }
 }
 
-function displayPosts(posts, i){
-    const viewButton = document.createElement("button");
-        viewButton.className = "view-post-button";
-
-        let postTime = (posts[i].date).toString();
-        const timeString = postTime.split("T")
-        let dateString = timeString[0]
-
-        viewButton.onclick = () => viewFullPost(posts[i]);
-
-        const newPost = document.createElement("div");
-        const postFlexTop = document.createElement("div")
-        const postFlexBottom = document.createElement("div")
-        const flexArea = document.createElement("div")
-        const leftArea = document.createElement("div");
-        const rightArea = document.createElement("div");
-        rightArea.id = "post-right-area";
-        leftArea.id = "post-left-area";
-        postFlexTop.id = "post-flex-top";
-        flexArea.id = "post-flex-display";
-        postFlexBottom.id = "post-flex-bottom";
-        
-        const userPfp = new Image();
-        userPfp.src = 'images/freddyt_logo.png';
-        userPfp.id = "user-pfp"
-
-        const upvoteBtn = document.createElement("button");
-        const downvoteBtn = document.createElement("button");
-        upvoteBtn.id = "upvote-btn";
-        downvoteBtn.id = "downvote-btn";
-        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
-        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
-
-        let voteCount = document.createElement("p");
-        voteCount.id = "vote-count";
-        voteCount.appendChild(document.createTextNode(posts[i].votes));
-
-        const postTag = document.createElement("p");
-        postTag.id = "post-tag";
-        if (posts[i].tag === "discussion"){
-            postTag.classList.add('green-tag');
-        }
-        else if (posts[i].tag === "guides"){
-            postTag.classList.add('red-tag');
-        }
-        else if (posts[i].tag === "showcase"){
-            postTag.classList.add('purple-tag');
-        }
-        else if (posts[i].tag === "joke"){
-            postTag.classList.add('blue-tag');
-        }
-        else if (posts[i].tag === "misc"){
-            postTag.classList.add('orange-tag');
-        }
-        postTag.appendChild(document.createTextNode(posts[i].tag));
-
-        const postContent = document.createElement("p");
-        postContent.id = "post-content";
-        postContent.appendChild(document.createTextNode(posts[i].content));
-
-        const postTitle = document.createElement("p");
-        postTitle.id = "post-title";
-        postTitle.appendChild(document.createTextNode(posts[i].title));
-        
-        const postDate = document.createElement("p");
-        postDate.id = "post-date"
-        postDate.appendChild(document.createTextNode(dateString));
-
-        leftArea.append(userPfp);
-        leftArea.append(upvoteBtn);
-        leftArea.append(voteCount);
-        leftArea.append(downvoteBtn);
-        newPost.append(leftArea);
-        
-        postFlexTop.append(postTag);
-        postFlexTop.append(postTitle);
-        postFlexTop.append(postDate);
-        postFlexBottom.append(postContent);
-        rightArea.append(postFlexTop);
-        rightArea.append(postFlexBottom);
-        flexArea.append(rightArea);
-        newPost.append(flexArea);
-
-        newPost.id="post-display";
-        viewButton.append(newPost);
-
-        mainContent.appendChild(viewButton);
-
-        upvoteBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            posts[i].votes += 1;
-            voteCount.textContent = posts[i].votes;
-            localStorage.setItem("posts", JSON.stringify(posts));
-        });
-
-        downvoteBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            posts[i].votes -= 1;
-            voteCount.textContent = posts[i].votes;
-            localStorage.setItem("posts", JSON.stringify(posts));
-        });
-}
+*/
 
 function viewFullPost(post) {
+
+    console.log(post)
+  
     if(!post) return;
     const mainContent = document.getElementById("main-content");
     
     resetNavActive(); //Reset active state of nav buttons when viewing a post
     
-    const postDate = new Date(post.date);
+    const postDate = new Date(post.createdAt);
     const formattedPostDate = postDate.toLocaleDateString() + " " + postDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     
     const fullPostView = document.createElement("div");
@@ -199,7 +224,7 @@ function viewFullPost(post) {
                     <h3>Comments</h3>
                     <div id="full-comment-input-area" style="display: none;">
                         <textarea id="full-comment-input" placeholder="Join the conversation"></textarea>
-                        <button id="full-submit-comment-btn">Comment</button>
+                        <button id="full-submit-comment-btn" onclick="create_comment()">Comment</button>
                     </div>
                     <div id="full-comments-display-area"></div>
                 </div>
@@ -231,7 +256,7 @@ function viewFullPost(post) {
     // Populate the post data
     document.getElementById("full-post-title").textContent = post.title;
     document.getElementById("full-post-content").textContent = post.content;
-    document.getElementById("full-post-username").textContent = post.user.username;
+    document.getElementById("full-post-username").textContent = post.author;
     document.getElementById("full-post-date").textContent = "Posted on " + formattedPostDate;
     document.getElementById("full-post-tag").appendChild(postTag);
 
@@ -252,8 +277,6 @@ function viewFullPost(post) {
         updatePostInStorage(post);
     };
     
-    const postIndex = findPostIndex(post.postID);
-    setupPostOptions(postIndex);
 
     // Show/hide comment input area based on login status
     // Comments display is always visible
@@ -261,175 +284,8 @@ function viewFullPost(post) {
     const user = getCurrentUser();
     commentInputArea.style.display = user ? "block" : "none";
     
-    // Display comments
-    displayFullComments(post.postID);
     
-    // Back button functionality
-    document.getElementById("back-to-posts-btn").onclick = function() {
-    loadPostsList(currentFilter, currentTag);
-    };
-
-    function findPostIndex(postID) {
-        const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-        return allPosts.findIndex(p => p.postID === postID);
-    }
-        
-    function updatePostInStorage(updatedPost) {
-        const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-        const index = allPosts.findIndex(p => p.postID === updatedPost.postID);
-        if (index !== -1) {
-            allPosts[index] = updatedPost;
-            localStorage.setItem("posts", JSON.stringify(allPosts));
-        }
-    }
-    
-    // Comment submit button
-    document.getElementById("full-submit-comment-btn").onclick = function() {
-        submitComment(post.postID, null); // null = top-level comment, no parent
-    };
 }
 
-function submitComment(postID, parentCommentIndex) {
-    let commentInput, commentsArea;
-    
-    if (parentCommentIndex !== null) {
-        commentInput = document.getElementById(`reply-input-${parentCommentIndex}`);
-        commentsArea = document.getElementById(`replies-${parentCommentIndex}`);
-    } else {
-        commentInput = document.getElementById("full-comment-input");
-    }
-    
-    const commentText = commentInput.value.trim();
-    
-    if (commentText === "") {
-        alert("Please write a comment");
-        return;
-    }
-    
-    const currentUser = getCurrentUser();
-    
-    const comment = {
-        user: currentUser,
-        text: commentText,
-        date: new Date().toISOString(),
-        parent_id: parentCommentIndex // null for top-level, index for nested
-    };
-    
-    let allComments = JSON.parse(localStorage.getItem('comments') || '{}');
-    
-    if (!allComments[postID]) {
-        allComments[postID] = [];
-    }
-    
-    allComments[postID].push(comment);
-    localStorage.setItem('comments', JSON.stringify(allComments));
-    
-    commentInput.value = "";
-    displayFullComments(postID);
-}
 
-function displayFullComments(postID) {
-    const commentsArea = document.getElementById("full-comments-display-area");
-    if (!commentsArea) return;
-    
-    commentsArea.innerHTML = "";
-    
-    const allComments = JSON.parse(localStorage.getItem('comments') || '{}');
-    const postComments = allComments[postID] || [];
-    
-    if (postComments.length === 0) {
-        commentsArea.innerHTML = '<h3 align="center" style="color: #999; font-family: \'Reddit Sans\'">Be the first to comment</h3>';
-        return;
-    }
-    
-    const topLevelComments = postComments
-        .map((comment, index) => ({ ...comment, index }))
-        .filter(c => !c.parent_id && c.parent_id !== 0);
-    
-    topLevelComments.forEach((comment) => {
-        renderCommentThread(commentsArea, comment, postComments, postID, comment.index);
-    });
-}
-
-function renderCommentThread(container, comment, allComments, postID, commentIndex) {
-    const commentItem = document.createElement("div");
-    commentItem.className = "comment-item";
-    
-    const commentDate = new Date(comment.date);
-    const formattedDate = commentDate.toLocaleDateString() + " " + commentDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    
-    const user = getCurrentUser();
-    const isLoggedIn = user !== null;
-    const replyButtonHTML = isLoggedIn 
-        ? `<button class="reply-button" onclick="toggleReplyInput(${commentIndex})">Reply</button>
-           <div id="reply-input-container-${commentIndex}" class="reply-input-container" style="display: none; margin-top: 10px;">
-               <textarea id="reply-input-${commentIndex}" class="reply-input"></textarea>
-               <button onclick="submitComment('${postID}', ${commentIndex})" class="submit-reply-btn">Reply</button>
-               <button onclick="toggleReplyInput(${commentIndex})" class="cancel-reply-btn">Cancel</button>
-           </div>`
-        : '';
-    
-    commentItem.innerHTML = `
-        <link rel="stylesheet" type="text/css" href="index.css">
-        <div class="comment-content">
-            <div class="comment-header">
-                <span class="comment-username">${comment.user.username}</span>
-                <span class="comment-date">${formattedDate}</span>
-            </div>
-            <div class="comment-text">${comment.text}</div>
-            ${replyButtonHTML}
-            <div id="replies-${commentIndex}" class="replies-container"></div>
-        </div>
-    `;
-    
-    container.appendChild(commentItem);
-    
-    const replies = allComments
-        .map((c, i) => ({ ...c, index: i }))
-        .filter(c => c.parent_id === commentIndex);
-    
-    if (replies.length > 0) {
-        const repliesContainer = commentItem.querySelector(`#replies-${commentIndex}`);
-        replies.forEach(reply => {
-            renderCommentThread(repliesContainer, reply, allComments, postID, reply.index);
-        });
-    }
-}
-
-function toggleReplyInput(commentIndex) {
-    const inputContainer = document.getElementById(`reply-input-container-${commentIndex}`);
-    if (inputContainer) {
-        inputContainer.style.display = inputContainer.style.display === "none" ? "block" : "none";
-        if (inputContainer.style.display === "block") {
-            document.getElementById(`reply-input-${commentIndex}`).focus();
-        }
-    }
-}
-
-// Tag filters
-document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
-    radio.addEventListener("change", function() {
-        if (!this.checked) return;
-
-        currentTag = this.value.replace("filter-", "");
-        if (currentTag === "all") currentTag = "all";
-
-        loadPostsList(currentFilter, currentTag);
-    });
-});
-
-// Sort filters
-document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
-    radio.addEventListener("change", function() {
-        if (!this.checked) return;
-
-        currentFilter = this.value;
-
-        loadPostsList(currentFilter, currentTag);
-    });
-});
-
-// Initial load
-currentTag = "all";
-currentFilter = "none";
-loadPostsList(currentFilter, currentTag);
+load_posts()

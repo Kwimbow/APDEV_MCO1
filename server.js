@@ -23,6 +23,11 @@ const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
 const postRoutes = require('./routes/authpost');
 app.use('/api', postRoutes);
+const loadRoutes = require('./routes/loadposts');
+app.use('/api/posts', loadRoutes);
+const commentRoutes = require('./routes/authcomments');
+app.use('/api/comments', commentRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
