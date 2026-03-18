@@ -4,11 +4,13 @@
 RETURN: true if username & password matches one in the storage
         false if either of them don't match */
 async function create_post() {
+	console.log("hai ", getCurrentUser());
+
 	let voteCount = 0;
 
 	const post = {
 		postID:	crypto.randomUUID(),
-		author: getCurrentUser(),
+		author: getCurrentUser()._id,
 		title: document.getElementById('title').value,
 		content: document.getElementById("content").value,
 		tag: document.querySelector('input[name="tag"]:checked').value,
@@ -22,6 +24,8 @@ async function create_post() {
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify({ post })
 	});
+
+	console.log(res);
 
 	if (res.ok) {
 	hidePopup('create-post-popup');

@@ -24,7 +24,19 @@ router.post('/login', async (req, res) => {
 		return res.status(400).json({ message: "Invalid username or password "});
 	}
 
-	res.json({ success: true, user: { username } });
+	res.json({ success: true, _id: user._id, username: user.username });
 });
+
+/* This function returns the userID of the current user */
+router.post('/curr_user', async (req, res) => {
+	const { username } = req.body;
+
+	const user = await User.findOne({ username });
+	if (!user) {
+		return res.status(400).json({ message: "Error, no curent logged in user or no user with this username type shit "});
+	}
+
+	res.json({ success: true, _id: user._id, username: user.username });
+})
 
 module.exports = router;
