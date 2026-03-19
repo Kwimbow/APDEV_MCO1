@@ -180,6 +180,7 @@ function viewFullPost(post) {
     console.log(post)
   
     if(!post) return;
+    setCurrentPost(post);
     const mainContent = document.getElementById("main-content");
     
     resetNavActive(); //Reset active state of nav buttons when viewing a post
@@ -256,7 +257,7 @@ function viewFullPost(post) {
     // Populate the post data
     document.getElementById("full-post-title").textContent = post.title;
     document.getElementById("full-post-content").textContent = post.content;
-    document.getElementById("full-post-username").textContent = post.author;
+    document.getElementById("full-post-username").textContent = post.author.username;
     document.getElementById("full-post-date").textContent = "Posted on " + formattedPostDate;
     document.getElementById("full-post-tag").appendChild(postTag);
 
@@ -285,6 +286,12 @@ function viewFullPost(post) {
     commentInputArea.style.display = user ? "block" : "none";
     
     
+}
+
+
+
+function setCurrentPost(post) {
+    sessionStorage.setItem("post", JSON.stringify(post));
 }
 
 

@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const commentSchema = new mongoose.Schema({
 	author: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "User" },
-	//post: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Post" },
+	post: { type: mongoose.SchemaTypes.ObjectId, required: true, ref: "Post" },
 	content: { type: String, required: true },
 	createdAt: { type: Date, required: true, default: () => Date.now() },
 	upvotes: { type: Number, required: true, default: 0 },
-	//parent_id: {type: String, required:true, default: null},
+	parent_id: {type: String, default: null},
 	edited:  { type: Boolean, required: true, default: false },
 });
 

@@ -10,7 +10,7 @@ async function create_comment() {
 	// post constructor
 	const comment = {
         author: getCurrentUser()._id,
-        //post: getCurrentPost()._id,
+        post: getCurrentPost()._id,
         content: document.getElementById("full-comment-input").value,
         createdAt: new Date(),
         upvotes: voteCount,
@@ -43,5 +43,12 @@ function getCurrentUser() {
     return JSON.parse(cookieUser);
   }
   return null;
-  
+}
+
+
+
+
+function getCurrentPost() {
+    const post = sessionStorage.getItem("post");
+    return post ? JSON.parse(post) : null;
 }
