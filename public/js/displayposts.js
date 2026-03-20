@@ -105,6 +105,105 @@ async function load_posts() {
 
 }
 
+async function load_searched_posts(posts){
+    
+    const container = document.getElementById("main-content");
+
+    container.innerHTML = "";
+
+    posts.slice().reverse().forEach((post) => {
+
+        if (post.votes === undefined) post.votes = 0;
+
+        const viewButton = document.createElement("button");
+        viewButton.className = "view-post-button";
+
+        let postTime = (post.createdAt).toString();
+        const timeString = postTime.split("T")
+        let dateString = timeString[0]
+
+        viewButton.onclick = () => viewFullPost(post);
+
+        const newPost = document.createElement("div");
+        const postFlexTop = document.createElement("div")
+        const postFlexBottom = document.createElement("div")
+        const flexArea = document.createElement("div")
+        const leftArea = document.createElement("div");
+        const rightArea = document.createElement("div");
+        rightArea.id = "post-right-area";
+        leftArea.id = "post-left-area";
+        postFlexTop.id = "post-flex-top";
+        flexArea.id = "post-flex-display";
+        postFlexBottom.id = "post-flex-bottom";
+        
+        const userPfp = new Image();
+        userPfp.src = 'images/freddyt_logo.png';
+        userPfp.id = "user-pfp"
+
+        const upvoteBtn = document.createElement("button");
+        const downvoteBtn = document.createElement("button");
+        upvoteBtn.id = "upvote-btn";
+        downvoteBtn.id = "downvote-btn";
+        upvoteBtn.innerHTML = "<i class='bx bx-upvote'></i>";
+        downvoteBtn.innerHTML = "<i class='bx bx-downvote'></i>";
+
+        let voteCount = document.createElement("p");
+        voteCount.id = "vote-count";
+        voteCount.appendChild(document.createTextNode(post.votes));
+
+        const postTag = document.createElement("p");
+        postTag.id = "post-tag";
+        if (post.tag === "discussion"){
+            postTag.classList.add('green-tag');
+        }
+        else if (post.tag === "guides"){
+            postTag.classList.add('red-tag');
+        }
+        else if (post.tag === "showcase"){
+            postTag.classList.add('purple-tag');
+        }
+        else if (post.tag === "joke"){
+            postTag.classList.add('blue-tag');
+        }
+        else if (post.tag === "misc"){
+            postTag.classList.add('orange-tag');
+        }
+        postTag.appendChild(document.createTextNode(post.tag));
+
+        const postContent = document.createElement("p");
+        postContent.id = "post-content";
+        postContent.appendChild(document.createTextNode(post.content));
+
+        const postTitle = document.createElement("p");
+        postTitle.id = "post-title";
+        postTitle.appendChild(document.createTextNode(post.title));
+        
+        const postDate = document.createElement("p");
+        postDate.id = "post-date"
+        postDate.appendChild(document.createTextNode(dateString));
+
+        leftArea.append(userPfp);
+        leftArea.append(upvoteBtn);
+        leftArea.append(voteCount);
+        leftArea.append(downvoteBtn);
+        newPost.append(leftArea);
+        
+        postFlexTop.append(postTag);
+        postFlexTop.append(postTitle);
+        postFlexTop.append(postDate);
+        postFlexBottom.append(postContent);
+        rightArea.append(postFlexTop);
+        rightArea.append(postFlexBottom);
+        flexArea.append(rightArea);
+        newPost.append(flexArea);
+
+        newPost.id="post-display";
+        viewButton.append(newPost);
+
+        container.appendChild(viewButton);
+    })
+
+}
 
 
 //when clicking a post, you entire full screen mode, home shi is gone, now its full of the post shi
@@ -678,6 +777,7 @@ function toggleReplyInput(commentID){
 	}
 }
 
+/*
 // Tag filters (discussion, guide, joke,...) -----------------------------------------------------------
 document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
 	radio.addEventListener("change", function() {
@@ -700,7 +800,7 @@ document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
 		loadPostsList(currentFilter, currentTag);
 	});
 });
-
+*/
 // Initial load
 currentTag = "all";
 currentFilter = "none";

@@ -25,8 +25,8 @@
 
             <!--The search bar-->
             <div>
-                <form id="search-for">
-                    <input type="search" placeholder="Find anything" name="search" id="search-bar">
+                <form id="search-for" onsubmit="search_posts(event)">
+                    <input type="search"  placeholder="Find anything" name="search" id="search-bar">
                 </form>
             </div>
 
@@ -83,19 +83,19 @@
                 
                 <div id="tag-filters">
                     <form id="tag-filter">
-                        <input type="radio" name="tag-filter" id="filter-guides" value="filter-guides" class="filter-input">
+                        <input type="radio" name="tag-filter" id="filter-guides" value="filter-guides" class="filter-input" onclick="filter_posts(event, 'guides')">
                         <label class="filter-label-g" for="filter-guides">Guides</label>
 
-                        <input type="radio" name="tag-filter" id="filter-discussion" value="filter-discussion" class="filter-input">
+                        <input type="radio" name="tag-filter" id="filter-discussion" value="filter-discussion" class="filter-input" onclick="filter_posts(event, 'discussion')">
                         <label class="filter-label-d" for="filter-discussion">Discussion</label>
 
-                        <input type="radio" name="tag-filter" id="filter-showcase" value="filter-showcase" class="filter-input">
+                        <input type="radio" name="tag-filter" id="filter-showcase" value="filter-showcase" class="filter-input" onclick="filter_posts(event, 'showcase')">
                         <label class="filter-label-s" for="filter-showcase">Showcase</label>
 
-                        <input type="radio" name="tag-filter" id="filter-joke" value="filter-joke" class="filter-input">
+                        <input type="radio" name="tag-filter" id="filter-joke" value="filter-joke" class="filter-input" onclick="filter_posts(event, 'joke')">
                         <label class="filter-label-j" for="filter-joke">Jokes</label>
 
-                        <input type="radio" name="tag-filter" id="filter-misc" value="filter-misc" class="filter-input">
+                        <input type="radio" name="tag-filter" id="filter-misc" value="filter-misc" class="filter-input"onclick="filter_posts(event, 'misc')">
                         <label class="filter-label-m" for="filter-misc">Miscellaneous</label>
                     </form>
                 </div>
@@ -105,7 +105,7 @@
 
                 <div id="filter-posts">
                     <form id="post-filter">
-                        <input type="radio" name="post-filter" id="filter-oldest" value="filter-oldest" class="filter-input">
+                        <input type="radio" name="post-filter" id="filter-oldest" value="filter-oldest" class="filter-input" >
                         <label class="filter-label-sbo" for="filter-oldest">Sort by Oldest</label>
 
                         <input type="radio" name="post-filter" id="filter-popular" value="filter-popular" class="filter-input">
@@ -224,9 +224,12 @@
                     <div>
                         <h2 id="create-title">Create Post</h2>
                         <hr>
-                        <br>
 
-                        <div class="tag_holder">
+                        <div>
+                            <input class="title_inpt" type="text" id="title" name="title" placeholder="Enter post title..." required>
+                        </div>
+
+                    <div class="tag_holder">
                             <label class="tag_header" for="tag">Tag:</label>
 
                             <input class="tag_input" type="radio" id="guides" name="tag" value="guides">
@@ -244,10 +247,8 @@
                             <input class="tag_input" type="radio" id="misc" name="tag" value="misc">
                             <label class="tag_label" for="misc">Miscellaneous</label>
                         </div>
-
-                        <div>
-                            <input class="title_inpt" type="text" id="title" name="title" placeholder="Enter post title..." required>
-                        </div>
+             
+                        <br>
 
                         <div>
                             <textarea class="post_content" id="content" name="post-content" placeholder="Enter post content..." required></textarea>
@@ -275,8 +276,8 @@
         <script src="js/displayposts.js"></script>
         <script src="js/savecomment.js"></script>
         <script src = "js/viewposts.js"></script>
-
-        
+        <script src = "js/searchQuery.js"></script>
+        <script src = "js/filterquery.js"></script>
 
         <script>
             setupPopups();

@@ -700,7 +700,7 @@ function searchPostsByKeyword(keyword) {
         return titleMatch || contentMatch || tagMatch;
     });
 }
-
+/*
 function setupSearchFunctionality() {
     const searchForm = document.getElementById("search-for");
     const searchInput = document.getElementById("search-bar");
@@ -723,7 +723,7 @@ function displaySearchResults(results, keyword) {
     mainContent.innerHTML = `<h2 id="search-results-title">Search Results for "<span id="search-results-keyword">${keyword}</span>"</h2>`;
 
     if (results.length === 0) {
-        mainContent.innerHTML += "<p id='search-no-posts'>No posts found.. *cricket noises*</p>";
+        mainContent.innerHTML += "<p id='search-no-posts'>No posts found.. *higurashi noises*</p>";
         return;
     }
 
@@ -812,6 +812,7 @@ function displaySearchResults(results, keyword) {
         viewButton.onclick = () => viewFullPost(posts[i]);
     });
 }
+*/
 
 //calls the functions
 document.addEventListener("DOMContentLoaded", () => {
@@ -824,5 +825,4 @@ document.addEventListener("DOMContentLoaded", () => {
     setupCommentOptions();
     setupGeneralOptions();
     setupUserOptions();
-    setupSearchFunctionality();
 });
