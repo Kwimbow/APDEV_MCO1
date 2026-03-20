@@ -1,4 +1,8 @@
-let darkmode = localStorage.getItem('darkmode');
+/* Dark and light mode switching*/
+let darkmode = localStorage.getItem('darkmode')
+
+
+const themeSwitch = document.getElementById('theme-switch');
 
 function enableDarkMode() {
 	document.documentElement.classList.add('darkmode');

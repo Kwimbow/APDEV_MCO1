@@ -577,8 +577,22 @@ body.modal-open{
     transition: background-color 0.3s ease;
     vertical-align: middle;
 }
-#settings-logged-in:hover, #settings-visitor:hover{
+#settings-logged-in:hover, #settings-visitor:hover, .comment-options:hover{
     background-color: var(--log-info-hover);
+}
+
+.comment-options{
+    width: 30px;
+    height: 30px;
+    border-radius: 25px;
+    border: transparent;
+    text-align: center;
+    background-color: transparent;
+    color: var(--sidenav-button);
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 #settings-icon{
@@ -1053,14 +1067,14 @@ body.modal-open{
     margin: 5px 0;
 }
 
-#full-vote-area {
+#full-vote-area{
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 8px;
 }
 
-#full-upvote-btn, #full-downvote-btn {
+#full-upvote-btn, #full-downvote-btn, #full-bookmark-btn {
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -1068,24 +1082,27 @@ body.modal-open{
     font-size: 20px;
 }
 
-#upv-checkbox, #downv-checkbox{
+
+.comment-vote-btns{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--default-txt);
+    font-size: 28px;
+    line-height: 1;
+}
+
+#upv-checkbox, #downv-checkbox, #bookmark-checkbox{
     display: none;
 }
 
-#upv-checkbox:checked + label i{
-    color: #df4b4b
-}
-
-#downv-checkbox:checked + label i{
-    color: #0004ff
-}
-
 .upv-checkbox,
-.downv-checkbox{
+.downv-checkbox,
+.comment-checkbox{
     display:none;
 }
 
-#full-vote-count {
+#full-vote-count, .comment-vote-count {
     font-family: 'Reddit Sans', sans-serif;
     font-size: 16px;
     color: var(--default-txt);
@@ -1205,8 +1222,8 @@ body.modal-open{
 .reply-button {
     margin-top: 8px;
     padding: 5px 12px;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--default-txt);
     border: 1px solid #b8b8b8;
     border-radius: 15px;
     font-family: 'Reddit Sans', sans-serif;
@@ -1217,8 +1234,9 @@ body.modal-open{
 }
 
 .reply-button:hover {
-    background-color: #e0e0e0;
+    background-color: var(--background-color);
     border-color: #df4b4b;
+    color: #df4b4b;
 }
 
 .reply-input-container {
@@ -1489,3 +1507,134 @@ body.modal-open{
     margin-left: 40px;
     margin-top: 20px;
 }
+
+#comment-settings-icon{
+    padding: 0px;
+    font-size: 16px;
+    border-radius: 50%;
+    align-items: center;
+    color: #727272;   
+}
+
+.comment-options-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.comment-options-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 160px;
+    background-color: var(--log-info-field);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    display: none;
+    flex-direction: column;
+    padding: 6px 8px;
+    z-index: 10;
+}
+.comment-options-menu.open {
+    display: flex;
+}
+
+.comment-options-menu-item{
+    border: none;
+    padding: 8px 10px;
+    text-align: left;
+    font-family: 'Reddit Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 6px;
+    background-color: var(--log-info-field);
+    color: var(--default-txt);
+}
+
+.comment-options-menu-item:hover{
+    background-color: var(--log-info-hover);
+}
+
+.comment-item.deleted > .comment-content > .comment-text,
+.comment-item.deleted > .comment-content > .comment-username {
+    color: #999999ea;
+    font-style: italic;
+    pointer-events: none;
+}
+
+.deleted-text{
+    opacity: 0.7;
+    font-style: italic;
+}
+
+.comment-edit-overlay {
+    margin-top: 10px;
+}
+
+.comment-edit-textarea {
+    min-width: 90%;
+    max-width: 90%;
+    min-height:100px;
+    max-height: 100px;
+    padding: 5px;
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    border-radius: 15px;
+    outline:none;
+    border: 2px solid #df4b4b;
+}
+
+.comment-edit-buttons button{
+    margin-top: 8px;
+    padding: 5px 12px;
+    background-color: var(--background-color);
+    color: var(--default-txt);
+    border: 1px solid #b8b8b8;
+    border-radius: 15px;
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.comment-edit-buttons button:hover {
+    background-color: #df4b4b;
+    color: var(--background-color);
+}
+
+.edited-comment{
+    font-style: italic;
+}
+
+.comment-actions-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.upvote-downvote-comm {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.upvote-downvote-comm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.comment-vote-btns {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.comment-vote-count {
+    min-width: 20px;
+    text-align: center;
+}
+

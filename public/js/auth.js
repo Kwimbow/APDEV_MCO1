@@ -29,7 +29,7 @@ async function login() {
 
   if (res.ok) {
     const data = await res.json();
-    sessionStorage.setItem('user', JSON.stringify({ username }));
+    sessionStorage.setItem("user", JSON.stringify({ _id: data._id, username: data.username }));
     hidePopup('login-popup');
     location.reload();
   }
@@ -56,8 +56,8 @@ function rememberMe3Weeks(username, password) {
     date.setTime(date.getTime() + (21 * 24 * 60 * 60 * 1000)); //
     let expires = "; expires=" + date.toUTCString();
 
-    document.cookie = "user=" + JSON.stringify({ username }) + expires + "; path=/";
-    sessionStorage.setItem("user", JSON.stringify({ username }));
+    document.cookie = "user=" + JSON.stringify({ _id, username }) + expires + "; path=/";
+    sessionStorage.setItem("user", JSON.stringify({ _id, username }));
     
     return true;
   }

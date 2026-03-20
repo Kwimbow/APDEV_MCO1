@@ -1,39 +1,33 @@
-/* FOR CREATING NEW POST 		*/
+/* FOR CREATING NEW COMMENT 		*/
 
 // function for creating posts and adding them to mongo
 
-async function create_post() {
+async function create_comment() {
 	console.log("hai ", getCurrentUser());
 
 	let voteCount = 0;
 	
 	// post constructor
-	const post = {
-		postID:	crypto.randomUUID(),
-		author: getCurrentUser()._id,
-		title: document.getElementById('title').value,
-		content: document.getElementById("content").value,
-		tag: document.querySelector('input[name="tag"]:checked').value,
-		createdAt: new Date(),
-		upvotes: voteCount,
-		edited: false
-	}
+	const comment = {
+        author: getCurrentUser()._id,
+        post: getCurrentPost()._id,
+        content: document.getElementById("full-comment-input").value,
+        createdAt: new Date(),
+        upvotes: voteCount,
+        //parent_id: ,
+        edited: false
+    }
 
 	// await post and JSON stringify the content
-	const res = await fetch('/api/create_post', {
+	const res = await fetch('/api/comments', {
 	method: 'POST',
 	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify({ post })
+	body: JSON.stringify({ comment })
 	});
 
 	console.log(res);
 	
-	//hide modal pop up and reload
-	if (res.ok) {
-	hidePopup('create-post-popup');
-	location.reload();
 	
-	}
 }
 
 
@@ -49,4 +43,12 @@ function getCurrentUser() {
     return JSON.parse(cookieUser);
   }
   return null;
+}
+
+
+
+
+function getCurrentPost() {
+    const post = sessionStorage.getItem("post");
+    return post ? JSON.parse(post) : null;
 }

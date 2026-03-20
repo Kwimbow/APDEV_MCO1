@@ -21,6 +21,18 @@ const Comment = require('./models/Comment');
 // getting le routes
 const authRoutes = require('./routes/auth');
 app.use('/api', authRoutes);
+const postRoutes = require('./routes/authpost');
+app.use('/api', postRoutes);
+const loadRoutes = require('./routes/loadposts');
+app.use('/api/posts', loadRoutes);
+const commentRoutes = require('./routes/authcomments');
+app.use('/api/comments', commentRoutes);
+
+const searchRoutes = require('./routes/searchposts');
+app.use('/api/search', searchRoutes);
+const filterRoutes = require('./routes/filterposts');
+app.use('/api/filter', filterRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
