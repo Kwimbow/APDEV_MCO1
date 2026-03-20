@@ -172,6 +172,7 @@ function setupLoginForm(){
             if (successful) {
                 hidePopup("login-popup");
                 updateUserUI();
+                loadPostsList();
             //otherwise, not successfully logged in because of wrong credentials or account not registered
             } else {
                 errorShake(log_user, log_pw, log_unmatch_user_pw);
@@ -448,13 +449,14 @@ function updateUserUI() {
 }
 
 /* This function displays the drop down menu for posts*/
-function setupPostOptions(postIndex) {
+function setupPostOptions() {
     const user = getCurrentUser();
     if (!user) return;
 
     const btn = document.getElementById("post-settings-btn");
     const menu = document.querySelector(".post-options-menu");
     const postUsernameEl = document.getElementById("full-post-username"); // use this
+    const currentPostID = document.getElementById("full-post-view")?.dataset.postId;
     if (!btn || !menu || !postUsernameEl) return;
 
     const postUser = postUsernameEl.textContent.trim();
@@ -484,13 +486,13 @@ function setupPostOptions(postIndex) {
     const deleteBtn = document.getElementById("delete-post");
     const editBtn = document.getElementById("edit-post");
 
-    if (deleteBtn && postIndex !== undefined) {
+    if(deleteBtn && currentPostID){
         deleteBtn.addEventListener("click", () => {
             const posts = JSON.parse(localStorage.getItem("posts") || "[]");
-            posts.splice(postIndex, 1);
-            localStorage.setItem("posts", JSON.stringify(posts));
+            const updatedPosts = posts.filter(p => p.postID !== currentPostID);
+            localStorage.setItem("posts", JSON.stringify(updatedPosts));
             const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
-            delete allComments[postIndex];
+            delete allComments[currentPostID];
             localStorage.setItem("comments", JSON.stringify(allComments));
             successfullyDelPostMsg();
             setTimeout(() => {
@@ -500,10 +502,119 @@ function setupPostOptions(postIndex) {
         });
     }
 
-    if (editBtn) {
+    if(editBtn && currentPostID) {
         editBtn.addEventListener("click", () => {
-            // Implement edit functionality
-            alert("Edit post functionality to be implemented.");
+            const posts = JSON.parse(localStorage.getItem("posts") || "[]");
+            const postToEdit = posts.find(p => p.postID === currentPostID);
+            if (!postToEdit) return;
+
+            const oldPopup = document.getElementById("create-post-popup");
+            if (oldPopup) oldPopup.remove();
+
+            const editPopup = document.createElement("div");
+            editPopup.innerHTML =
+                "<div id='create-post-popup' class='modal'>" +
+                    "<form id='createpost_form' class='create-post-modal'>" +
+                        "<div class='xcontainer'>" +
+                            "<span onclick='hidePopup(\"create-post-popup\")' class='close'>&times;</span>" +
+                        "</div>" +
+                        "<div>" +
+                            "<h2 id='create-title'>Edit Post</h2><hr><br>" +
+                            "<div class='tag_holder'>" +
+                                "<label class='tag_header' for='tag'>Tag:</label>" +
+                                "<input class='tag_input' type='radio' id='guides' name='tag' value='guides'>" +
+                                "<label class='tag_label' for='guides'>Guides</label>" +
+                                "<input class='tag_input' type='radio' id='discussion' name='tag' value='discussion'>" +
+                                "<label class='tag_label' for='discussion'>Discussion</label>" +
+                                "<input class='tag_input' type='radio' id='showcase' name='tag' value='showcase'>" +
+                                "<label class='tag_label' for='showcase'>Showcase</label>" +
+                                "<input class='tag_input' type='radio' id='joke' name='tag' value='joke'>" +
+                                "<label class='tag_label' for='joke'>Jokes</label>" +
+                                "<input class='tag_input' type='radio' id='misc' name='tag' value='misc'>" +
+                                "<label class='tag_label' for='misc'>Miscellaneous</label>" +
+                            "</div>" +
+                            "<div>" +
+                                "<input class='title_inpt' type='text' id='title' name='title' placeholder='Enter post title...' required>" +
+                            "</div>" +
+                            "<div>" +
+                                "<textarea class='post_content' id='content' name='post-content' placeholder='Enter post content...' required></textarea>" +
+                            "</div>" +
+                            "<div>" +
+                                "<input class='submit_btn' type='submit' id='create-post-submit' value='Save Changes'>" +
+                            "</div>" +
+                        "</div>" +
+                    "</form>" +
+                "</div>";
+
+            document.body.appendChild(editPopup);
+
+            // Opens popup similar to create post, but for editing the post
+            const modalEl = document.getElementById("create-post-popup");
+            modalEl.style.display = "block";
+            document.body.classList.add("modal-open");
+
+            // Keep old values in the textboxes
+            const titleInput = modalEl.querySelector("#title");
+            const contentInput = modalEl.querySelector("#content");
+            if (titleInput) titleInput.value = postToEdit.title;
+            if (contentInput) contentInput.value = postToEdit.content;
+
+            //Set the tags
+            const tags = ["guides", "discussion", "showcase", "joke", "misc"];
+            tags.forEach(tag => {
+                const radio = modalEl.querySelector(`#${tag}`);
+                if (radio) radio.checked = (postToEdit.tag === tag);
+            });
+
+            setupCreatePostForm();
+            lightUpCreateButton();
+
+            // saving the post data
+            const form = modalEl.querySelector("#createpost_form");
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                // Check old data
+                const newTitle = titleInput.value.trim();
+                const newContent = contentInput.value.trim();
+                const selectedTagEl = modalEl.querySelector("input[name='tag']:checked");
+                const newTag = selectedTagEl ? selectedTagEl.value : postToEdit.tag;
+
+                let wasEdited = false;
+
+                //if there was anything changed, set the post to "Edited on..." rather than "Posted on..."
+                if (newTitle !== postToEdit.title || newContent !== postToEdit.content || newTag !== postToEdit.tag) {
+                    wasEdited = true;
+                    //this makes sure that posts that were edited previously wouldnt be set as "posted on" if nothing was changed and it was initially edited alr
+                    postToEdit.edited = wasEdited;
+                }
+
+                // Update post
+                postToEdit.title = newTitle;
+                postToEdit.content = newContent;
+                postToEdit.tag = newTag;
+
+                // Update date
+                if (wasEdited) {
+                    const now = new Date();
+                    const formattedDate = now.toISOString();
+                    postToEdit.date = formattedDate; 
+                }
+
+                //save post
+                const index = posts.findIndex(p => p.postID === currentPostID);
+                if(index !== -1) posts[index] = postToEdit;
+                localStorage.setItem("posts", JSON.stringify(posts));
+
+                //close modal
+                hidePopup("create-post-popup");
+                viewFullPost(postToEdit);
+            });
+
+            // click outside to close
+            modalEl.addEventListener("click", (e) => {
+                if (e.target === modalEl) hidePopup("create-post-popup");
+            });
         });
     }
 }
@@ -710,6 +821,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateUserUI();
     protectBookmarksPage();
     setupPostOptions();
+    setupCommentOptions();
     setupGeneralOptions();
     setupUserOptions();
     setupSearchFunctionality();
