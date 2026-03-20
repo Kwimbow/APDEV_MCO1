@@ -564,120 +564,99 @@ async function saveCommentVotes(postID, commentID, votes) {
 
 //comment option popups and their actions -------------------------------------------------
 function setupCommentOptions() {
-	const buttons = document.querySelectorAll(".comments-settings-btn");
+    const buttons = document.querySelectorAll(".comments-settings-btn");
+    buttons.forEach(btn => {
+        const menu = btn.nextElementSibling;
+        if (!menu) return;
+        const isOwner = btn.dataset.commentUser === getCurrentUser()?.username;
+        const editBtn = menu.querySelector(".edit-comment");
+        if (editBtn) editBtn.style.display = isOwner ? "block" : "none";
 
-	buttons.forEach(btn => {
-		const menu = btn.nextElementSibling;
-		if (!menu) return;
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const isOpen = menu.classList.contains("open");
+            document.querySelectorAll(".comment-options-menu").forEach(m => m.classList.remove("open"));
+            menu.classList.toggle("open", !isOpen);
+            btn.setAttribute("aria-expanded", !isOpen);
+            menu.setAttribute("aria-hidden", isOpen);
+        };
 
-		const isOwner = btn.dataset.commentUser === getCurrentUser()?.username;
-		const editBtn = menu.querySelector(".edit-comment");
-		if (editBtn) editBtn.style.display = isOwner ? "block" : "none";
+        const deleteBtn = menu.querySelector(".delete-comment");
+        if (deleteBtn) {
+            deleteBtn.onclick = () => {
+                const postID = deleteBtn.dataset.postId;
+                const commentID = deleteBtn.dataset.commentId;
+                deleteCommentById(postID, commentID);
+            };
+        }
 
-		btn.onclick = (e) => {
-			e.stopPropagation();
-			const isOpen = menu.classList.contains("open");
-			document.querySelectorAll(".comment-options-menu").forEach(m => m.classList.remove("open"));
+        if (editBtn) {
+            editBtn.onclick = async () => {
+                const postID = editBtn.dataset.postId;
+                const commentID = editBtn.dataset.commentId;
 
-			menu.classList.toggle("open", !isOpen);
-			btn.setAttribute("aria-expanded", !isOpen);
-			menu.setAttribute("aria-hidden", isOpen);
-		};
+                // fetch comment from MongoDB instead of localStorage
+                const res = await fetch(`/api/comments/single/${commentID}`);
+                const comment = await res.json();
+                if (!comment) return;
 
-		const deleteBtn = menu.querySelector(".delete-comment");
-		if (deleteBtn) {
-			deleteBtn.onclick = () => {
-				const postID = deleteBtn.dataset.postId;
-				const commentID = deleteBtn.dataset.commentId;
-				deleteCommentById(postID, commentID);
-			};
-		}
+                const commentItem = document.querySelector(`[data-comment-id='${commentID}']`)?.closest(".comment-item");
+                if (!commentItem) return;
 
-		if (editBtn) {
-			editBtn.onclick = () => {
-				const postID = editBtn.dataset.postId;
-				const commentID = editBtn.dataset.commentId;
-				const allComments = JSON.parse(localStorage.getItem("comments") || "{}");
-				const postComments = allComments[postID] || [];
-				const comment = postComments.find(c => c.commentID === commentID);
-				if (!comment) return;
+                // hide other UI elements while editing
+                document.querySelectorAll('.reply-input-container').forEach(c => c.style.display = "none");
+                document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => b.style.display = "none");
+                document.querySelectorAll('.upvote-downvote-comm').forEach(b => b.style.display = "none");
 
-				const commentItem = document.querySelector(`.comment-item [data-comment-id='${commentID}']`)?.closest(".comment-item");
-				if (!commentItem) return;
+                const commentTextDiv = commentItem.querySelector(".comment-text");
+                const textarea = document.createElement("textarea");
+                textarea.className = "comment-edit-textarea";
+                textarea.value = comment.content;  // was comment.text
+                commentTextDiv.replaceWith(textarea);
+                textarea.focus();
 
-				//take off reply textboxes when ur abt to edit a comment
-				document.querySelectorAll('.reply-input-container').forEach(container => {
-					container.style.display = "none";
-				});
-				document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {
-					b.style.display = "none";
-				});
-				document.querySelectorAll('.upvote-downvote-comm').forEach(b => {
-					b.style.display = "none";
-				});
+                const buttonContainer = document.createElement("div");
+                buttonContainer.className = "comment-edit-buttons";
+                buttonContainer.innerHTML = `
+                    <button class="comment-edit-submit-btn">Submit</button>
+                    <button class="comment-edit-cancel-btn">Cancel</button>
+                `;
+                textarea.after(buttonContainer);
 
-				const commentTextDiv = commentItem.querySelector(".comment-text");
+                const submitBtn = buttonContainer.querySelector(".comment-edit-submit-btn");
+                const cancelBtn = buttonContainer.querySelector(".comment-edit-cancel-btn");
 
-				const textarea = document.createElement("textarea");
-				textarea.className = "comment-edit-textarea";
-				textarea.value = comment.text;
+                // submit changes to MongoDB
+                submitBtn.onclick = async () => {
+                    const newText = textarea.value.trim();
+                    if (!newText) return;
 
-				commentTextDiv.replaceWith(textarea);
-				textarea.focus();
+                    await fetch(`/api/comments/${commentID}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: newText })
+                    });
 
-				const buttonContainer = document.createElement("div");
-				buttonContainer.className = "comment-edit-buttons";
-				buttonContainer.innerHTML = `
-					<button class="comment-edit-submit-btn">Submit</button>
-					<button class="comment-edit-cancel-btn">Cancel</button>
-				`;
-				textarea.after(buttonContainer);
+                    document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => b.style.display = "inline-block");
+                    document.querySelectorAll('.upvote-downvote-comm').forEach(b => b.style.display = "flex");
+                    displayFullComments(postID);
+                };
 
-				const submitBtn = buttonContainer.querySelector(".comment-edit-submit-btn");
-				const cancelBtn = buttonContainer.querySelector(".comment-edit-cancel-btn");
+                // cancel editing
+                cancelBtn.onclick = () => {
+                    textarea.replaceWith(commentTextDiv);
+                    buttonContainer.remove();
+                    document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => b.style.display = "inline-block");
+                    document.querySelectorAll('.upvote-downvote-comm').forEach(b => b.style.display = "flex");
+                };
+            };
+        }
+    });
 
-				// Submit changes
-				submitBtn.onclick = () => {
-					const newText = textarea.value.trim();
-					if(!newText){
-						return;
-					}
-					comment.text = newText;
-					comment.date = new Date().toISOString();
-					comment.edited = true;
-					allComments[postID] = postComments;
-					localStorage.setItem("comments", JSON.stringify(allComments));
-					document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {
-						b.style.display = "inline-block";
-					});
-					document.querySelectorAll('.upvote-downvote-comm').forEach(b => {
-						b.style.display = "flex";
-					});
-					displayFullComments(postID);
-				};
-
-				// Cancel editing
-				cancelBtn.onclick = () => {
-					textarea.replaceWith(commentTextDiv); // restore original div
-					buttonContainer.remove();
-					document.querySelectorAll('.reply-button, .comments-settings-btn').forEach(b => {
-						b.style.display = "inline-block";
-					});
-					document.querySelectorAll('.upvote-downvote-comm').forEach(b => {
-					b.style.display = "flex";
-				});
-				};
-			};
-		}
-	});
-	document.addEventListener("click", () => {
-		document.querySelectorAll(".comment-options-menu").forEach(menu => {
-			menu.classList.remove("open");
-		});
-		document.querySelectorAll(".comments-settings-btn").forEach(btn => {
-			btn.setAttribute("aria-expanded", "false");
-		});
-	});
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".comment-options-menu").forEach(menu => menu.classList.remove("open"));
+        document.querySelectorAll(".comments-settings-btn").forEach(btn => btn.setAttribute("aria-expanded", "false"));
+    });
 }
 
 //makes a comment "delete" ---------------------------------------------------------------
