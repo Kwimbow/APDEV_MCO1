@@ -1,25 +1,29 @@
 /* FOR DISPLAYING POSTS */
-let currentFilter = "none";
-let currentTag = "all";
-
-const posts = JSON.parse(localStorage.getItem('posts') || '[]');
-
 //loads the entire list of posts in the home screen
-function loadPostsList(filter = "none", tag = "all") {
+function loadPostsList(filter = "none", tag = "all", bookmarked = false) {
     const mainContent = document.getElementById("main-content");
     mainContent.innerHTML = "";
 
-    const storedPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-    posts.length = 0;
-    posts.push(...storedPosts);
+    const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
 
-    posts.forEach(post => {
+    allPosts.forEach(post => {
         if (post.votes === undefined) post.votes = 0;
     });
+    localStorage.setItem("posts", JSON.stringify(allPosts));
+    
+    let displayPostsList = [...allPosts];
 
-    let displayPostsList = posts;
+    const user = getCurrentUser();
+    if(bookmarked){
+        if(!user){
+            displayPostsList = [];
+        }else{
+            displayPostsList = displayPostsList.filter(post => user.bookmarks.includes(post.postID));
+        }
+    }
+    
     if (tag !== "all") {
-        displayPostsList = posts.filter(post => post.tag === tag);
+        displayPostsList = displayPostsList.filter(post => post.tag === tag);
     }
 
     if (displayPostsList.length === 0) {
@@ -56,6 +60,9 @@ function displayPosts(posts, i){
     const viewButton = document.createElement("button");
     viewButton.className = "view-post-button";
     const user = getCurrentUser();
+
+    const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
+    const postData = allPosts.find(p => p.postID === posts[i].postID);
 
     let postTime = (posts[i].date).toString();
     const timeString = postTime.split("T")
@@ -170,6 +177,8 @@ function displayPosts(posts, i){
     upvCheckbox.addEventListener("change", (event) => {
         event.stopPropagation();
         if(user !== null){
+            const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
+            const index = allPosts.findIndex(p => p.postID === posts[i].postID);
             if(upvCheckbox.checked){
                 upvoteIcon.classList.replace("bx-upvote","bxs-upvote");
                 upvoteIcon.style.color = "#df4b4b";
@@ -178,17 +187,23 @@ function displayPosts(posts, i){
                     downvCheckbox.checked = false;
                     downvoteIcon.classList.replace("bxs-downvote","bx-downvote");
                     downvoteIcon.style.color = ""; 
-                    posts[i].votes += 2;
+                    if (index !== -1) {
+                        allPosts[index].votes += 2;
+                    }
                 }else{
-                    posts[i].votes += 1;
+                    if (index !== -1) {
+                        allPosts[index].votes += 1;
+                    }
                 }
             }else{
                 upvoteIcon.classList.replace("bxs-upvote","bx-upvote");
                 upvoteIcon.style.color = ""; 
-                posts[i].votes -= 1;
+                if (index !== -1) {
+                    allPosts[index].votes -= 1;
+                }
             }
-            voteCount.textContent = posts[i].votes;
-            localStorage.setItem("posts", JSON.stringify(posts));
+            voteCount.textContent = allPosts[index].votes;
+            localStorage.setItem("posts", JSON.stringify(allPosts));
         } else{
             showPopup("login-popup");
         }
@@ -197,6 +212,8 @@ function displayPosts(posts, i){
     downvCheckbox.addEventListener("change", (event) => {
         event.stopPropagation();
         if(user !== null){
+            const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
+            const index = allPosts.findIndex(p => p.postID === posts[i].postID);
             if(downvCheckbox.checked){
                 downvoteIcon.classList.replace("bx-downvote","bxs-downvote");
                 downvoteIcon.style.color = "#0004ff"; 
@@ -205,17 +222,23 @@ function displayPosts(posts, i){
                     upvCheckbox.checked = false;
                     upvoteIcon.classList.replace("bxs-upvote","bx-upvote");
                     upvoteIcon.style.color = "";   
-                    posts[i].votes -= 2;
+                    if (index !== -1) {
+                        allPosts[index].votes -= 2;
+                    }
                 }else{
-                    posts[i].votes -= 1;
+                    if (index !== -1) {
+                        allPosts[index].votes -= 1;
+                    }
                 }
             }else{
                 downvoteIcon.classList.replace("bxs-downvote","bx-downvote");
                 downvoteIcon.style.color = "";
-                posts[i].votes += 1;
+                if (index !== -1) {
+                        allPosts[index].votes += 1;
+                    }
             }
-            voteCount.textContent = posts[i].votes;
-            localStorage.setItem("posts", JSON.stringify(posts));
+            voteCount.textContent = allPosts[index].votes;
+            localStorage.setItem("posts", JSON.stringify(allPosts));
         }else{
             showPopup("login-popup");
         }
@@ -228,7 +251,7 @@ function viewFullPost(post) {
     const mainContent = document.getElementById("main-content");
     const userNow = getCurrentUser();
     
-    resetNavActive(); //Reset active state of nav buttons when viewing a post
+    //resetNavActive(); //Reset active state of nav buttons when viewing a post
     
     const postDate = new Date(post.date);
     const formattedPostDate = postDate.toLocaleDateString() + " " + postDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -298,9 +321,9 @@ function viewFullPost(post) {
     mainContent.appendChild(fullPostView);
 
     const backBtn = document.getElementById("back-to-posts-btn"); 
-    backBtn.addEventListener("click", () => { 
-        homeBtn.classList.add("active"); 
-    });
+        backBtn.onclick = function(){
+            renderPosts();
+        };
     
     const postTag = document.createElement("p");
     postTag.id = "full-post-tag";
@@ -425,11 +448,6 @@ function viewFullPost(post) {
     
     //display comments
     displayFullComments(post.postID);
-    
-    //back button functionality
-    document.getElementById("back-to-posts-btn").onclick = function() {
-        loadPostsList(currentFilter, currentTag);
-    };
         
     function updatePostInStorage(updatedPost) {
         const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
@@ -839,11 +857,7 @@ function toggleReplyInput(commentID){
 document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
     radio.addEventListener("change", function() {
         if (!this.checked) return;
-
-        currentTag = this.value.replace("filter-", "");
-        if (currentTag === "all") currentTag = "all";
-
-        loadPostsList(currentFilter, currentTag);
+        renderPosts();
     });
 });
 
@@ -851,14 +865,39 @@ document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
 document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
     radio.addEventListener("change", function() {
         if (!this.checked) return;
-
-        currentFilter = this.value;
-
-        loadPostsList(currentFilter, currentTag);
+        renderPosts();
     });
 });
 
+function setView(view) {
+    const radio = document.querySelector(`input[name="view-filter"][value="${view}"]`);
+    if (radio) radio.checked = true;
+
+    document.querySelectorAll('input[name="post-filter"]').forEach(r => r.checked = false);
+    document.querySelectorAll('input[name="tag-filter"]').forEach(r => r.checked = false);
+
+    renderPosts();
+}
+
+homeBtn.onclick = () => setView("home");
+bookmarksBtn.onclick = () => setView("bookmarks");
+
+function getStateFromUI() {
+    const view = document.querySelector('input[name="view-filter"]:checked')?.value || "home";
+    const tag = document.querySelector('input[name="tag-filter"]:checked')?.value;
+    const filter = document.querySelector('input[name="post-filter"]:checked')?.value;
+
+    return {
+        bookmarked: view === "bookmarks",
+        tag: tag ? tag.replace("filter-", "") : "all",
+        filter: filter || "none"
+    };
+}
+
+function renderPosts() {
+    const state = getStateFromUI();
+    loadPostsList(state.filter, state.tag, state.bookmarked);
+}
+
 // Initial load
-currentTag = "all";
-currentFilter = "none";
-loadPostsList(currentFilter, currentTag);
+renderPosts();

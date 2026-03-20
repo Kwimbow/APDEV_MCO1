@@ -24,26 +24,15 @@ btn.onclick = function() {
     mainContent.classList.toggle("expand");
 }
 
-const navButtons = document.querySelectorAll('.side-nav-buttons');
-const homeBtn = document.getElementById('home-btn');
-const bookmarksBtn = document.getElementById('bookmarks-bar');
+const homeBtn = document.getElementById('filter-home');
+const bookmarksBtn = document.getElementById('filter-bookmarks');
 
-function resetNavActive() {
-    navButtons.forEach(btn => btn.classList.remove('active'));
-}
-
-if (window.location.pathname.split('/').pop() === 'index.html') {
-    homeBtn.classList.add('active');
-} else if (window.location.pathname.split('/').pop() === 'bookmarks.html') {
-    bookmarksBtn.classList.add('active');
-}
-
-const filters = document.querySelectorAll('.filter-input');
-filters.forEach(filter => {
-    filter.addEventListener('change', () => {
-        resetNavActive();
+function resetNavActive(){
+    document.querySelectorAll('input[name="view-filter"]').forEach(radio => {
+        radio.checked = false;
     });
-});
+}
+
 
 /* This function shows the pop-up of the register and login "page", 
 it also locks the body's content so that it cannot be scrolled */
@@ -352,14 +341,14 @@ function logoutAndRedirect(){
 
 /* This function unhides the bookmarks navigation button if the user is logged in.
 NOTE: If you want to make more navigation bar buttons, duplicate this function, rename
-      what is required to be renamed and add to updateUserUI() */
+      what is required to be renamed and add to updateUserUI()
 function showBookmarksBar(){
     if(getCurrentUser() !== null){
         document.getElementById("bookmarks-bar").style.display = "block";
     }else{
         document.getElementById("bookmarks-bar").style.display = "none";
     }
-}
+}*/
 
 /* This function prohibits visitors from accessing the bookmarks page, even if they
 change the link name to bookmarks.html */
@@ -431,7 +420,7 @@ function updateUserUI() {
     if (!postBtn || !miniProfile || !regLoginGroup) return;
 
     //add more views here (profile, settings, create post pop-up, and many more)
-    showBookmarksBar();
+    //showBookmarksBar();
 
     //end of views
 
