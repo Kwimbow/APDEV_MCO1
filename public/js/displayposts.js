@@ -201,7 +201,7 @@ function viewFullPost(post) {
 	else if (post.tag === "misc") postTag.classList.add('orange-tag');
 	postTag.appendChild(document.createTextNode(post.tag));
 
-	// Populate the post data
+	// le populate
 	document.getElementById("full-post-title").textContent = post.title;
 	document.getElementById("full-post-content").textContent = post.content;
 	document.getElementById("full-post-username").textContent = post.author.username;
@@ -318,7 +318,7 @@ function viewFullPost(post) {
 	
 	//back button functionality
 	document.getElementById("back-to-posts-btn").onclick = function() {
-		loadPostsList(currentFilter, currentTag);
+		window.location.reload(); // --------------------------------------------------------------------for now just reloading window. lets add sorting and filtering eventually
 	};
 		
 	function updatePostInStorage(updatedPost) { // ------------------------------------------------------------------------------------
@@ -554,11 +554,11 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
 }
 
 //updates comment vote count -------------------------------------------------------
-async function saveCommentVotes(postID, commentID, votes) {
+async function saveCommentVotes(postID, commentID, votes) { // i tried to do this but i gave up
 	await fetch(`/api/comments/${commentID}`, {
 		method: 'PATCH',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ votes })  // add votes to your PATCH handler too
+		body: JSON.stringify({ votes })
 	});
 }
 
@@ -595,7 +595,7 @@ function setupCommentOptions() {
                 const postID = editBtn.dataset.postId;
                 const commentID = editBtn.dataset.commentId;
 
-                // fetch comment from MongoDB instead of localStorage
+                // fetch comment from le mongo
                 const res = await fetch(`/api/comments/single/${commentID}`);
                 const comment = await res.json();
                 if (!comment) return;
@@ -626,7 +626,7 @@ function setupCommentOptions() {
                 const submitBtn = buttonContainer.querySelector(".comment-edit-submit-btn");
                 const cancelBtn = buttonContainer.querySelector(".comment-edit-cancel-btn");
 
-                // submit changes to MongoDB
+                // submit changes to le mongo
                 submitBtn.onclick = async () => {
                     const newText = textarea.value.trim();
                     if (!newText) return;
