@@ -73,10 +73,18 @@
         <!--Side navigation bar-->
         <div class="side-nav" id="side-bar">
             <div class="nav-item" id="nav-item">
-                <a href="index.html" style="text-decoration: none;"><button class="side-nav-buttons" id="home-btn"><i class='bx bxs-home' id="side-nav-icons"></i> Home</button></a>
-                
-                <div id="bookmarks-bar">
-                    <a href="bookmarks.html" style="text-decoration: none;"><button class="side-nav-buttons" id="bookmarks-btn"><i class='bx bxs-bookmarks' id="side-nav-icons"></i> Bookmarks</button></a>
+                <div id="view-filters">
+                    <form id="view-filter">
+                        <input type="radio" name="view-filter" id="filter-home" value="home" checked class="filter-input side-nav-buttons">
+                        <label class="filter-label-main" for="filter-home">
+                            <i class='bx bxs-home'></i><pre> </pre>Home
+                        </label>
+
+                        <input type="radio" name="view-filter" id="filter-bookmarks" value="bookmarks" class="filter-input side-nav-buttons">
+                        <label class="filter-label-main" for="filter-bookmarks">
+                            <i class='bx bxs-bookmarks'></i><pre> </pre>Bookmarks
+                        </label>
+                    </form>
                 </div>
 
                 <hr id="sidenav-hr">

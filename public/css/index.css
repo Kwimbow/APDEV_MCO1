@@ -242,29 +242,30 @@ header div{
     display: none;
 }
 
-.side-nav-buttons{
+.filter-label-main{
     font-family: 'Reddit Sans', sans-serif;
     text-decoration: none; 
     color: var(--sidenav-button); 
     font-size: 16px;
     background-color: transparent;
-    width: 230px;
-    height: 50px;
+    width: 200px;
+    height: 60px;
     border-color: transparent;
     border-radius: 10px;
     transition: all 0.3s ease;
     text-align: left;
     padding-left: 30px;
-    display: block;
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin: 0.7rem;
 }
 
-.side-nav-buttons:hover{
+.filter-label-main:hover{
     background-color: var(--sidenav-btnhover);
     cursor: pointer;
 }
 
-.side-nav-buttons.active{
+.filter-input:checked + .filter-label-main {
     background-color: var(--sidenav-active);
 }
 
@@ -869,7 +870,7 @@ body.modal-open{
 }
 
 /* for tag filters part */
-#tag-filters, #filter-posts {
+#tag-filters, #filter-posts{
     padding-top: .5rem;
 }
 
@@ -881,7 +882,7 @@ body.modal-open{
 .filter-label-d, .filter-label-s, 
 .filter-label-j, .filter-label-m,
 .filter-label-sbo, .filter-label-sbp, 
-.filter-label-sbc {
+.filter-label-sbc{
     display: block;
 
     font-family: 'Reddit Sans', sans-serif; 
