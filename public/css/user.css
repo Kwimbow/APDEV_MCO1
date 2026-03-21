@@ -271,3 +271,30 @@ with an actual image */
 #bio-edit.show{
 	display: block;
 }
+
+.side-nav-buttons{
+    font-family: 'Reddit Sans', sans-serif;
+    text-decoration: none; 
+    color: var(--sidenav-button); 
+    font-size: 16px;
+    background-color: transparent;
+    width: 200px;
+    height: 60px;
+    border-color: transparent;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    text-align: left;
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+    margin: 0.7rem;
+}
+
+.side-nav-buttons:hover{
+    background-color: var(--sidenav-btnhover);
+    cursor: pointer;
+}
+
+.side-nav-buttons:checked + .filter-label-main {
+    background-color: var(--sidenav-active);
+}

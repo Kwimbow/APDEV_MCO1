@@ -32,6 +32,10 @@ const searchRoutes = require('./routes/searchposts');
 app.use('/api/search', searchRoutes);
 const filterRoutes = require('./routes/filterposts');
 app.use('/api/filter', filterRoutes);
+const bookmarkRoutes = require('./routes/savebookmarks');
+app.use('/api/bookmarks', bookmarkRoutes);
+const getBookmarkRoutes = require('./routes/getbookmarks');
+app.use('/api/getbookmarks', getBookmarkRoutes);
 
 
 app.listen(PORT, () => {

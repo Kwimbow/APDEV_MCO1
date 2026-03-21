@@ -75,12 +75,14 @@
             <div class="nav-item" id="nav-item">
                 <div id="view-filters">
                     <form id="view-filter">
+                        <a href="index.html" id="logo">
                         <input type="radio" name="view-filter" id="filter-home" value="home" checked class="filter-input side-nav-buttons">
                         <label class="filter-label-main" for="filter-home">
                             <i class='bx bxs-home'></i><pre> </pre>Home
                         </label>
+                        </a>
 
-                        <input type="radio" name="view-filter" id="filter-bookmarks" value="bookmarks" class="filter-input side-nav-buttons">
+                        <input type="radio" name="view-filter" id="filter-bookmarks" value="bookmarks" onclick = "show_bookmarks(event)" class="filter-input side-nav-buttons">
                         <label class="filter-label-main" for="filter-bookmarks">
                             <i class='bx bxs-bookmarks'></i><pre> </pre>Bookmarks
                         </label>
@@ -286,6 +288,7 @@
         <script src = "js/viewposts.js"></script>
         <script src = "js/searchQuery.js"></script>
         <script src = "js/filterquery.js"></script>
+        <script src = "js/bookmarks.js"></script>
 
         <script>
             setupPopups();

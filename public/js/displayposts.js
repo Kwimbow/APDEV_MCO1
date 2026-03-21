@@ -265,7 +265,7 @@ function viewFullPost(post) {
 							</label>
 						</div>
 						<div id="bookmarkBTN">
-							<input type="checkbox" id="bookmark-checkbox">
+							<input type="checkbox" id="bookmark-checkbox" onclick = "save_bookmark('${post.postID}')">
 							<label for="bookmark-checkbox">
 								<i class='bx bx-bookmark' id="full-bookmark-btn"></i>
 							</label>
