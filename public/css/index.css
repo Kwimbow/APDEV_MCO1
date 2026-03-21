@@ -155,7 +155,7 @@ header div{
     background-color: var(--background-color);
     color: var(--default-txt);
 
-    background-image: url("images/freddyt_logo.png");
+    background-image: url("../images/freddyt_logo.png");
     background-repeat: no-repeat;
     background-position-x: 3px;
     background-position-y: 3px;
