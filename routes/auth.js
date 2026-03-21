@@ -1,4 +1,5 @@
-const router = require('express').Router();
+const express = require('express');                       // i edited these 2 lines to only increase
+const router = express.Router();                          // the file size limit for the pfp --only.
 const User = require('../models/User');
 
 /* This function registers the user.
@@ -38,5 +39,34 @@ router.post('/curr_user', async (req, res) => {
 
 	res.json({ success: true, _id: user._id, username: user.username });
 })
+
+/* Get user profile info by ID */
+router.get('/user/:userId', async (req, res) => {
+	const user = await User.findById(req.params.userId).select('username bio pfp cupcakes createdAt');
+	if (!user) return res.status(404).json({ message: 'User not found' });
+	res.json(user);
+});
+
+
+/* for the user pfp
+
+THIS . LINE . HERE . I SPENT. 2 HOURS. WANTING TO GAME END MYSELF.
+apparently the default file size limit for express is 100 mb and photos are just not. 100 mb. 
+i put 
+
+*/
+
+router.post('/user/:userId/pfp', express.json({ limit: '10mb' }), async (req, res) => {
+	const { pfp } = req.body;
+	await User.findByIdAndUpdate(req.params.userId, { pfp });
+	res.json({ success: true, pfp });
+});
+
+/* Update user bio */
+router.patch('/user/:userId/bio', async (req, res) => {
+	const { bio } = req.body;
+	await User.findByIdAndUpdate(req.params.userId, { bio });
+	res.json({ success: true });
+});
 
 module.exports = router;

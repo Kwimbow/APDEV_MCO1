@@ -560,6 +560,17 @@ body.modal-open{
     text-align: center;
     font-weight: bold;
     vertical-align: middle;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#profile-clickable img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 #profile-clickable:hover{
@@ -721,6 +732,8 @@ body.modal-open{
     margin-right:10px;
     display:block;
     margin-bottom: 15px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 #post-tag{
@@ -1050,6 +1063,7 @@ body.modal-open{
     width: 80px;
     height: 80px;
     border-radius: 50%;
+    object-fit: cover;
     margin-bottom: 10px;
 }
 
@@ -1639,3 +1653,14 @@ body.modal-open{
     text-align: center;
 }
 
+
+/* comment pfp 
+ */
+.comment-pfp { 
+width: 28px; 
+height: 28px; 
+border-radius: 50%; 
+object-fit: cover; 
+margin-right: 6px; 
+vertical-align: middle; 
+}

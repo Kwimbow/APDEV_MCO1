@@ -8,7 +8,7 @@ router.get( '/', async (req, res) => {
     const tag = req.query.term;
 
     if (tag == ""){
-        const posts = await Post.find().populate('author', 'username');
+        const posts = await Post.find().populate('author', 'username pfp');
         res.json(posts);
     }
 
@@ -17,7 +17,7 @@ router.get( '/', async (req, res) => {
             $or: [
                 {tag: {$regex: tag, $options: 'i'}}
             ]
-        });
+        }).populate('author', 'username pfp');
         
         res.json(matchingPosts);
     }

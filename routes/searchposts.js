@@ -8,7 +8,7 @@ router.get( '/', async (req, res) => {
     const searchTerm = req.query.term;
 
     if (searchTerm == ""){
-        const posts = await Post.find().populate('author', 'username');
+        const posts = await Post.find().populate('author', 'username pfp');
         res.json(posts);
     }
     else{
@@ -17,7 +17,7 @@ router.get( '/', async (req, res) => {
                 {content: {$regex: searchTerm, $options: 'i'}},
                 {title: {$regex: searchTerm, $options: 'i'} }
             ]
-        });
+        }).populate('author', 'username pfp');
         
         res.json(matchingPosts);
     }

@@ -1,5 +1,10 @@
 
-/* css file for user_view */
+/* css file for user_view 
+ 
+please . edit this soon future gab... 
+this file is so buns...
+ 
+ */
 
 .user-container {
 
@@ -92,6 +97,19 @@ with an actual image */
 
 /* sizing relative to hirsfhi profile section */
 
+#user-pfp-wrapper {
+
+	position: relative;
+
+	height: 140px;
+	width: 140px;
+
+	margin-top: 20%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
 #user-pfp {
 
 	position: relative; 
@@ -102,10 +120,7 @@ with an actual image */
 	border-radius: 50%;
 	border: none;
 	box-sizing: border-box;
-
-	margin-top: 20%;
-	margin-left: auto;
-	margin-right:auto;
+	overflow: hidden;
 
 }
 
@@ -114,6 +129,7 @@ with an actual image */
 	height: 100%;
 	width: 100%;
 	object-fit: cover;
+	border-radius: 50%;
 }
 
 /* .user-profile-info-bottom {
@@ -218,8 +234,9 @@ with an actual image */
 
 #camera-icon{
 	position: absolute;
-	top: 8px;
-	right: 8px;
+	bottom: -14px;
+	left: 50%;
+	transform: translateX(-50%);
 	background: #00b7ff;
 	color: white;
 	border-radius: 50%;
@@ -227,6 +244,7 @@ with an actual image */
 	cursor: pointer;
 	font-size: 18px;
 	display: none;
+	z-index: 1;
 }
 
 #camera-icon.show {
