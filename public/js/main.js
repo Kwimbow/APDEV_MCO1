@@ -441,6 +441,16 @@ function updateUserUI() {
         postBtn.style.display = "block";
         miniProfile.style.display = "block";
         regLoginGroup.style.display = "none";
+
+        const profileBtn = document.getElementById('profile-clickable');
+
+        if (profileBtn) 
+          profileBtn.onclick = () => {                  // omg i used an arrow function i feel so cool
+            location.href = `user.html?id=${user._id}`; 
+          };
+
+        loadMiniProfilePfp(user._id);
+
     } else {
         postBtn.style.display = "none";
         miniProfile.style.display = "none";
@@ -813,6 +823,30 @@ function displaySearchResults(results, keyword) {
     });
 }
 */
+
+
+// fetches the current user's pfp from the DB and updates the mini-profile icon 
+
+async function loadMiniProfilePfp(userId) {
+
+    const res = await fetch(`/api/user/${userId}`);
+    if (!res.ok) 
+      return;
+
+    const data = await res.json();
+    if (!data.pfp) 
+      return;
+
+    const icon = document.getElementById('profile-icon');
+    if (!icon) 
+      return;
+  
+    const img = document.createElement('img');
+    img.src = data.pfp;
+    img.id = 'profile-icon';
+    icon.replaceWith(img);
+}
+
 
 //calls the functions
 document.addEventListener("DOMContentLoaded", () => {

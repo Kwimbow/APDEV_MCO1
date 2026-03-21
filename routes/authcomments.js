@@ -5,20 +5,20 @@ const Comment = require('../models/Comment');
 router.post('/', async (req, res) => {
     const { comment } = req.body;
     const newComment = await Comment.create(comment);
-    const populated = await newComment.populate('author', 'username');
+    const populated = await newComment.populate('author', 'username pfp');      // i did this to like everything...
     res.json({ success: true, comment: populated });
 });
 
 // get single comment
 router.get('/single/:commentId', async (req, res) => {
-    const comment = await Comment.findById(req.params.commentId).populate('author', 'username');
+    const comment = await Comment.findById(req.params.commentId).populate('author', 'username pfp');
     res.json(comment);
 });
 
 // get all comments for a post
 router.get('/:postId', async (req, res) => {
     const comments = await Comment.find({ post: req.params.postId })
-        .populate('author', 'username');
+        .populate('author', 'username pfp');
     res.json(comments);
 });
 

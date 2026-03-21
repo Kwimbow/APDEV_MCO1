@@ -34,9 +34,15 @@ async function load_posts() {
 		flexArea.id = "post-flex-display";
 		postFlexBottom.id = "post-flex-bottom";
 		
+    // propane photo 
 		const userPfp = new Image();
-		userPfp.src = 'images/freddyt_logo.png';
-		userPfp.id = "user-pfp"
+		userPfp.src = post.author.pfp || 'images/freddyt_logo.png';
+		userPfp.id = "user-pfp";
+		userPfp.style.cursor = 'pointer';
+		userPfp.onclick = (e) => { 
+      e.stopPropagation(); 
+      location.href = `user.html?id=${post.author._id}`; 
+    };
 
 		const upvoteBtn = document.createElement("button");
 		const downvoteBtn = document.createElement("button");
@@ -136,9 +142,15 @@ async function load_searched_posts(posts){
         flexArea.id = "post-flex-display";
         postFlexBottom.id = "post-flex-bottom";
         
+        // le profile pictura with default if post.author.pfp is falsey
         const userPfp = new Image();
-        userPfp.src = 'images/freddyt_logo.png';
-        userPfp.id = "user-pfp"
+        userPfp.src = post.author.pfp || 'images/freddyt_logo.png';
+        userPfp.id = "user-pfp";
+        userPfp.style.cursor = 'pointer';
+        userPfp.onclick = (e) => { 
+          e.stopPropagation(); 
+          location.href = `user.html?id=${post.author._id}`;    // le fancy 
+        };
 
         const upvoteBtn = document.createElement("button");
         const downvoteBtn = document.createElement("button");
@@ -304,6 +316,16 @@ function viewFullPost(post) {
 	document.getElementById("full-post-title").textContent = post.title;
 	document.getElementById("full-post-content").textContent = post.content;
 	document.getElementById("full-post-username").textContent = post.author.username;
+
+  // le pfp for the post
+	const fullPostPfp = document.getElementById("full-post-pfp");
+	fullPostPfp.src = post.author.pfp || 'images/freddyt_logo.png';
+	fullPostPfp.style.cursor = 'pointer';
+	fullPostPfp.onclick = () => { 
+    location.href = `user.html?id=${post.author._id}`; 
+  };
+
+
 	//This sets the posts' left side to be marked as edited or posted
 	const fullPostDate = document.getElementById("full-post-date");
 	fullPostDate.textContent = post.edited 
@@ -569,9 +591,14 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
            </div>`
         : '';
 
+    //jfoiskngoiefdm
+    const commentPfpSrc = comment.author && comment.author.pfp ? comment.author.pfp : 'images/freddyt_logo.png';
+    const commentAuthorId = comment.author ? comment.author._id : '';
+
     commentItem.innerHTML = 
         `<div class="comment-content">
             <div class="comment-header">
+                <img class="comment-pfp" src="${commentPfpSrc}" onclick="location.href='user.html?id=${commentAuthorId}'" style="cursor:pointer;">
                 <span class="comment-username">${usernameText}</span>
                 <span class="comment-date">${formattedDate} ${editedFlag}</span>
             </div>
