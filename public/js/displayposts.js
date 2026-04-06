@@ -85,8 +85,9 @@ async function save_comment_downvote(commentID){
 
 
 async function load_posts() {
-
-	const res = await fetch('api/posts');
+	user = getCurrentUser();
+	const url = user ? `api/posts?userId=${user._id}` : 'api/posts';
+	const res = await fetch(url);
 	const posts = await res.json();
 
 	const container = document.getElementById("main-content");
@@ -138,6 +139,15 @@ async function load_posts() {
 		let voteCount = document.createElement("p");
 		voteCount.id = "vote-count";
 		voteCount.appendChild(document.createTextNode(post.score));
+
+		if(post.upvoteFlag){
+			upvoteBtn.innerHTML = "<i class='bx bxs-upvote'></i>";
+    		upvoteBtn.style.color = "#df4b4b";
+		}
+		if(post.downvoteFlag){
+			downvoteBtn.innerHTML = "<i class='bx bxs-downvote'></i>";
+    		downvoteBtn.style.color = "#6668ec";
+		}
 
 		upvoteBtn.onclick = (e) => {
             e.stopPropagation();	

@@ -6,7 +6,20 @@ const Post = require('../models/Post');
 router.get('/', async (req, res) => {
     
     const posts = await Post.find().populate('author', 'username pfp');
+    
+    const userId = req.query.userId;
+    
+
+    if(userId){
+        posts.forEach(post => {
+            post.upvoteFlag = post.upvotedBy.includes(userId);
+            post.downvoteFlag = post.downvotedBy.includes(userId);
+        });
+    }
+    
     res.json(posts);
+
+
 });
 
 
