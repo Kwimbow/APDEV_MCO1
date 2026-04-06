@@ -1,5 +1,51 @@
 /* FOR DISPLAYING POSTS */
 
+/*
+async function toggleUpvote(){
+
+}
+
+async function toggleDownvote(){
+
+}
+*/
+
+async function save_upvote(postID){
+	console.log("saving upvote for ", postID);
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_upvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, postID: postID })
+	});
+
+	const updatingScore = document.getElementById("main-content");
+	updatingScore.innerHTML = ""
+   
+	load_posts();
+}
+
+async function save_downvote(postID){
+	console.log("saving downvote");
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_downvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, postID: postID })
+	})
+
+	const updatingScore = document.getElementById("main-content");
+	updatingScore.innerHTML = ""
+   
+	load_posts();
+}
+
 async function load_posts() {
 
 	const res = await fetch('api/posts');
@@ -53,7 +99,21 @@ async function load_posts() {
 
 		let voteCount = document.createElement("p");
 		voteCount.id = "vote-count";
-		voteCount.appendChild(document.createTextNode(post.votes));
+		voteCount.appendChild(document.createTextNode(post.score));
+
+		upvoteBtn.onclick = (e) => {
+            e.stopPropagation();	
+			const post_id = post._id;
+			save_upvote(post_id);
+			
+        };
+
+        downvoteBtn.onclick = (e) => {
+            e.stopPropagation();
+		
+			const post_id = post._id;
+			save_downvote(post_id);
+        };
 
 		const postTag = document.createElement("p");
 		postTag.id = "post-tag";
@@ -110,6 +170,7 @@ async function load_posts() {
 	console.log(res);
 
 }
+
 
 async function load_searched_posts(posts){
     
@@ -351,7 +412,7 @@ function viewFullPost(post) {
 		bookmarkContainer.style.display = "none";
 	}
 
-	upvCheckbox.addEventListener("change", (e) => {
+	upvCheckbox.addEventListener("change", async(e) => {
 		e.stopPropagation();
 		if (userNow !== null){
 			if(upvCheckbox.checked){
@@ -362,44 +423,35 @@ function viewFullPost(post) {
 					downvCheckbox.checked = false;
 					downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
 					downvoteIcon.style.color = "";
-					post.votes += 2;
-				}else{
-					post.votes += 1;
 				}
 			}else{
 				upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
 				upvoteIcon.style.color = "";
-				post.votes -= 1;
 			}
-			fullVoteCount.textContent = post.votes;
-			updatePostInStorage(post);
+
+			save_upvote(post._id);
 		} else{
 			showPopup("login-popup");
 		}
 	});
 
-	downvCheckbox.addEventListener("change", (e) => {
+	downvCheckbox.addEventListener("change", async (e) => {
 		e.stopPropagation();
 		if(userNow !== null){
 			if(downvCheckbox.checked){
 				downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
-				downvoteIcon.style.color = "#0004ff"; 
+				downvoteIcon.style.color = "#6668ec"; 
 
 				if(upvCheckbox.checked){
 					upvCheckbox.checked = false;
 					upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
 					upvoteIcon.style.color = "";
-					post.votes -= 2;
-				}else{
-					post.votes -= 1;
 				}
 			}else{
 				downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
 				downvoteIcon.style.color = "";
-				post.votes += 1;
 			}
-			fullVoteCount.textContent = post.votes;
-			updatePostInStorage(post);
+			save_downvote(post._id);
 		} else{
 			showPopup("login-popup");
 		}
@@ -442,14 +494,6 @@ function viewFullPost(post) {
 		window.location.reload(); // --------------------------------------------------------------------for now just reloading window. lets add sorting and filtering eventually
 	};
 		
-	function updatePostInStorage(updatedPost) { // ------------------------------------------------------------------------------------
-		const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-		const index = allPosts.findIndex(p => p.postID === updatedPost.postID);
-		if (index !== -1) {
-			allPosts[index] = updatedPost;
-			localStorage.setItem("posts", JSON.stringify(allPosts));
-		}
-	}
 	
 	//submit button for comment // -----------------------------------------------------------------------------
 	document.getElementById("full-submit-comment-btn").onclick = function() {
@@ -804,30 +848,6 @@ function toggleReplyInput(commentID){
 	}
 }
 
-/*
-// Tag filters (discussion, guide, joke,...) -----------------------------------------------------------
-document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
-	radio.addEventListener("change", function() {
-		if (!this.checked) return;
-
-		currentTag = this.value.replace("filter-", "");
-		if (currentTag === "all") currentTag = "all";
-
-		loadPostsList(currentFilter, currentTag);
-	});
-});
-
-// Sort filters (most popular, by date, ...) ----------------------------------------------------------
-document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
-	radio.addEventListener("change", function() {
-		if (!this.checked) return;
-
-		currentFilter = this.value;
-
-		loadPostsList(currentFilter, currentTag);
-	});
-});
-*/
 // Initial load
 currentTag = "all";
 currentFilter = "none";

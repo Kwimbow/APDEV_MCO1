@@ -13,7 +13,7 @@ async function create_comment() {
         post: getCurrentPost()._id,
         content: document.getElementById("full-comment-input").value,
         createdAt: new Date(),
-        upvotes: voteCount,
+        score: voteCount,
         //parent_id: ,
         edited: false
     }

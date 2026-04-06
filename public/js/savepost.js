@@ -15,7 +15,7 @@ async function create_post() {
 		content: document.getElementById("content").value,
 		tag: document.querySelector('input[name="tag"]:checked').value,
 		createdAt: new Date(),
-		upvotes: voteCount,
+		score: voteCount,
 		edited: false
 	}
 

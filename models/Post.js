@@ -7,9 +7,11 @@ const postSchema = new mongoose.Schema({
 	content: { type: String, required: true },
 	createdAt: { type: Date, required: true, default: () => Date.now() },
 	tag: { type: String, required: true },
-	upvotes: { type: Number, required: true, default: 0 }, 
-	edited:{ type: Boolean, required: true, default: false}
+	score: { type: Number, required: true, default: 0 }, 
+	edited:{ type: Boolean, required: true, default: false},
 	
+	upvotedBy: [{ type: mongoose.SchemaTypes.ObjectId, default: [], ref: "User"  }],
+	downvotedBy: [{ type: mongoose.SchemaTypes.ObjectId, default: [], ref: "User"  }]
 });
 
 module.exports = mongoose.model('Post', postSchema);
