@@ -46,6 +46,44 @@ async function save_downvote(postID){
 	load_posts();
 }
 
+async function save_comment_upvote(commentID){
+	console.log("saving upvote for ", commentID);
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_comment_upvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, commentID: commentID })
+	});
+
+	if (res.success) {
+        const voteDisplay = document.getElementById(`votes-${commentID}`);
+        if (voteDisplay) voteDisplay.textContent = result.score;
+    }
+}
+
+async function save_comment_downvote(commentID){
+	console.log("saving downvote");
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_comment_downvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, commentID: commentID })
+	})
+
+	if (res.success) {
+        const voteDisplay = document.getElementById(`votes-${commentID}`);
+        if (voteDisplay) voteDisplay.textContent = result.score;
+    }
+
+}
+
+
 async function load_posts() {
 
 	const res = await fetch('api/posts');
@@ -586,7 +624,7 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
                <label for="upv-${comment._id}">
                    <i class='bx bx-upvote comment-vote-btns' id="upvote-${comment._id}"></i>
                </label>
-               <p id="votes-${comment._id}">${comment.votes || 0}</p>
+               <p id="votes-${comment._id}">${comment.score || 0}</p>
                <input type="checkbox" id="downv-${comment._id}" class="comment-checkbox">
                <label for="downv-${comment._id}">
                    <i class='bx bx-downvote comment-vote-btns' id="downvote-${comment._id}"></i>
@@ -660,7 +698,7 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     const downvoteIcon = commentItem.querySelector(`#downvote-${comment._id}`);
 
     if (upvCheckbox && downvCheckbox){
-        upvCheckbox.addEventListener("change", (e) => {
+        upvCheckbox.addEventListener("change", async (e) => {
             e.stopPropagation();
             if(user !== null){
                 if(upvCheckbox.checked){
@@ -670,43 +708,38 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
                         downvCheckbox.checked = false;
                         downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
                         downvoteIcon.style.color = "";
-                        comment.votes += 2;
-                    }else{
-                        comment.votes += 1;
                     }
                 }else{
                     upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
                     upvoteIcon.style.color = "";
-                    comment.votes -= 1;
                 }
-                voteDisplay.textContent = comment.votes;
-                saveCommentVotes(postID, comment._id, comment.votes);
+                voteDisplay.textContent = comment.score;
+				save_comment_upvote(comment._id);
+				
             }else{
                 showPopup("login-popup");
             }
         });
 
-        downvCheckbox.addEventListener("change", (e) => {
+        downvCheckbox.addEventListener("change", async (e) => {
             e.stopPropagation();
             if(user !== null){
                 if(downvCheckbox.checked){
                     downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
-                    downvoteIcon.style.color = "#0004ff";
+                    downvoteIcon.style.color = "#6668ec";
                     if(upvCheckbox.checked){
                         upvCheckbox.checked = false;
                         upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
                         upvoteIcon.style.color = "";
-                        comment.votes -= 2;
-                    }else{
-                        comment.votes -= 1;
                     }
                 }else{
                     downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
                     downvoteIcon.style.color = "";
-                    comment.votes += 1;
                 }
-                voteDisplay.textContent = comment.votes;
-                saveCommentVotes(postID, comment._id, comment.votes);
+                voteDisplay.textContent = comment.score;
+				save_comment_downvote(comment._id);
+				
+                
             }else{
                 showPopup("login-popup");
             }
@@ -723,14 +756,6 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     }
 }
 
-//updates comment vote count -------------------------------------------------------
-async function saveCommentVotes(postID, commentID, votes) { // i tried to do this but i gave up
-	await fetch(`/api/comments/${commentID}`, {
-		method: 'PATCH',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ votes })
-	});
-}
 
 //comment option popups and their actions -------------------------------------------------
 function setupCommentOptions() {
