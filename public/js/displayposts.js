@@ -164,7 +164,7 @@ function setupVoteButtons(post, voteCountEl, upvoteBtn, downvoteBtn, userId) {
 	});
 }
 
-async function load_posts(tag=null, sort=null) {
+async function load_posts(event=null, tag=null, sort=null) {
 	let posts;
 
 	if (tag == null){
