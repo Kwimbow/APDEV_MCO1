@@ -1664,3 +1664,7 @@ object-fit: cover;
 margin-right: 6px; 
 vertical-align: middle; 
 }
+
+#delbutton {
+    font-family: 'Reddit Sans', sans-serif;
+}
