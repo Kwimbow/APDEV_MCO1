@@ -93,6 +93,9 @@
                 
                 <div id="tag-filters">
                     <form id="tag-filter">
+                        <input type="radio" name="tag-filter" id="filter-all" value="filter-all" class="filter-input" onclick="load_posts()">
+                        <label class="filter-label-g" for="filter-all">All</label>
+
                         <input type="radio" name="tag-filter" id="filter-guides" value="filter-guides" class="filter-input" onclick="load_posts(event, 'guides')">
                         <label class="filter-label-g" for="filter-guides">Guides</label>
 
@@ -115,6 +118,9 @@
 
                 <div id="filter-posts">
                     <form id="post-filter">
+
+                        <input type="radio" name="post-filter" id="filter-newest" value="filter-newest" class="filter-input" onclick="load_posts(event, null, 'newest')">
+                        <label class="filter-label-sbo" for="filter-newest">Sort by Newest</label>
 
                         <input type="radio" name="post-filter" id="filter-oldest" value="filter-oldest" class="filter-input" onclick="load_posts(event, null, 'oldest')">
                         <label class="filter-label-sbo" for="filter-oldest">Sort by Oldest</label>

@@ -183,7 +183,10 @@ async function load_posts(event=null, tag=null, sort=null) {
 	    posts = await res.json();
 	}
 
-	if (sort == 'oldest'){
+	if (sort == 'newest'){
+		posts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+	}
+	else if (sort == 'oldest'){
 		posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 	}
 	else if (sort == 'popular'){
