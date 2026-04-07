@@ -37,7 +37,28 @@ function resetNavActive(){
 /* This function shows the pop-up of the register and login "page", 
 it also locks the body's content so that it cannot be scrolled */
 function showPopup(id) {
-    document.getElementById(id).style.display = "block";
+    
+    // changed this a bit because it is actually killing the whole user page 
+    const test = document.getElementById(id);
+
+    if (!test) 
+    {
+        // Popup doesn't exist on this page — redirect to index and open it there
+        if (id === "register-popup") 
+        { 
+          window.location.href = "index.html?action=register"; 
+          return; 
+        }
+        if (id === "login-popup")    
+        { 
+          window.location.href = "index.html?action=login";
+          return; 
+        }
+
+        return;
+    }
+
+    test.style.display = "block";
     document.body.classList.add("modal-open");
 }
 
