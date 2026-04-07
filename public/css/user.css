@@ -1,10 +1,30 @@
-
 /* css file for user_view 
  
 please . edit this soon future gab... 
 this file is so buns...
  
  */
+
+/* css rules that overwrite ones in index.css : */
+
+/*
+header 
+{
+	background-image: linear-gradient(to right, var(--orange-glow), var(--orangey-red)); 
+
+}
+
+#logo {
+
+  color: white; 
+}
+
+#reg, #log {
+
+}
+*/
+
+/* until here... rest is user profile specific css */
 
 .user-container {
 
@@ -26,7 +46,7 @@ this file is so buns...
 
 	height: 500px;
 	width: 27%;	
-	border: 2px solid #ff9050;
+	border: 2px solid var(--yellow-border);
 	border-radius: 15px;
 
 	top: 0;
@@ -35,14 +55,14 @@ this file is so buns...
 	margin-right: 10%;
 
 	float:right;
-	background-image: linear-gradient(to right, #df4b4b, #ff9050); 
+	background-image: linear-gradient(to right, var(--orange-glow), var(--orangey-red)); 
 }
 
 .user-stats h2 {
 
 	margin-left: 20px;	
 	text-align: left;
-	color: #ffffff;
+	color: white;
     font-family: 'Reddit Sans', sans-serif;
 }
 
@@ -190,10 +210,152 @@ with an actual image */
 
 #user-content-space {
 
-	position: absolute;		
-	width: 100%;	
+	width: 100%;
+  display: flex;
+  
+  flex: 0 1 1;
+
+  flex-direction: column;
 
 }
+
+.userprof-post-display{
+
+    background-color: var(--background-color);
+
+    margin-bottom:20px;
+    width:100%;
+    padding-left:15px;
+    height:200px;
+    display:flex;
+    flex-direction: row;
+    border-radius: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border: 1px solid #df4b4b;
+}
+
+#userprof-post-left-area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#userprof-post-right-area{
+
+    display: flex;
+    flex-direction: column;
+}
+
+#userprof-upvote-btn, #userprof-downvote-btn{
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+    margin-right: 10px;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    color: var(--default-txt);
+}
+
+#userprof-vote-count{
+    font-family: 'Reddit Sans', sans-serif;
+    font-size: 16px;
+    margin-right: 10px;
+    color: var(--default-txt);
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+#userprof-post-flex-display{
+    display:flex;
+    flex-direction: column;
+}
+
+#userprof-user-pfp{
+    height:70px;
+    width:70px;
+    margin-right:10px;
+    display:block;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#userprof-post-tag{
+    height:25px;
+    display:inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    margin-top: 16px;
+    border-radius:8px;
+    font-family: 'Reddit Sans', sans-serif;
+    padding-left: 8px;
+    padding-right:8px;
+}
+
+#userprof-post-title{
+    display:inline-block;  
+    margin-top:14px;
+    font-size:22px;
+    font-family: 'Reddit Sans', sans-serif;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    color: var(--default-txt);
+
+}
+
+#userprof-post-flex-top{
+    display:flex;
+
+    width: 825px;
+    min-height:56px;
+    
+}
+
+#userprof-post-flex-bottom{
+    display:flex;
+
+    width: 825px;
+    min-height:24px;
+}
+
+#userprof-post-content{
+    display:inline-block;
+    font-family: 'Reddit Sans', sans-serif;
+    padding-bottom:-15px;
+    font-size:15px;
+    margin-top: -5px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    color: var(--default-txt);
+
+}
+
+#userprof-post-date{
+    margin-left:auto;
+    font-family: 'Reddit Sans', sans-serif;
+    color: var(--default-txt);
+
+}
+
+.userprof-view-post-button{
+    border:none;
+    background: none;
+    cursor:pointer;
+    height:80px;
+    margin-bottom:170px;
+    padding-right: 20px;
+    transition-duration: 0.4s;  
+}
+
+
+
 
 #edit-profile-btn{
 	width: 100px;
@@ -237,7 +399,7 @@ with an actual image */
 	bottom: -14px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: #00b7ff;
+
 	color: white;
 	border-radius: 50%;
 	padding: 6px;
