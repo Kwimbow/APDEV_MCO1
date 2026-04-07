@@ -98,19 +98,22 @@
                 
                 <div id="tag-filters">
                     <form id="tag-filter">
-                        <input type="radio" name="tag-filter" id="filter-guides" value="filter-guides" class="filter-input" onclick="filter_posts(event, 'guides')">
+                        <input type="radio" name="tag-filter" id="filter-all" value="filter-all" class="filter-input" onclick="load_posts(event, 'all')">
+                        <label class="filter-label-g" for="filter-all">All</label>
+
+                        <input type="radio" name="tag-filter" id="filter-guides" value="filter-guides" class="filter-input" onclick="load_posts(event, 'guides')">
                         <label class="filter-label-g" for="filter-guides">Guides</label>
 
-                        <input type="radio" name="tag-filter" id="filter-discussion" value="filter-discussion" class="filter-input" onclick="filter_posts(event, 'discussion')">
+                        <input type="radio" name="tag-filter" id="filter-discussion" value="filter-discussion" class="filter-input" onclick="load_posts(event, 'discussion')">
                         <label class="filter-label-d" for="filter-discussion">Discussion</label>
 
-                        <input type="radio" name="tag-filter" id="filter-showcase" value="filter-showcase" class="filter-input" onclick="filter_posts(event, 'showcase')">
+                        <input type="radio" name="tag-filter" id="filter-showcase" value="filter-showcase" class="filter-input" onclick="load_posts(event, 'showcase')">
                         <label class="filter-label-s" for="filter-showcase">Showcase</label>
 
-                        <input type="radio" name="tag-filter" id="filter-joke" value="filter-joke" class="filter-input" onclick="filter_posts(event, 'joke')">
+                        <input type="radio" name="tag-filter" id="filter-joke" value="filter-joke" class="filter-input" onclick="load_posts(event, 'joke')">
                         <label class="filter-label-j" for="filter-joke">Jokes</label>
 
-                        <input type="radio" name="tag-filter" id="filter-misc" value="filter-misc" class="filter-input"onclick="filter_posts(event, 'misc')">
+                        <input type="radio" name="tag-filter" id="filter-misc" value="filter-misc" class="filter-input"onclick="load_posts(event, 'misc')">
                         <label class="filter-label-m" for="filter-misc">Miscellaneous</label>
                     </form>
                 </div>
@@ -120,14 +123,18 @@
 
                 <div id="filter-posts">
                     <form id="post-filter">
-                        <input type="radio" name="post-filter" id="filter-oldest" value="filter-oldest" class="filter-input" >
+
+                        <input type="radio" name="post-filter" id="filter-newest" value="filter-newest" class="filter-input" onclick="load_posts(event, null, 'newest')">
+                        <label class="filter-label-sbo" for="filter-newest">Sort by Newest</label>
+
+                        <input type="radio" name="post-filter" id="filter-oldest" value="filter-oldest" class="filter-input" onclick="load_posts(event, null, 'oldest')">
                         <label class="filter-label-sbo" for="filter-oldest">Sort by Oldest</label>
 
                         <input type="radio" name="post-filter" id="filter-popular" value="filter-popular" class="filter-input">
-                        <label class="filter-label-sbp" for="filter-popular">Sort by Popularity</label>
+                        <label class="filter-label-sbp" for="filter-popular" onclick="load_posts(event, null, 'popular')">Sort by Popularity</label>
 
                         <input type="radio" name="post-filter" id="filter-controversial" value="filter-controversial" class="filter-input">
-                        <label class="filter-label-sbc" for="filter-controversial">Sort by Controversy</label>
+                        <label class="filter-label-sbc" for="filter-controversial" onclick="load_posts(event, null, 'controversial')">Sort by Controversy</label>
                     </form>
                 </div>
                 <br>
@@ -292,6 +299,7 @@
         <script src="js/savecomment.js"></script>
         <script src = "js/viewposts.js"></script>
         <script src = "js/searchQuery.js"></script>
+        <script src = "js/filterquery.js"></script>
         <script src = "js/bookmarks.js"></script>
 
         <script>
