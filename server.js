@@ -1,14 +1,20 @@
 const express = require('express');
 const path = require('path');
-const mongoose = require('mongoose');
 require('dotenv').config();
+const connectDB = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB worken!"))
-  .catch((err) => console.error("MongoDB error: ", err));
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  }
+  catch (err) {
+    console.error('Mongoose not worken: ', err);
+    res.status(500).json({error: 'Database not workn'});
+  }
+});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -41,6 +47,4 @@ const votingRoutes = require('./routes/voting');
 app.use('/api/voting', votingRoutes);
 
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+module.exports = app;
