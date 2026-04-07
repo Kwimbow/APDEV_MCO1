@@ -166,7 +166,7 @@ function setupVoteButtons(post, voteCountEl, upvoteBtn, downvoteBtn, userId) {
 
 async function load_posts(event=null, tag=null, sort=null) {
 	if (localStorage.getItem('activeTag') === null) localStorage.setItem('activeTag', 'all');
-	if (localStorage.getItem('activeSort') === null) localStorage.setItem('activeTag', 'newest');
+	if (localStorage.getItem('activeSort') === null) localStorage.setItem('activeSort', 'newest');
 
 
 	let activeTag = localStorage.getItem('activeTag');
@@ -340,8 +340,6 @@ async function load_posts(event=null, tag=null, sort=null) {
 
 		container.appendChild(viewButton);
 	})
-
-	console.log(res);
 
 }
 
