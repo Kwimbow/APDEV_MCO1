@@ -11,39 +11,29 @@ async function toggleDownvote(){
 */
 
 async function save_upvote(postID){
-	console.log("saving upvote for ", postID);
- 	user = getCurrentUser();
+    const user = getCurrentUser();
+    if (!user) return;
 
-  	console.log(user._id);
+    console.log("saving upvote for ", postID);
 
-	const res = await fetch('/api/voting/save_upvote', {
+    const res = await fetch('/api/voting/save_upvote', {
 	method: 'PATCH',
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify({ userID: user._id, postID: postID })
-	});
-
-	const updatingScore = document.getElementById("main-content");
-	updatingScore.innerHTML = ""
-   
-	load_posts();
+    });
 }
 
 async function save_downvote(postID){
-	console.log("saving downvote");
- 	user = getCurrentUser();
+    const user = getCurrentUser();
+    if (!user) return;
 
-  	console.log(user._id);
+    console.log("saving downvote for ", postID);
 
-	const res = await fetch('/api/voting/save_downvote', {
+    const res = await fetch('/api/voting/save_downvote', {
 	method: 'PATCH',
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify({ userID: user._id, postID: postID })
-	})
-
-	const updatingScore = document.getElementById("main-content");
-	updatingScore.innerHTML = ""
-   
-	load_posts();
+    });
 }
 
 async function save_comment_upvote(commentID){
@@ -74,7 +64,7 @@ async function save_comment_downvote(commentID){
 	method: 'PATCH',
 	headers: { 'Content-Type': 'application/json' },
 	body: JSON.stringify({ userID: user._id, commentID: commentID })
-	})
+	});
 
 	if (res.success) {
         const voteDisplay = document.getElementById(`votes-${commentID}`);
@@ -83,6 +73,96 @@ async function save_comment_downvote(commentID){
 
 }
 
+async function handlePostVote(postID, type, voteDisplay, upvoteBtn, downvoteBtn, userID) {
+    let current = parseInt(voteDisplay.textContent) || 0;
+    let userVote = parseInt(voteDisplay.dataset.uservote || "0");
+    const upIcon = upvoteBtn.querySelector("i");
+    const downIcon = downvoteBtn.querySelector("i");
+
+    if(type === 'upvote'){
+        if(userVote === 1){ // undo upvote
+            current -= 1;
+            userVote = 0;
+            upIcon.classList.replace("bxs-upvote", "bx-upvote");
+            upIcon.style.color = "";
+        }else if (userVote === -1){ // switch downvote to upvote
+            current += 2;
+            userVote = 1;
+            upIcon.classList.replace("bx-upvote", "bxs-upvote");
+            upIcon.style.color = "#df4b4b";
+            downIcon.classList.replace("bxs-downvote", "bx-downvote");
+			downIcon.style.color = "";
+        }else { // normal upvote
+            current += 1;
+            userVote = 1;
+            upIcon.classList.replace("bx-upvote", "bxs-upvote");
+            upIcon.style.color = "#df4b4b";
+        }
+        save_upvote(postID);
+    }
+
+    if(type === 'downvote'){
+        if(userVote === -1){ // undo downvote
+            current += 1;
+            userVote = 0;
+            downIcon.classList.replace("bxs-downvote", "bx-downvote");
+            downIcon.style.color = "";
+        }else if (userVote === 1){ // switch upvote to downvote
+            current -= 2;
+            userVote = -1;
+            downIcon.classList.replace("bx-downvote", "bxs-downvote");
+            downIcon.style.color = "#6668ec";
+            upIcon.classList.replace("bxs-upvote", "bx-upvote");
+			upIcon.style.color = "";
+        }else{ // normal downvote
+            current -= 1;
+            userVote = -1;
+            downIcon.classList.replace("bx-downvote", "bxs-downvote");
+            downIcon.style.color = "#6668ec";
+        }
+        save_downvote(postID);
+    }
+    voteDisplay.textContent = current;
+    voteDisplay.dataset.uservote = userVote;
+
+    return {
+        upvoted: userVote === 1,
+        downvoted: userVote === -1
+    };
+}
+
+function setupVoteButtons(post, voteCountEl, upvoteBtn, downvoteBtn, userId) {
+    let userVote = 0;
+    if (userId) {
+        if (post.upvotedBy?.includes(userId)) userVote = 1;
+        else if (post.downvotedBy?.includes(userId)) userVote = -1;
+    }
+
+    voteCountEl.textContent = post.score || 0;
+    voteCountEl.dataset.uservote = userVote;
+
+    if (userVote === 1) {
+        upvoteBtn.classList.replace("bx-upvote", "bxs-upvote");
+        upvoteBtn.style.color = "#df4b4b";
+    } else if (userVote === -1) {
+        downvoteBtn.classList.replace("bx-downvote", "bxs-downvote");
+        downvoteBtn.style.color = "#6668ec";
+    }
+
+   upvoteBtn.addEventListener("click", async (e) => {
+		e.stopPropagation();
+		if (!userId) return showPopup("login-popup");
+		const result = await handlePostVote(post._id, 'upvote', voteCountEl, upvoteBtn, downvoteBtn, userId);
+		post.score = parseInt(voteCountEl.textContent);
+	});
+
+	downvoteBtn.addEventListener("click", async (e) => {
+		e.stopPropagation();
+		if (!userId) return showPopup("login-popup");
+		const result = await handlePostVote(post._id, 'downvote', voteCountEl, upvoteBtn, downvoteBtn, userId);
+		post.score = parseInt(voteCountEl.textContent);
+	});
+}
 
 async function load_posts() {
 	user = getCurrentUser();
@@ -91,12 +171,18 @@ async function load_posts() {
 	const posts = await res.json();
 
 	const container = document.getElementById("main-content");
-
+	container.innerHTML = "";
 	console.log(posts)
-	
-	posts.slice().reverse().forEach((post) => {
 
-		if (post.votes === undefined) post.votes = 0;
+	posts.slice().reverse().forEach((post) => {
+		let userVote = 0;
+		if (user) {
+			if (post.upvotedBy?.includes(user._id)) {
+				userVote = 1;
+			} else if (post.downvotedBy?.includes(user._id)) {
+				userVote = -1;
+			}
+		}
 
 		const viewButton = document.createElement("button");
 		viewButton.className = "view-post-button";
@@ -138,30 +224,18 @@ async function load_posts() {
 
 		let voteCount = document.createElement("p");
 		voteCount.id = "vote-count";
-		voteCount.appendChild(document.createTextNode(post.score));
+		voteCount.textContent = post.score || 0;
+		voteCount.dataset.uservote = userVote;
 
-		if(post.upvoteFlag){
+		if(userVote === 1){
 			upvoteBtn.innerHTML = "<i class='bx bxs-upvote'></i>";
     		upvoteBtn.style.color = "#df4b4b";
-		}
-		if(post.downvoteFlag){
+		} else if(userVote === -1){
 			downvoteBtn.innerHTML = "<i class='bx bxs-downvote'></i>";
     		downvoteBtn.style.color = "#6668ec";
 		}
 
-		upvoteBtn.onclick = (e) => {
-            e.stopPropagation();	
-			const post_id = post._id;
-			save_upvote(post_id);
-			
-        };
-
-        downvoteBtn.onclick = (e) => {
-            e.stopPropagation();
-		
-			const post_id = post._id;
-			save_downvote(post_id);
-        };
+		setupVoteButtons(post, voteCount, upvoteBtn, downvoteBtn, user?._id);
 
 		const postTag = document.createElement("p");
 		postTag.id = "post-tag";
@@ -209,7 +283,8 @@ async function load_posts() {
 		flexArea.append(rightArea);
 		newPost.append(flexArea);
 
-		newPost.id="post-display";
+		newPost.id=`post-${post._id}`;
+		newPost.className = "post-display";
 		viewButton.append(newPost);
 
 		container.appendChild(viewButton);
@@ -227,8 +302,16 @@ async function load_searched_posts(posts){
     container.innerHTML = "";
 
     posts.slice().reverse().forEach((post) => {
+		let user = getCurrentUser();
+		let userVote = 0;
 
-        if (post.votes === undefined) post.votes = 0;
+		if (user) {
+			if (post.upvotedBy?.includes(user._id)) {
+				userVote = 1;
+			} else if (post.downvotedBy?.includes(user._id)) {
+				userVote = -1;
+			}
+		}
 
         const viewButton = document.createElement("button");
         viewButton.className = "view-post-button";
@@ -270,7 +353,18 @@ async function load_searched_posts(posts){
 
         let voteCount = document.createElement("p");
         voteCount.id = "vote-count";
-        voteCount.appendChild(document.createTextNode(post.votes));
+        voteCount.textContent = post.score || 0;
+		voteCount.dataset.uservote = userVote;
+
+		if(userVote === 1){
+			upvoteBtn.innerHTML = "<i class='bx bxs-upvote'></i>";
+			upvoteBtn.style.color = "#df4b4b";
+		}else if(userVote === -1){
+			downvoteBtn.innerHTML = "<i class='bx bxs-downvote'></i>";
+			downvoteBtn.style.color = "#6668ec";
+		}
+
+		setupVoteButtons(post, voteCount, upvoteBtn, downvoteBtn, user?._id);
 
         const postTag = document.createElement("p");
         postTag.id = "post-tag";
@@ -318,7 +412,8 @@ async function load_searched_posts(posts){
         flexArea.append(rightArea);
         newPost.append(flexArea);
 
-        newPost.id="post-display";
+        newPost.id=`post-${post._id}`;
+		newPost.className = "post-display";
         viewButton.append(newPost);
 
         container.appendChild(viewButton);
@@ -444,7 +539,17 @@ function viewFullPost(post) {
 	document.getElementById("full-post-tag").appendChild(postTag);
 
 	const fullVoteCount = document.getElementById("full-vote-count");
-	fullVoteCount.textContent = post.votes;
+	fullVoteCount.textContent = post.score || 0;
+
+	let userVote = 0;
+	if (userNow) {
+		if (post.upvotedBy?.includes(userNow._id)) {
+			userVote = 1;
+		} else if (post.downvotedBy?.includes(userNow._id)) {
+			userVote = -1;
+		}
+	}
+	fullVoteCount.dataset.uservote = userVote;
 
 	const upvCheckbox = document.getElementById("upv-checkbox");
 	const downvCheckbox = document.getElementById("downv-checkbox");
@@ -454,56 +559,23 @@ function viewFullPost(post) {
 	const bookmarkIcon = document.getElementById("full-bookmark-btn");
 	const bookmarkContainer = document.getElementById("bookmarkBTN");
 
+	if (userVote === 1) {
+		upvCheckbox.checked = true;
+		upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+		upvoteIcon.style.color = "#df4b4b";
+	} else if (userVote === -1) {
+		downvCheckbox.checked = true;
+		downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+		downvoteIcon.style.color = "#6668ec";
+	}
+
 	if(userNow){
 		bookmarkContainer.style.display = "block";
 	}else{
 		bookmarkContainer.style.display = "none";
 	}
 
-	upvCheckbox.addEventListener("change", async(e) => {
-		e.stopPropagation();
-		if (userNow !== null){
-			if(upvCheckbox.checked){
-				upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
-				upvoteIcon.style.color = "#df4b4b";
-
-				if(downvCheckbox.checked){
-					downvCheckbox.checked = false;
-					downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
-					downvoteIcon.style.color = "";
-				}
-			}else{
-				upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
-				upvoteIcon.style.color = "";
-			}
-
-			save_upvote(post._id);
-		} else{
-			showPopup("login-popup");
-		}
-	});
-
-	downvCheckbox.addEventListener("change", async (e) => {
-		e.stopPropagation();
-		if(userNow !== null){
-			if(downvCheckbox.checked){
-				downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
-				downvoteIcon.style.color = "#6668ec"; 
-
-				if(upvCheckbox.checked){
-					upvCheckbox.checked = false;
-					upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
-					upvoteIcon.style.color = "";
-				}
-			}else{
-				downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
-				downvoteIcon.style.color = "";
-			}
-			save_downvote(post._id);
-		} else{
-			showPopup("login-popup");
-		}
-	});
+	setupVoteButtons(post, fullVoteCount, upvCheckbox, downvCheckbox, userNow?._id);
 
 	bookmarkCheckbox.addEventListener("change", (e) => {
 		e.stopPropagation();
@@ -613,6 +685,7 @@ async function displayFullComments(postID) {
 function renderCommentThread(container, comment, allComments, postID, commentIndex){
     const isDeleted = comment.deleted === true;
     const isEdited = comment.edited === true;
+	let userVote = 0;
 
     const commentItem = document.createElement("div");
     commentItem.className = "comment-item";
@@ -624,6 +697,13 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
 
     const user = getCurrentUser();
     const isLoggedIn = user !== null;
+	if (user) {
+		if (comment.upvotedBy?.includes(user._id)) {
+			userVote = 1;
+		} else if (comment.downvotedBy?.includes(user._id)) {
+			userVote = -1;
+		}
+	}
 
     const currUser = isLoggedIn && comment.author && (String(comment.author._id) === String(user._id));
     const editComUser = currUser;
@@ -707,23 +787,61 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     const upvoteIcon = commentItem.querySelector(`#upvote-${comment._id}`);
     const downvoteIcon = commentItem.querySelector(`#downvote-${comment._id}`);
 
+	if(userVote === 1){
+		upvCheckbox.checked = true;
+		upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+		upvoteIcon.style.color = "#df4b4b";
+	}else if(userVote === -1){
+		downvCheckbox.checked = true;
+		downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+		downvoteIcon.style.color = "#6668ec";
+	}
+
     if (upvCheckbox && downvCheckbox){
         upvCheckbox.addEventListener("change", async (e) => {
             e.stopPropagation();
             if(user !== null){
-                if(upvCheckbox.checked){
+				const current = parseInt(voteDisplay.textContent) || 0;
+                /*if(upvCheckbox.checked){
                     upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
                     upvoteIcon.style.color = "#df4b4b";
+					voteDisplay.textContent = current + 1;
                     if(downvCheckbox.checked){
                         downvCheckbox.checked = false;
                         downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
                         downvoteIcon.style.color = "";
+						voteDisplay.textContent = current - 2;
                     }
                 }else{
                     upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
                     upvoteIcon.style.color = "";
-                }
-                voteDisplay.textContent = comment.score;
+					voteDisplay.textContent = current - 1;
+                }*/
+
+				if(userVote === 1){ // undo upvote
+					upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
+					upvoteIcon.style.color = "";
+					voteDisplay.textContent = current - 1;
+					userVote = 0;
+					upvCheckbox.checked = false;
+				}else if(userVote === -1){ // switch from downvote → upvote
+					downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
+					downvoteIcon.style.color = "";
+					upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+					upvoteIcon.style.color = "#df4b4b";
+					voteDisplay.textContent = current + 2;
+					userVote = 1;
+					upvCheckbox.checked = true;
+					downvCheckbox.checked = false;
+				}else{ // normal upvote
+					upvoteIcon.classList.replace("bx-upvote", "bxs-upvote");
+					upvoteIcon.style.color = "#df4b4b";
+					voteDisplay.textContent = current + 1;
+					userVote = 1;
+					upvCheckbox.checked = true;
+				}
+
+                //voteDisplay.textContent = comment.score;
 				save_comment_upvote(comment._id);
 				
             }else{
@@ -734,19 +852,46 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
         downvCheckbox.addEventListener("change", async (e) => {
             e.stopPropagation();
             if(user !== null){
-                if(downvCheckbox.checked){
+				const current = parseInt(voteDisplay.textContent) || 0;
+                /*if(downvCheckbox.checked){
                     downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
                     downvoteIcon.style.color = "#6668ec";
+					voteDisplay.textContent = current - 1;
                     if(upvCheckbox.checked){
                         upvCheckbox.checked = false;
                         upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
                         upvoteIcon.style.color = "";
+						voteDisplay.textContent = current + 2;
                     }
                 }else{
                     downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
                     downvoteIcon.style.color = "";
-                }
-                voteDisplay.textContent = comment.score;
+					voteDisplay.textContent = current + 1;
+                }*/
+
+				if(userVote === -1){ // undo downvote
+					downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
+					downvoteIcon.style.color = "";
+					voteDisplay.textContent = current + 1;
+					userVote = 0;
+					downvCheckbox.checked = false;
+				}else if(userVote === 1){ // switch from upvote to downvote
+					upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
+					upvoteIcon.style.color = "";
+					downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+					downvoteIcon.style.color = "#6668ec";
+					voteDisplay.textContent = current - 2;
+					userVote = -1;
+					downvCheckbox.checked = true;
+					upvCheckbox.checked = false;
+				}else{ // normal downvote
+					downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
+					downvoteIcon.style.color = "#6668ec";
+					voteDisplay.textContent = current - 1;
+					userVote = -1;
+					downvCheckbox.checked = true;
+				}
+                //voteDisplay.textContent = comment.score;
 				save_comment_downvote(comment._id);
 				
                 
