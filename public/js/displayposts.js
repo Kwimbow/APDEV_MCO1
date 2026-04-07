@@ -190,14 +190,14 @@ async function load_posts(event=null, tag=null, sort=null) {
 		posts.sort((a, b) => {
 			const upvotesA = a.upvotedBy.length - a.downvotedBy.length;
 			const upvotesB = b.upvotedBy.length - b.downvotedBy.length;
-			return scoreB - scoreA;
+			return upvotesA - upvotesB;
 		});
 	}
 	else if (sort == 'controversial'){
 		posts.sort((a, b) => {
 			const upvotesA = a.upvotedBy.length - a.downvotedBy.length;
 			const upvotesB = b.upvotedBy.length - b.downvotedBy.length;
-			return scoreA - scoreB;
+			return upvotesB - upvotesA;
 		});
 	}
 
