@@ -1,8 +1,93 @@
 /* FOR DISPLAYING POSTS */
 
-async function load_posts() {
+/*
+async function toggleUpvote(){
 
-	const res = await fetch('api/posts');
+}
+
+async function toggleDownvote(){
+
+}
+*/
+
+async function save_upvote(postID){
+	console.log("saving upvote for ", postID);
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_upvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, postID: postID })
+	});
+
+	const updatingScore = document.getElementById("main-content");
+	updatingScore.innerHTML = ""
+   
+	load_posts();
+}
+
+async function save_downvote(postID){
+	console.log("saving downvote");
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_downvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, postID: postID })
+	})
+
+	const updatingScore = document.getElementById("main-content");
+	updatingScore.innerHTML = ""
+   
+	load_posts();
+}
+
+async function save_comment_upvote(commentID){
+	console.log("saving upvote for ", commentID);
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_comment_upvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, commentID: commentID })
+	});
+
+	if (res.success) {
+        const voteDisplay = document.getElementById(`votes-${commentID}`);
+        if (voteDisplay) voteDisplay.textContent = result.score;
+    }
+}
+
+async function save_comment_downvote(commentID){
+	console.log("saving downvote");
+ 	user = getCurrentUser();
+
+  	console.log(user._id);
+
+	const res = await fetch('/api/voting/save_comment_downvote', {
+	method: 'PATCH',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify({ userID: user._id, commentID: commentID })
+	})
+
+	if (res.success) {
+        const voteDisplay = document.getElementById(`votes-${commentID}`);
+        if (voteDisplay) voteDisplay.textContent = result.score;
+    }
+
+}
+
+
+async function load_posts() {
+	user = getCurrentUser();
+	const url = user ? `api/posts?userId=${user._id}` : 'api/posts';
+	const res = await fetch(url);
 	const posts = await res.json();
 
 	const container = document.getElementById("main-content");
@@ -53,7 +138,30 @@ async function load_posts() {
 
 		let voteCount = document.createElement("p");
 		voteCount.id = "vote-count";
-		voteCount.appendChild(document.createTextNode(post.votes));
+		voteCount.appendChild(document.createTextNode(post.score));
+
+		if(post.upvoteFlag){
+			upvoteBtn.innerHTML = "<i class='bx bxs-upvote'></i>";
+    		upvoteBtn.style.color = "#df4b4b";
+		}
+		if(post.downvoteFlag){
+			downvoteBtn.innerHTML = "<i class='bx bxs-downvote'></i>";
+    		downvoteBtn.style.color = "#6668ec";
+		}
+
+		upvoteBtn.onclick = (e) => {
+            e.stopPropagation();	
+			const post_id = post._id;
+			save_upvote(post_id);
+			
+        };
+
+        downvoteBtn.onclick = (e) => {
+            e.stopPropagation();
+		
+			const post_id = post._id;
+			save_downvote(post_id);
+        };
 
 		const postTag = document.createElement("p");
 		postTag.id = "post-tag";
@@ -110,6 +218,7 @@ async function load_posts() {
 	console.log(res);
 
 }
+
 
 async function load_searched_posts(posts){
     
@@ -351,7 +460,7 @@ function viewFullPost(post) {
 		bookmarkContainer.style.display = "none";
 	}
 
-	upvCheckbox.addEventListener("change", (e) => {
+	upvCheckbox.addEventListener("change", async(e) => {
 		e.stopPropagation();
 		if (userNow !== null){
 			if(upvCheckbox.checked){
@@ -362,44 +471,35 @@ function viewFullPost(post) {
 					downvCheckbox.checked = false;
 					downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
 					downvoteIcon.style.color = "";
-					post.votes += 2;
-				}else{
-					post.votes += 1;
 				}
 			}else{
 				upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
 				upvoteIcon.style.color = "";
-				post.votes -= 1;
 			}
-			fullVoteCount.textContent = post.votes;
-			updatePostInStorage(post);
+
+			save_upvote(post._id);
 		} else{
 			showPopup("login-popup");
 		}
 	});
 
-	downvCheckbox.addEventListener("change", (e) => {
+	downvCheckbox.addEventListener("change", async (e) => {
 		e.stopPropagation();
 		if(userNow !== null){
 			if(downvCheckbox.checked){
 				downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
-				downvoteIcon.style.color = "#0004ff"; 
+				downvoteIcon.style.color = "#6668ec"; 
 
 				if(upvCheckbox.checked){
 					upvCheckbox.checked = false;
 					upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
 					upvoteIcon.style.color = "";
-					post.votes -= 2;
-				}else{
-					post.votes -= 1;
 				}
 			}else{
 				downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
 				downvoteIcon.style.color = "";
-				post.votes += 1;
 			}
-			fullVoteCount.textContent = post.votes;
-			updatePostInStorage(post);
+			save_downvote(post._id);
 		} else{
 			showPopup("login-popup");
 		}
@@ -442,14 +542,6 @@ function viewFullPost(post) {
 		window.location.reload(); // --------------------------------------------------------------------for now just reloading window. lets add sorting and filtering eventually
 	};
 		
-	function updatePostInStorage(updatedPost) { // ------------------------------------------------------------------------------------
-		const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-		const index = allPosts.findIndex(p => p.postID === updatedPost.postID);
-		if (index !== -1) {
-			allPosts[index] = updatedPost;
-			localStorage.setItem("posts", JSON.stringify(allPosts));
-		}
-	}
 	
 	//submit button for comment // -----------------------------------------------------------------------------
 	document.getElementById("full-submit-comment-btn").onclick = function() {
@@ -542,7 +634,7 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
                <label for="upv-${comment._id}">
                    <i class='bx bx-upvote comment-vote-btns' id="upvote-${comment._id}"></i>
                </label>
-               <p id="votes-${comment._id}">${comment.votes || 0}</p>
+               <p id="votes-${comment._id}">${comment.score || 0}</p>
                <input type="checkbox" id="downv-${comment._id}" class="comment-checkbox">
                <label for="downv-${comment._id}">
                    <i class='bx bx-downvote comment-vote-btns' id="downvote-${comment._id}"></i>
@@ -616,7 +708,7 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     const downvoteIcon = commentItem.querySelector(`#downvote-${comment._id}`);
 
     if (upvCheckbox && downvCheckbox){
-        upvCheckbox.addEventListener("change", (e) => {
+        upvCheckbox.addEventListener("change", async (e) => {
             e.stopPropagation();
             if(user !== null){
                 if(upvCheckbox.checked){
@@ -626,43 +718,38 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
                         downvCheckbox.checked = false;
                         downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
                         downvoteIcon.style.color = "";
-                        comment.votes += 2;
-                    }else{
-                        comment.votes += 1;
                     }
                 }else{
                     upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
                     upvoteIcon.style.color = "";
-                    comment.votes -= 1;
                 }
-                voteDisplay.textContent = comment.votes;
-                saveCommentVotes(postID, comment._id, comment.votes);
+                voteDisplay.textContent = comment.score;
+				save_comment_upvote(comment._id);
+				
             }else{
                 showPopup("login-popup");
             }
         });
 
-        downvCheckbox.addEventListener("change", (e) => {
+        downvCheckbox.addEventListener("change", async (e) => {
             e.stopPropagation();
             if(user !== null){
                 if(downvCheckbox.checked){
                     downvoteIcon.classList.replace("bx-downvote", "bxs-downvote");
-                    downvoteIcon.style.color = "#0004ff";
+                    downvoteIcon.style.color = "#6668ec";
                     if(upvCheckbox.checked){
                         upvCheckbox.checked = false;
                         upvoteIcon.classList.replace("bxs-upvote", "bx-upvote");
                         upvoteIcon.style.color = "";
-                        comment.votes -= 2;
-                    }else{
-                        comment.votes -= 1;
                     }
                 }else{
                     downvoteIcon.classList.replace("bxs-downvote", "bx-downvote");
                     downvoteIcon.style.color = "";
-                    comment.votes += 1;
                 }
-                voteDisplay.textContent = comment.votes;
-                saveCommentVotes(postID, comment._id, comment.votes);
+                voteDisplay.textContent = comment.score;
+				save_comment_downvote(comment._id);
+				
+                
             }else{
                 showPopup("login-popup");
             }
@@ -679,14 +766,6 @@ function renderCommentThread(container, comment, allComments, postID, commentInd
     }
 }
 
-//updates comment vote count -------------------------------------------------------
-async function saveCommentVotes(postID, commentID, votes) { // i tried to do this but i gave up
-	await fetch(`/api/comments/${commentID}`, {
-		method: 'PATCH',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ votes })
-	});
-}
 
 //comment option popups and their actions -------------------------------------------------
 function setupCommentOptions() {
@@ -804,30 +883,6 @@ function toggleReplyInput(commentID){
 	}
 }
 
-/*
-// Tag filters (discussion, guide, joke,...) -----------------------------------------------------------
-document.querySelectorAll('input[name="tag-filter"]').forEach(radio => {
-	radio.addEventListener("change", function() {
-		if (!this.checked) return;
-
-		currentTag = this.value.replace("filter-", "");
-		if (currentTag === "all") currentTag = "all";
-
-		loadPostsList(currentFilter, currentTag);
-	});
-});
-
-// Sort filters (most popular, by date, ...) ----------------------------------------------------------
-document.querySelectorAll('input[name="post-filter"]').forEach(radio => {
-	radio.addEventListener("change", function() {
-		if (!this.checked) return;
-
-		currentFilter = this.value;
-
-		loadPostsList(currentFilter, currentTag);
-	});
-});
-*/
 // Initial load
 currentTag = "all";
 currentFilter = "none";

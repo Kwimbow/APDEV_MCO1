@@ -37,6 +37,9 @@ app.use('/api/bookmarks', bookmarkRoutes);
 const getBookmarkRoutes = require('./routes/getbookmarks');
 app.use('/api/getbookmarks', getBookmarkRoutes);
 
+const votingRoutes = require('./routes/voting');
+app.use('/api/voting', votingRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
