@@ -164,11 +164,42 @@ function setupVoteButtons(post, voteCountEl, upvoteBtn, downvoteBtn, userId) {
 	});
 }
 
-async function load_posts() {
-	user = getCurrentUser();
-	const url = user ? `api/posts?userId=${user._id}` : 'api/posts';
-	const res = await fetch(url);
-	const posts = await res.json();
+async function load_posts(tag=null, sort=null) {
+	let posts;
+
+	if (tag == null){
+		user = getCurrentUser();
+		const url = user ? `api/posts?userId=${user._id}` : 'api/posts';
+		const res = await fetch(url);
+		posts = await res.json();
+	}
+
+	else { // tag is selected
+		const res = await fetch(`/api/filter?term=${encodeURIComponent(tag)}`, {
+		method: 'GET',
+		headers: { 'Content-Type': 'application/json' }
+		});
+
+	    posts = await res.json();
+	}
+
+	if (sort == 'oldest'){
+		posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+	}
+	else if (sort == 'popular'){
+		posts.sort((a, b) => {
+			const upvotesA = a.upvotedBy.length - a.downvotedBy.length;
+			const upvotesB = b.upvotedBy.length - b.downvotedBy.length;
+			return scoreB - scoreA;
+		});
+	}
+	else if (sort == 'controversial'){
+		posts.sort((a, b) => {
+			const upvotesA = a.upvotedBy.length - a.downvotedBy.length;
+			const upvotesB = b.upvotedBy.length - b.downvotedBy.length;
+			return scoreA - scoreB;
+		});
+	}
 
 	const container = document.getElementById("main-content");
 	container.innerHTML = "";
