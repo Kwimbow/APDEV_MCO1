@@ -426,7 +426,7 @@ async function load_searched_posts(posts){
 function viewFullPost(post) {
 
 	console.log(post)
-  
+	
     if(!post) return;
     setCurrentPost(post);
     const mainContent = document.getElementById("main-content");
