@@ -32,6 +32,18 @@ homeBtn.addEventListener('click', () => {
     window.location.href = 'index.html';
 });
 
+bookmarksBtn.addEventListener('click', () => {
+    const user = getCurrentUser();
+
+    if (!user) {
+        //show log in popup if user is not logged in
+        showPopup("login-popup");
+        resetNavActive();
+        document.querySelector('input[name="view-filter"][value="home"]').checked = true;
+        return;
+    }
+});
+
 function show_about() {
     document.getElementById('main-content').style.display = "";
     document.getElementById('main-content').innerHTML = 
