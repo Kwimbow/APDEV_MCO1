@@ -675,7 +675,7 @@ body.modal-open{
     color: rgb(45, 179, 45);
 }
 
-#post-display{
+.post-display{
     background-color: var(--background-color);
     margin-bottom:20px;
     width:100%;
