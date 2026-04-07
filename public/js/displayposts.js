@@ -481,6 +481,8 @@ function viewFullPost(post) {
     const mainContent = document.getElementById("main-content");
     const userNow = getCurrentUser();
     
+    const isAuthor = userNow && post.author && String(post.author._id) === String(userNow._id)
+
     resetNavActive(); //Reset active state of nav buttons when viewing a post
     
     const postDate = new Date(post.createdAt);
@@ -517,11 +519,19 @@ function viewFullPost(post) {
                                 <button id="full-downvote-btn"><i class='bx bx-downvote'></i></button>
                             </label>
                         </div>
-                        <div id="bookmarkBTN">
-                            <input type="checkbox" id="bookmark-checkbox" onclick = "save_bookmark('${post.postID}')">
-                            <label for="bookmark-checkbox">
-                                <i class='bx bx-bookmark' id="full-bookmark-btn"></i>
-                            </label>
+                        <div id = "post-options" style = "display:flex; gap: 10px;" >
+                            <div id="bookmarkBTN">
+                                <input type="checkbox" id="bookmark-checkbox" onclick = "save_bookmark('${post.postID}')">
+                                <label for="bookmark-checkbox">
+                                    <i class='bx bx-bookmark' id="full-bookmark-btn"></i>
+                                </label>
+                            </div>
+                            ${isAuthor ? `
+                            <div id = "delbutton">
+                                <button onclick = "delete_post('${post._id}')">Delete Post</button>
+                            </div>
+                            `
+                            : ''}
                         </div>
                     </div>
                     <div id="full-post-right">
@@ -665,7 +675,21 @@ function setCurrentPost(post) {
 }
 
 
-
+async function delete_post(postID){
+    
+    const res  = await fetch('/api/delpost', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({postID: postID})
+    })
+    
+    if(res.ok){
+        window.location.reload();
+    }
+    
+}
 
 //creating a comment 
 async function submitComment(postID, parentCommentID) {

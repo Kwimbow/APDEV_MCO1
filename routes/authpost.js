@@ -10,5 +10,15 @@ router.post('/create_post', async (req, res) => {
     res.json({ success: true });
 });
 
+router.delete('/delpost', async (req, res) => {
+    const {postID} = req.body;
+
+    console.log("deleting post with ID ", postID);
+
+    await Post.findByIdAndDelete(postID);
+    
+    res.json({ success: true });
+});
+
 
 module.exports = router;
