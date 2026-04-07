@@ -165,17 +165,33 @@ function setupVoteButtons(post, voteCountEl, upvoteBtn, downvoteBtn, userId) {
 }
 
 async function load_posts(event=null, tag=null, sort=null) {
-	let posts;
+	if (localStorage.getItem('activeTag') === null) localStorage.setItem('activeTag', 'all');
+	if (localStorage.getItem('activeSort') === null) localStorage.setItem('activeTag', 'newest');
 
-	if (tag == null){
+
+	let activeTag = localStorage.getItem('activeTag');
+	let activeSort = localStorage.getItem('activeSort');
+
+	// checking if activetag/sort is to be changed type shit
+	if (tag !== null) {
+		localStorage.setItem('activeTag', tag);
+		activeTag = tag;
+	}
+	if (sort !== null) {
+		localStorage.setItem('activeSort', sort);
+		activeSort = sort;
+	}
+
+	// tags
+	let posts;
+	if (activeTag == 'all'){
 		user = getCurrentUser();
 		const url = user ? `api/posts?userId=${user._id}` : 'api/posts';
 		const res = await fetch(url);
 		posts = await res.json();
 	}
-
-	else { // tag is selected
-		const res = await fetch(`/api/filter?term=${encodeURIComponent(tag)}`, {
+	else { 
+		const res = await fetch(`/api/filter?term=${encodeURIComponent(activeTag)}`, {
 		method: 'GET',
 		headers: { 'Content-Type': 'application/json' }
 		});
@@ -183,6 +199,7 @@ async function load_posts(event=null, tag=null, sort=null) {
 	    posts = await res.json();
 	}
 
+	// sort
 	if (sort == 'newest'){
 		posts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 	}
