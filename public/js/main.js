@@ -26,6 +26,38 @@ btn.onclick = function() {
 
 const homeBtn = document.getElementById('filter-home');
 const bookmarksBtn = document.getElementById('filter-bookmarks');
+const aboutBtn = document.getElementById('about-page');
+
+homeBtn.addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+
+bookmarksBtn.addEventListener('click', () => {
+    const user = getCurrentUser();
+
+    if (!user) {
+        //show log in popup if user is not logged in
+        showPopup("login-popup");
+        resetNavActive();
+        document.querySelector('input[name="view-filter"][value="home"]').checked = true;
+        return;
+    }
+});
+
+function show_about() {
+    document.getElementById('main-content').style.display = "";
+    document.getElementById('main-content').innerHTML = 
+    `<div id="about-container">
+        <h2>About Freddyt</h2>
+        <pre id="packages-used">
+        Packages used:
+            - Express
+            - Mongoose
+            - BCrypt
+        </pre>
+        <p id="copyright">Copyright &copy; 2026 Four Nights At Freddys. All rights reserved. Aragon, Luna, Salamida, Sotingco.</p>
+    </div>`;
+}
 
 function resetNavActive(){
     document.querySelectorAll('input[name="view-filter"]').forEach(radio => {

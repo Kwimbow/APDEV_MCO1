@@ -1668,3 +1668,19 @@ vertical-align: middle;
 #delbutton {
     font-family: 'Reddit Sans', sans-serif;
 }
+
+#packages-used{
+    font-family: 'Reddit Sans', sans-serif;
+    color: var(--default-txt);
+    text-align: left;
+    margin-left: 40px;
+    margin-top: 20px;
+}
+
+#copyright{
+    font-family: 'Reddit Sans', sans-serif;
+    color: var(--copyright);
+    text-align: bottom right;
+    
+    margin-bottom: 20px;
+}
